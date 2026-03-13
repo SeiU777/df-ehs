@@ -1,9 +1,612 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
-  <meta http-equiv="refresh" content="0; url=2026-03-13-職災分析報告-v5.html">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大豐環保 職業災害分析報告</title>
+  <style>
+    :root {
+      --primary: #1e4a6e;
+      --primary-light: #2a6496;
+      --primary-dark: #153a57;
+      --accent: #4caf50;
+      --warning: #ff9800;
+      --danger: #e53935;
+      --info: #2196f3;
+      --bg: #f5f7fa;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --text-light: #666666;
+      --border: #e0e0e0;
+      --shadow: 0 2px 8px rgba(0,0,0,0.1);
+      --shadow-hover: 0 6px 24px rgba(0,0,0,0.18);
+      --radius: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', 'Microsoft JhengHei', 'Noto Sans TC', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== 頂部橫幅 ===== */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, #2980b9 100%);
+      color: white;
+      text-align: center;
+      padding: 60px 24px 50px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+      animation: heroPulse 5s ease-in-out infinite;
+    }
+    @keyframes heroPulse {
+      0%, 100% { transform: scale(1); opacity: 0.4; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
+    .hero h1 {
+      font-size: 2.4em;
+      font-weight: 800;
+      position: relative;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      margin-bottom: 10px;
+    }
+    .hero .subtitle {
+      font-size: 1.1em;
+      opacity: 0.9;
+      position: relative;
+    }
+    .hero .org {
+      font-size: 0.95em;
+      opacity: 0.7;
+      margin-top: 16px;
+      position: relative;
+    }
+
+    /* ===== KPI 摘要列 ===== */
+    .kpi-bar {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      flex-wrap: wrap;
+      padding: 24px 20px;
+      background: white;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      position: relative;
+      z-index: 1;
+    }
+    .kpi-item {
+      text-align: center;
+      min-width: 100px;
+    }
+    .kpi-item .num {
+      font-size: 2em;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.2;
+    }
+    .kpi-item .num.danger { color: var(--danger); }
+    .kpi-item .num.warning { color: var(--warning); }
+    .kpi-item .num.accent { color: var(--accent); }
+    .kpi-item .label {
+      font-size: 0.82em;
+      color: var(--text-light);
+      margin-top: 2px;
+    }
+
+    /* ===== 主要內容區 ===== */
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+      flex: 1;
+    }
+
+    .section-title {
+      font-size: 1.5em;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .section-desc {
+      text-align: center;
+      color: var(--text-light);
+      margin-bottom: 36px;
+      font-size: 0.95em;
+    }
+
+    /* ===== 報告選擇卡片 ===== */
+    .report-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      margin-bottom: 50px;
+    }
+
+    .report-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+    }
+    .report-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .report-card .card-top {
+      padding: 32px 24px 20px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .report-card .card-top::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      right: -20%;
+      width: 140px;
+      height: 140px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .report-card .card-top h2 {
+      font-size: 1.5em;
+      font-weight: 800;
+      position: relative;
+      margin-bottom: 4px;
+    }
+    .report-card .card-top .period {
+      font-size: 0.85em;
+      opacity: 0.85;
+      position: relative;
+    }
+
+    /* 各年度卡片的顏色 */
+    .card-overview .card-top { background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
+    .card-2025 .card-top { background: linear-gradient(135deg, #e53935, #ef5350); }
+    .card-2024 .card-top { background: linear-gradient(135deg, #ff9800, #ffb74d); }
+    .card-2023 .card-top { background: linear-gradient(135deg, #4caf50, #81c784); }
+
+    .report-card .card-body {
+      padding: 20px 24px 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.9em;
+    }
+    .card-stat:last-of-type { border-bottom: none; }
+    .card-stat .stat-label { color: var(--text-light); }
+    .card-stat .stat-value { font-weight: 700; color: var(--primary); }
+    .card-stat .stat-value.danger { color: var(--danger); }
+    .card-stat .stat-value.warning { color: var(--warning); }
+
+    .card-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.75em;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+    .tag-traffic { background: #e3f2fd; color: #1565c0; }
+    .tag-safety { background: #fff3e0; color: #e65100; }
+    .tag-near-miss { background: #e8f5e9; color: #2e7d32; }
+
+    .card-cta {
+      margin-top: auto;
+      padding-top: 16px;
+      text-align: center;
+    }
+    .card-cta span {
+      display: inline-block;
+      padding: 8px 28px;
+      background: var(--primary);
+      color: white;
+      border-radius: 8px;
+      font-size: 0.9em;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .card-overview .card-cta span { background: var(--primary); }
+    .card-2025 .card-cta span { background: var(--danger); }
+    .card-2024 .card-cta span { background: var(--warning); }
+    .card-2023 .card-cta span { background: var(--accent); }
+    .report-card:hover .card-cta span {
+      filter: brightness(1.1);
+    }
+
+    /* ===== 年度趨勢快覽 ===== */
+    .trend-section {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px 32px;
+      margin-bottom: 40px;
+    }
+    .trend-title {
+      font-size: 1.15em;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+    .trend-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 32px;
+      justify-content: center;
+      padding: 20px 0;
+    }
+    .trend-bar-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .trend-bar-stack {
+      display: flex;
+      flex-direction: column-reverse;
+      width: 80px;
+      gap: 2px;
+    }
+    .trend-bar-seg {
+      width: 100%;
+      border-radius: 4px;
+      transition: height 0.5s;
+      position: relative;
+    }
+    .trend-bar-seg .seg-num {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      color: white;
+      font-size: 0.75em;
+      font-weight: 700;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .trend-year-label {
+      font-weight: 700;
+      font-size: 1em;
+      color: var(--text);
+    }
+    .trend-total {
+      font-size: 0.85em;
+      color: var(--text-light);
+    }
+    .trend-legend {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 16px;
+      font-size: 0.85em;
+    }
+    .trend-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .trend-legend-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+    }
+
+    /* ===== 頁尾 ===== */
+    .footer {
+      text-align: center;
+      padding: 24px;
+      background: var(--primary-dark);
+      color: rgba(255,255,255,0.7);
+      font-size: 0.85em;
+    }
+    .footer a {
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+    }
+
+    /* ===== 響應式 ===== */
+    @media (max-width: 768px) {
+      .hero { padding: 40px 16px 36px; }
+      .hero h1 { font-size: 1.7em; }
+      .kpi-bar { gap: 16px; padding: 18px 12px; }
+      .kpi-item .num { font-size: 1.5em; }
+      .main { padding: 24px 12px 40px; }
+      .section-title { font-size: 1.2em; }
+      .trend-chart { gap: 16px; }
+      .trend-bar-stack { width: 56px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero { padding: 30px 12px 28px; }
+      .hero h1 { font-size: 1.4em; }
+      .hero .subtitle { font-size: 0.88em; }
+      .kpi-bar { gap: 10px; padding: 14px 8px; }
+      .kpi-item { min-width: 70px; }
+      .kpi-item .num { font-size: 1.3em; }
+      .kpi-item .label { font-size: 0.72em; }
+      .report-grid { grid-template-columns: 1fr; gap: 16px; }
+      .report-card .card-top { padding: 24px 18px 16px; }
+      .report-card .card-top h2 { font-size: 1.25em; }
+      .report-card .card-body { padding: 16px 18px 20px; }
+      .trend-section { padding: 18px 14px; }
+      .trend-chart { gap: 10px; flex-wrap: wrap; }
+      .trend-bar-stack { width: 50px; }
+      .trend-bar-seg .seg-num { font-size: 0.65em; }
+    }
+
+    @media print {
+      .hero { padding: 20px; }
+      .report-card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+    }
+  </style>
 </head>
 <body>
-  <p>正在跳轉至報告...</p>
+
+  <!-- ===== 頂部橫幅 ===== -->
+  <div class="hero">
+    <h1>大豐環保 職業災害分析報告</h1>
+    <div class="subtitle">分析期間：2023 年 1 月 ~ 2025 年 12 月｜整合 HSG48 人因分析與三層原因模型</div>
+    <div class="org">法務及環安課｜報告日期：2026 年 3 月 13 日</div>
+  </div>
+
+  <!-- ===== KPI 摘要列 ===== -->
+  <div class="kpi-bar">
+    <div class="kpi-item">
+      <div class="num danger">142</div>
+      <div class="label">三年事故總件數</div>
+    </div>
+    <div class="kpi-item">
+      <div class="num warning">3.94</div>
+      <div class="label">月均事故件數</div>
+    </div>
+    <div class="kpi-item">
+      <div class="num">~910</div>
+      <div class="label">累計損失工日</div>
+    </div>
+    <div class="kpi-item">
+      <div class="num" style="color:var(--info);">72</div>
+      <div class="label">交通事故</div>
+    </div>
+    <div class="kpi-item">
+      <div class="num warning">63</div>
+      <div class="label">工安事故</div>
+    </div>
+    <div class="kpi-item">
+      <div class="num accent">7</div>
+      <div class="label">虛驚事故</div>
+    </div>
+    <div class="kpi-item">
+      <div class="num danger">2</div>
+      <div class="label">永久失能</div>
+    </div>
+  </div>
+
+  <!-- ===== 主要內容 ===== -->
+  <div class="main">
+
+    <h2 class="section-title">選擇報告</h2>
+    <p class="section-desc">點選下方卡片查看完整分析報告</p>
+
+    <!-- ===== 報告選擇卡片 ===== -->
+    <div class="report-grid">
+
+      <!-- 總覽對比 -->
+      <a href="https://seiu777.github.io/df-ehs/2026-03-13-職災分析報告-v5.html" class="report-card card-overview">
+        <div class="card-top">
+          <h2>總覽對比</h2>
+          <div class="period">2023 ~ 2025 三年度</div>
+        </div>
+        <div class="card-body">
+          <div class="card-stat">
+            <span class="stat-label">事故總數</span>
+            <span class="stat-value danger">142 件</span>
+          </div>
+          <div class="card-stat">
+            <span class="stat-label">分析期間</span>
+            <span class="stat-value">36 個月</span>
+          </div>
+          <div class="card-stat">
+            <span class="stat-label">報告特色</span>
+            <span class="stat-value">跨年趨勢比較</span>
+          </div>
+          <div>
+            <span class="card-tag tag-traffic">交通 72</span>
+            <span class="card-tag tag-safety">工安 63</span>
+            <span class="card-tag tag-near-miss">虛驚 7</span>
+          </div>
+          <div class="card-cta"><span>查看完整報告</span></div>
+        </div>
+      </a>
+
+      <!-- 2025 年度 -->
+      <a href="2025-annual-report.html" class="report-card card-2025">
+        <div class="card-top">
+          <h2>2025 年度</h2>
+          <div class="period">2025 年 1 月 ~ 12 月</div>
+        </div>
+        <div class="card-body">
+          <div class="card-stat">
+            <span class="stat-label">事故總數</span>
+            <span class="stat-value danger">53 件</span>
+          </div>
+          <div class="card-stat">
+            <span class="stat-label">損失工日</span>
+            <span class="stat-value warning">~359 天</span>
+          </div>
+          <div class="card-stat">
+            <span class="stat-label">年度特色</span>
+            <span class="stat-value">交通事故急升</span>
+          </div>
+          <div>
+            <span class="card-tag tag-traffic">交通 35</span>
+            <span class="card-tag tag-safety">工安 13</span>
+            <span class="card-tag tag-near-miss">虛驚 5</span>
+          </div>
+          <div class="card-cta"><span>查看完整報告</span></div>
+        </div>
+      </a>
+
+      <!-- 2024 年度 -->
+      <a href="2024-annual-report.html" class="report-card card-2024">
+        <div class="card-top">
+          <h2>2024 年度</h2>
+          <div class="period">2024 年 1 月 ~ 12 月</div>
+        </div>
+        <div class="card-body">
+          <div class="card-stat">
+            <span class="stat-label">事故總數</span>
+            <span class="stat-value danger">44 件</span>
+          </div>
+          <div class="card-stat">
+            <span class="stat-label">損失工日</span>
+            <span class="stat-value warning">~406 天</span>
+          </div>
+          <div class="card-stat">
+            <span class="stat-label">年度特色</span>
+            <span class="stat-value danger">含永久失能 1 例</span>
+          </div>
+          <div>
+            <span class="card-tag tag-traffic">交通 22</span>
+            <span class="card-tag tag-safety">工安 21</span>
+            <span class="card-tag tag-near-miss">虛驚 1</span>
+          </div>
+          <div class="card-cta"><span>查看完整報告</span></div>
+        </div>
+      </a>
+
+      <!-- 2023 年度 -->
+      <a href="2023-annual-report.html" class="report-card card-2023">
+        <div class="card-top">
+          <h2>2023 年度</h2>
+          <div class="period">2023 年 1 月 ~ 12 月</div>
+        </div>
+        <div class="card-body">
+          <div class="card-stat">
+            <span class="stat-label">事故總數</span>
+            <span class="stat-value danger">45 件</span>
+          </div>
+          <div class="card-stat">
+            <span class="stat-label">損失工日</span>
+            <span class="stat-value">~144 天</span>
+          </div>
+          <div class="card-stat">
+            <span class="stat-label">年度特色</span>
+            <span class="stat-value danger">含永久失能 1 例</span>
+          </div>
+          <div>
+            <span class="card-tag tag-safety">工安 29</span>
+            <span class="card-tag tag-traffic">交通 15</span>
+            <span class="card-tag tag-near-miss">虛驚 1</span>
+          </div>
+          <div class="card-cta"><span>查看完整報告</span></div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- ===== 年度趨勢快覽 ===== -->
+    <div class="trend-section">
+      <div class="trend-title">三年事故趨勢快覽</div>
+      <div class="trend-chart">
+        <!-- 2023 -->
+        <div class="trend-bar-group">
+          <div class="trend-bar-stack">
+            <div class="trend-bar-seg" style="height:116px;background:var(--info);">
+              <span class="seg-num">15</span>
+            </div>
+            <div class="trend-bar-seg" style="height:4px;background:var(--accent);">
+            </div>
+            <div class="trend-bar-seg" style="height:116px;background:var(--warning);">
+              <span class="seg-num">29</span>
+            </div>
+          </div>
+          <div class="trend-year-label">2023</div>
+          <div class="trend-total">45 件</div>
+        </div>
+        <!-- 2024 -->
+        <div class="trend-bar-group">
+          <div class="trend-bar-stack">
+            <div class="trend-bar-seg" style="height:88px;background:var(--info);">
+              <span class="seg-num">22</span>
+            </div>
+            <div class="trend-bar-seg" style="height:4px;background:var(--accent);">
+            </div>
+            <div class="trend-bar-seg" style="height:84px;background:var(--warning);">
+              <span class="seg-num">21</span>
+            </div>
+          </div>
+          <div class="trend-year-label">2024</div>
+          <div class="trend-total">44 件</div>
+        </div>
+        <!-- 2025 -->
+        <div class="trend-bar-group">
+          <div class="trend-bar-stack">
+            <div class="trend-bar-seg" style="height:140px;background:var(--info);">
+              <span class="seg-num">35</span>
+            </div>
+            <div class="trend-bar-seg" style="height:20px;background:var(--accent);">
+              <span class="seg-num">5</span>
+            </div>
+            <div class="trend-bar-seg" style="height:52px;background:var(--warning);">
+              <span class="seg-num">13</span>
+            </div>
+          </div>
+          <div class="trend-year-label">2025</div>
+          <div class="trend-total">53 件</div>
+        </div>
+      </div>
+      <div class="trend-legend">
+        <div class="trend-legend-item">
+          <div class="trend-legend-dot" style="background:var(--info);"></div>
+          <span>交通事故</span>
+        </div>
+        <div class="trend-legend-item">
+          <div class="trend-legend-dot" style="background:var(--warning);"></div>
+          <span>工安事故</span>
+        </div>
+        <div class="trend-legend-item">
+          <div class="trend-legend-dot" style="background:var(--accent);"></div>
+          <span>虛驚事故</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== 頁尾 ===== -->
+  <div class="footer">
+    大豐環保｜法務及環安課｜職業災害分析報告系統｜2026 年 3 月
+  </div>
+
 </body>
 </html>

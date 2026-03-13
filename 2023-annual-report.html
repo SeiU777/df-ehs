@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大豐環保 2023 年度職業災害分析報告</title>
+  <style>
+    /* ===== 基礎設定 ===== */
+    :root {
+      --primary: #1e4a6e;
+      --primary-light: #2a6496;
+      --primary-dark: #153a57;
+      --accent: #4caf50;
+      --accent-light: #81c784;
+      --warning: #ff9800;
+      --warning-light: #ffb74d;
+      --danger: #e53935;
+      --danger-light: #ef5350;
+      --info: #2196f3;
+      --info-light: #64b5f6;
+      --bg: #f5f7fa;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --text-light: #666666;
+      --border: #e0e0e0;
+      --shadow: 0 2px 8px rgba(0,0,0,0.1);
+      --shadow-hover: 0 4px 16px rgba(0,0,0,0.15);
+      --radius: 12px;
+      --sidebar-width: 300px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', 'Microsoft JhengHei', 'Noto Sans TC', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    /* ===== 側邊目錄觸發區 ===== */
+    .sidebar-trigger {
+      position: fixed; top: 0; left: 0; width: 18px; height: 100vh; z-index: 2000; cursor: pointer;
+    }
+    .sidebar-trigger::after {
+      content: ''; position: absolute; top: 50%; left: 4px; transform: translateY(-50%);
+      width: 6px; height: 60px; background: rgba(30,74,110,0.3); border-radius: 3px; transition: all 0.3s;
+    }
+    .sidebar-trigger:hover::after { background: rgba(30,74,110,0.7); width: 8px; height: 80px; }
+
+    /* ===== 側邊目錄面板 ===== */
+    .sidebar {
+      position: fixed; top: 0; left: -320px; width: var(--sidebar-width); height: 100vh;
+      background: white; box-shadow: 4px 0 20px rgba(0,0,0,0.15); z-index: 1999;
+      transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; overflow-x: hidden;
+    }
+    @media (min-width: 481px) {
+      .sidebar-trigger:hover ~ .sidebar, .sidebar:hover { left: 0; }
+    }
+    .sidebar-header {
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      color: white; padding: 20px 18px 14px; font-size: 1em; font-weight: 700;
+      position: sticky; top: 0; z-index: 1;
+    }
+    .sidebar-header small { display: block; font-weight: 400; font-size: 0.78em; opacity: 0.8; margin-top: 2px; }
+    .toc-group { padding: 6px 0; border-bottom: 1px solid #f0f0f0; }
+    .toc-chapter {
+      display: block; padding: 9px 18px; font-size: 0.88em; font-weight: 600;
+      color: var(--primary); text-decoration: none; transition: background 0.15s;
+      cursor: pointer; border-left: 3px solid transparent;
+    }
+    .toc-chapter:hover { background: #e3f2fd; border-left-color: var(--primary); }
+    .toc-sub {
+      display: block; padding: 5px 18px 5px 32px; font-size: 0.82em;
+      color: var(--text-light); text-decoration: none; transition: background 0.15s; cursor: pointer;
+    }
+    .toc-sub:hover { background: #f5f5f5; color: var(--primary); }
+    .sidebar-footer { padding: 12px 18px; font-size: 0.75em; color: #999; text-align: center; border-top: 1px solid #f0f0f0; }
+
+    /* ===== 主內容 ===== */
+    .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+    /* ===== 返回入口 ===== */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px;
+      background: white; color: var(--primary); border-radius: 8px; text-decoration: none;
+      font-size: 0.9em; font-weight: 600; box-shadow: var(--shadow); margin-bottom: 20px;
+      transition: all 0.2s;
+    }
+    .back-link:hover { background: var(--primary); color: white; }
+
+    /* ===== 封面卡片 ===== */
+    .cover-card {
+      background: linear-gradient(135deg, var(--accent) 0%, #66bb6a 50%, #43a047 100%);
+      color: white; border-radius: var(--radius); padding: 60px 40px; text-align: center;
+      margin-bottom: 30px; box-shadow: var(--shadow); position: relative; overflow: hidden;
+    }
+    .cover-card::before {
+      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 1; } }
+    .cover-card h1 { font-size: 2.2em; margin-bottom: 10px; position: relative; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .cover-card .subtitle { font-size: 1.1em; opacity: 0.9; position: relative; }
+    .cover-card .date { margin-top: 20px; font-size: 0.95em; opacity: 0.8; position: relative; }
+
+    /* ===== KPI 網格 ===== */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 30px; }
+    .kpi-card {
+      background: var(--card-bg); border-radius: var(--radius); padding: 24px 20px; text-align: center;
+      box-shadow: var(--shadow); border-top: 4px solid var(--primary); transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+    .kpi-card .big-number { font-size: 2.5em; font-weight: 700; color: var(--primary); line-height: 1.2; }
+    .kpi-card .kpi-label { font-size: 0.85em; color: var(--text-light); margin-top: 4px; }
+    .kpi-card.danger { border-top-color: var(--danger); }
+    .kpi-card.danger .big-number { color: var(--danger); }
+    .kpi-card.warning { border-top-color: var(--warning); }
+    .kpi-card.warning .big-number { color: var(--warning); }
+    .kpi-card.accent { border-top-color: var(--accent); }
+    .kpi-card.accent .big-number { color: var(--accent); }
+    .kpi-card.info { border-top-color: var(--info); }
+    .kpi-card.info .big-number { color: var(--info); }
+
+    /* ===== 通用卡片 ===== */
+    .card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 24px; overflow: hidden; }
+    .card-header { background: var(--primary); color: white; padding: 16px 24px; font-size: 1.15em; font-weight: 600; }
+    .card-header.warning-header { background: var(--warning); }
+    .card-header.danger-header { background: var(--danger); }
+    .card-header.accent-header { background: var(--accent); }
+    .card-header.info-header { background: var(--info); }
+    .card-body { padding: 24px; }
+
+    /* ===== 章節標題 ===== */
+    .chapter { margin-top: 40px; margin-bottom: 20px; scroll-margin-top: 20px; }
+    .chapter-title { font-size: 1.6em; color: var(--primary); border-left: 5px solid var(--primary); padding-left: 16px; margin-bottom: 8px; font-weight: 700; }
+    .chapter-subtitle { color: var(--text-light); font-size: 0.95em; padding-left: 21px; }
+
+    /* ===== 高亮卡片 ===== */
+    .highlight-card { background: linear-gradient(135deg, #e8f5e9, #f1f8e9); border-left: 4px solid var(--accent); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px; }
+    .warning-card { background: linear-gradient(135deg, #fff3e0, #fff8e1); border-left: 4px solid var(--warning); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px; }
+    .danger-card { background: linear-gradient(135deg, #ffebee, #fce4ec); border-left: 4px solid var(--danger); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px; }
+    .info-card { background: linear-gradient(135deg, #e3f2fd, #e1f5fe); border-left: 4px solid var(--info); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px; }
+
+    /* ===== 圓餅圖 ===== */
+    .chart-container { display: flex; align-items: center; gap: 30px; flex-wrap: wrap; justify-content: center; }
+    .pie-chart { width: 200px; height: 200px; border-radius: 50%; position: relative; flex-shrink: 0; }
+    .pie-chart::after { content: ''; position: absolute; top: 25%; left: 25%; width: 50%; height: 50%; background: white; border-radius: 50%; }
+    .chart-legend { display: flex; flex-direction: column; gap: 10px; }
+    .legend-item { display: flex; align-items: center; gap: 10px; font-size: 0.95em; }
+    .legend-color { width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0; }
+
+    /* ===== 表格 ===== */
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.92em; }
+    th { background: var(--primary); color: white; padding: 12px 14px; text-align: left; font-weight: 600; }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+    tr:nth-child(even) { background: #f8f9fa; }
+    tr:hover { background: #e3f2fd; }
+
+    /* ===== 徽章/風險 ===== */
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.8em; font-weight: 600; }
+    .badge-danger { background: #ffcdd2; color: #c62828; }
+    .badge-warning { background: #ffe0b2; color: #e65100; }
+    .badge-success { background: #c8e6c9; color: #2e7d32; }
+    .badge-info { background: #bbdefb; color: #1565c0; }
+    .risk-extreme { background: #b71c1c; color: white; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+    .risk-high { background: #e53935; color: white; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+    .risk-medium { background: #ff9800; color: white; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+    .risk-low { background: #4caf50; color: white; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+
+    /* ===== 長條圖 ===== */
+    .bar-chart { margin: 12px 0; }
+    .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 10px; }
+    .bar-label { width: 140px; text-align: right; font-size: 0.88em; flex-shrink: 0; }
+    .bar-track { flex: 1; background: #e0e0e0; border-radius: 6px; height: 24px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; padding-left: 8px; font-size: 0.78em; color: white; font-weight: 600; transition: width 0.6s ease; }
+    .bar-value { font-size: 0.88em; font-weight: 600; width: 50px; flex-shrink: 0; }
+
+    /* ===== 雙欄/三欄 ===== */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+    /* ===== 流程圖 ===== */
+    .flow-section { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 16px 0; }
+    .flow-box { background: var(--primary); color: white; padding: 12px 20px; border-radius: 8px; text-align: center; font-weight: 600; font-size: 0.92em; }
+    .flow-box.warning-box { background: var(--warning); }
+    .flow-box.danger-box { background: var(--danger); }
+    .flow-box.accent-box { background: var(--accent); }
+    .flow-arrow { font-size: 1.5em; color: var(--text-light); }
+
+    /* ===== 瑞士乳酪 ===== */
+    .swiss-cheese { display: flex; align-items: center; gap: 8px; overflow-x: auto; padding: 20px 0; }
+    .cheese-layer { min-width: 120px; background: linear-gradient(180deg, #ffcc80, #ffb74d); border-radius: 12px; padding: 16px 12px; text-align: center; font-size: 0.82em; font-weight: 600; position: relative; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .cheese-layer .hole { width: 20px; height: 20px; background: var(--bg); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    .cheese-arrow { font-size: 1.8em; color: var(--danger); flex-shrink: 0; }
+
+    /* ===== 清單 ===== */
+    .styled-list { list-style: none; padding: 0; }
+    .styled-list li { padding: 8px 0 8px 24px; position: relative; border-bottom: 1px solid #f0f0f0; }
+    .styled-list li::before { content: ''; position: absolute; left: 6px; top: 14px; width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
+    .styled-list li.danger-li::before { background: var(--danger); }
+    .styled-list li.warning-li::before { background: var(--warning); }
+
+    /* ===== 優先序卡 ===== */
+    .priority-card { display: flex; align-items: flex-start; gap: 16px; background: var(--card-bg); border-radius: var(--radius); padding: 20px; margin-bottom: 12px; box-shadow: var(--shadow); border-left: 5px solid var(--primary); }
+    .priority-card.p1 { border-left-color: var(--danger); }
+    .priority-card.p2 { border-left-color: var(--warning); }
+    .priority-card.p3 { border-left-color: var(--info); }
+    .priority-rank { font-size: 1.8em; font-weight: 800; line-height: 1; flex-shrink: 0; }
+    .priority-card.p1 .priority-rank { color: var(--danger); }
+    .priority-card.p2 .priority-rank { color: var(--warning); }
+    .priority-card.p3 .priority-rank { color: var(--info); }
+
+    .key-finding { background: #f8f9fa; border-radius: 8px; padding: 14px 18px; margin: 10px 0; font-size: 0.93em; border: 1px solid var(--border); }
+    .key-finding strong { color: var(--primary); }
+
+    .divider { border: none; height: 1px; background: linear-gradient(to right, transparent, var(--border), transparent); margin: 20px 0; }
+
+    .footer { text-align: center; color: var(--text-light); font-size: 0.85em; padding: 30px 0; margin-top: 40px; border-top: 1px solid var(--border); }
+
+    .back-to-top { position: fixed; bottom: 30px; right: 30px; width: 44px; height: 44px; background: var(--primary); color: white; border: none; border-radius: 50%; font-size: 1.3em; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.2); opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 999; }
+    .back-to-top.visible { opacity: 1; visibility: visible; }
+    .back-to-top:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+    .mobile-menu-btn { display: none; position: fixed; top: 12px; left: 12px; width: 42px; height: 42px; background: var(--primary); color: white; border: none; border-radius: 50%; font-size: 1.2em; cursor: pointer; z-index: 2001; box-shadow: 0 2px 10px rgba(0,0,0,0.25); transition: all 0.3s; line-height: 1; }
+    .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1998; opacity: 0; transition: opacity 0.3s; }
+    .sidebar-overlay.active { opacity: 1; }
+
+    .trend-up { color: var(--danger); font-weight: 700; }
+    .trend-down { color: var(--accent); font-weight: 700; }
+
+    /* ===== 響應式：平板 ===== */
+    @media (max-width: 768px) {
+      .two-col, .three-col { grid-template-columns: 1fr; }
+      .cover-card { padding: 40px 20px; }
+      .cover-card h1 { font-size: 1.6em; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .chart-container { flex-direction: column; }
+      .bar-label { width: 100px; font-size: 0.8em; }
+      .swiss-cheese { flex-direction: column; }
+      .sidebar { width: 280px; }
+      .flow-section { justify-content: center; }
+      .priority-card { flex-direction: column; gap: 10px; }
+    }
+    /* ===== 響應式：手機 ===== */
+    @media (max-width: 480px) {
+      body { font-size: 14px; line-height: 1.6; }
+      .container { padding: 12px 10px; }
+      .sidebar-trigger { display: none; }
+      .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+      .sidebar { width: 80vw; max-width: 300px; left: -85vw; transition: left 0.3s ease; }
+      .sidebar.open { left: 0; }
+      .cover-card { padding: 30px 16px; margin-bottom: 20px; border-radius: 8px; }
+      .cover-card h1 { font-size: 1.35em; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .kpi-card { padding: 16px 12px; }
+      .kpi-card .big-number { font-size: 1.8em; }
+      .chapter-title { font-size: 1.2em; padding-left: 12px; }
+      .card-header { padding: 12px 16px; font-size: 1em; }
+      .card-body { padding: 14px 12px; overflow-x: auto; }
+      .bar-label { width: 80px; font-size: 0.75em; }
+      .bar-value { width: 40px; font-size: 0.78em; }
+      .bar-fill { font-size: 0.7em; padding-left: 4px; }
+      .pie-chart { width: 160px; height: 160px; }
+      table { font-size: 0.8em; min-width: 420px; }
+      .back-to-top { width: 38px; height: 38px; bottom: 20px; right: 16px; font-size: 1.1em; }
+    }
+    @media print {
+      body { font-size: 12px; }
+      .card, .cover-card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+      .sidebar-trigger, .sidebar, .back-to-top, .mobile-menu-btn, .back-link { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleSidebar()" aria-label="開啟目錄">&#9776;</button>
+<div class="sidebar-trigger"></div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">2023 年度職災分析報告<small>大豐環保｜法務及環安課</small></div>
+  <div class="toc-group"><a class="toc-chapter" href="#cover">封面與 KPI 總覽</a></div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch1">第一章｜月度趨勢分析</a>
+    <a class="toc-sub" href="#ch1-month">月份事故分布</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch2">第二章｜事故分類分析</a>
+    <a class="toc-sub" href="#ch2-pie">分類佔比</a>
+    <a class="toc-sub" href="#ch2-detail">工安/交通細分</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch3">第三章｜事故類型深度分析</a>
+    <a class="toc-sub" href="#ch3-cut">3-1 被切割挫傷（9件）</a>
+    <a class="toc-sub" href="#ch3-fall">3-2 墜落與跌倒（7件）</a>
+    <a class="toc-sub" href="#ch3-pinch">3-3 被夾被捲（含永久失能）</a>
+    <a class="toc-sub" href="#ch3-traffic">3-4 交通事故（15件）</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch4">第四章｜部門風險排名</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch5">第五章｜嚴重度分析</a>
+    <a class="toc-sub" href="#ch5-perm">蘇密永久失能案例</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch6">第六章｜HSG48 人因分析</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch7">第七章｜根本原因分析</a>
+    <a class="toc-sub" href="#ch7-swiss">瑞士乳酪模型</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch8">第八章｜懲處與制度分析</a>
+    <a class="toc-sub" href="#ch8-drunk">林偉聖酒駕案例</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch9">第九章｜改善建議</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch10">第十章｜總結</a>
+  </div>
+  <div class="sidebar-footer">桌面：滑鼠移至左側邊緣｜手機：點左上角按鈕</div>
+</nav>
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到頂部">&#9650;</button>
+
+<div class="container">
+
+  <a href="index.html" class="back-link">&#9664; 返回報告總覽</a>
+
+  <!-- ===== 封面 ===== -->
+  <div id="cover" class="cover-card">
+    <h1>大豐環保 2023 年度職業災害分析報告</h1>
+    <div class="subtitle">分析期間：2023 年 1 月 ～ 2023 年 12 月｜整合 HSG48 人因分析與三層原因模型</div>
+    <div class="date">報告日期：2026 年 3 月 13 日｜法務及環安課</div>
+  </div>
+
+  <!-- ===== KPI ===== -->
+  <div class="kpi-grid">
+    <div class="kpi-card danger"><div class="big-number">45</div><div class="kpi-label">事故總件數</div></div>
+    <div class="kpi-card warning"><div class="big-number">3.75</div><div class="kpi-label">月均事故件數</div></div>
+    <div class="kpi-card"><div class="big-number">~144</div><div class="kpi-label">累計損失工日（天）</div></div>
+    <div class="kpi-card warning"><div class="big-number">29</div><div class="kpi-label">工安事故（64.4%）</div></div>
+    <div class="kpi-card info"><div class="big-number">15</div><div class="kpi-label">交通事故（33.3%）</div></div>
+    <div class="kpi-card danger"><div class="big-number">1</div><div class="kpi-label">永久性失能案例</div></div>
+  </div>
+
+  <!-- ===== 第一章 ===== -->
+  <div class="chapter" id="ch1"><h2 class="chapter-title">第一章｜月度趨勢分析</h2><p class="chapter-subtitle">Monthly Trend Analysis</p></div>
+
+  <div class="card" id="ch1-month">
+    <div class="card-header">2023 年各月事故件數分布</div>
+    <div class="card-body">
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label">1 月</div><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--primary);">2</div></div><div class="bar-value">2</div></div>
+        <div class="bar-row"><div class="bar-label">2 月</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--primary);">3</div></div><div class="bar-value">3</div></div>
+        <div class="bar-row"><div class="bar-label">3 月</div><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--primary);">2</div></div><div class="bar-value">2</div></div>
+        <div class="bar-row"><div class="bar-label">4 月</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--primary);">3</div></div><div class="bar-value">3</div></div>
+        <div class="bar-row"><div class="bar-label">5 月</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--warning);">3</div></div><div class="bar-value">3</div></div>
+        <div class="bar-row"><div class="bar-label">6 月</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--warning);">3</div></div><div class="bar-value">3</div></div>
+        <div class="bar-row"><div class="bar-label">7 月</div><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--primary);">2</div></div><div class="bar-value">2</div></div>
+        <div class="bar-row"><div class="bar-label">8 月</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--warning);">3</div></div><div class="bar-value">3</div></div>
+        <div class="bar-row"><div class="bar-label">9 月</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--danger);">5</div></div><div class="bar-value">5</div></div>
+        <div class="bar-row"><div class="bar-label">10 月</div><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--primary);">2</div></div><div class="bar-value">2</div></div>
+        <div class="bar-row"><div class="bar-label">11 月</div><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--primary);">2</div></div><div class="bar-value">2</div></div>
+        <div class="bar-row"><div class="bar-label">12 月</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--primary);">1</div></div><div class="bar-value">1</div></div>
+      </div>
+      <div class="key-finding"><strong>關鍵發現：</strong>9 月為全年高峰（5件），包含蘇密手指截斷永久失能案例（2/28夜班）、切割傷、交通事故等集中爆發。整體呈現均勻分布，無明顯季節性。</div>
+    </div>
+  </div>
+
+  <!-- ===== 第二章 ===== -->
+  <div class="chapter" id="ch2"><h2 class="chapter-title">第二章｜事故分類分析</h2><p class="chapter-subtitle">Accident Classification Breakdown</p></div>
+
+  <div class="card" id="ch2-pie">
+    <div class="card-header">2023 年事故分類佔比</div>
+    <div class="card-body">
+      <div class="chart-container">
+        <!-- 工安64.4% = 232deg, 交通33.3% = 120deg, 虛驚2.2% = 8deg -->
+        <div class="pie-chart" style="background: conic-gradient(var(--warning) 0deg 232deg, var(--info) 232deg 352deg, var(--accent) 352deg 360deg);"></div>
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-color" style="background:var(--warning);"></div><span><strong>工安事故：29 件（64.4%）</strong> — 年度最大宗</span></div>
+          <div class="legend-item"><div class="legend-color" style="background:var(--info);"></div><span>交通事故：15 件（33.3%）</span></div>
+          <div class="legend-item"><div class="legend-color" style="background:var(--accent);"></div><span>虛驚事故：1 件（2.2%）</span></div>
+        </div>
+      </div>
+      <div class="danger-card" style="margin-top:16px;">
+        <strong>2023 年度特色：工安事故佔絕對多數</strong><br>
+        與 2024、2025 年交通事故為主的型態截然不同，2023 年工安事故（29件）佔全年 <strong>64.4%</strong>。
+        這反映當年度廠區內作業安全管理仍有顯著缺口，特別是在分選作業、機台操作、高處作業等環節。
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col" id="ch2-detail">
+    <div class="card">
+      <div class="card-header warning-header">工安事故細分（29 件）</div>
+      <div class="card-body">
+        <table>
+          <tr><th>事故類型</th><th>件數</th><th>佔比</th></tr>
+          <tr><td><strong>被切、割、挫傷</strong></td><td><strong>9</strong></td><td><strong>31.0%</strong></td></tr>
+          <tr><td>墜落、滾落</td><td>5</td><td>17.2%</td></tr>
+          <tr><td>衝撞</td><td>3</td><td>10.3%</td></tr>
+          <tr><td>被夾、被捲</td><td>2</td><td>6.9%</td></tr>
+          <tr><td>跌倒</td><td>2</td><td>6.9%</td></tr>
+          <tr><td>被撞</td><td>2</td><td>6.9%</td></tr>
+          <tr><td>物體飛落</td><td>1</td><td>3.4%</td></tr>
+          <tr><td>有害物接觸</td><td>1</td><td>3.4%</td></tr>
+          <tr><td>其他（含上下班交通、狗咬等）</td><td>4</td><td>13.8%</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header info-header">交通事故細分（15 件）</div>
+      <div class="card-body">
+        <table>
+          <tr><th>子類型</th><th>件數</th><th>佔比</th></tr>
+          <tr><td>一般交通事故（含衝撞、被撞）</td><td>8</td><td>53.3%</td></tr>
+          <tr><td>上下班交通事故</td><td>7</td><td>46.7%</td></tr>
+        </table>
+        <div class="key-finding" style="margin-top:12px;">
+          <strong>分析：</strong>2023 年交通事故僅 15 件，但上下班通勤事故佔比高達 46.7%，
+          顯示員工通勤安全意識仍需強化。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第三章 ===== -->
+  <div class="chapter" id="ch3"><h2 class="chapter-title">第三章｜事故類型深度分析</h2><p class="chapter-subtitle">Deep Dive by Accident Type</p></div>
+
+  <div class="card" id="ch3-cut">
+    <div class="card-header danger-header">3-1 被切、割、挫傷分析（9 件）— 年度最大宗</div>
+    <div class="card-body">
+      <p style="margin-bottom:12px;">切割挫傷是 2023 年度最突出的安全問題，佔工安事故 <strong>31%</strong>，涉及刀具使用、分選作業、金屬處理等多元場景。</p>
+      <table>
+        <tr><th>案例</th><th>日期</th><th>部門</th><th>傷害</th><th>原因</th><th>休息</th></tr>
+        <tr><td>林建芳</td><td>04/19</td><td>北一課</td><td>右腳被堆高機撞到挫傷</td><td>未人車分離</td><td>20天</td></tr>
+        <tr><td>鍾雲青</td><td>05/18</td><td>北二課</td><td>手臂撕裂傷縫15針</td><td>僅戴手套未保護手臂</td><td>16天</td></tr>
+        <tr><td>恩波</td><td>03/02</td><td>中三課</td><td>額頭撕裂傷+牙齒斷裂</td><td>鋼索斷裂</td><td>7天</td></tr>
+        <tr><td>劉祥志</td><td>05/20</td><td>再生處理部</td><td>大腿膝蓋撕裂傷縫3針</td><td>香蕉刀使用不當</td><td>5天</td></tr>
+        <tr><td>潘玉簪</td><td>06/15</td><td>中三課</td><td>小腿割傷縫5針</td><td>美工刀割傷</td><td>3天</td></tr>
+        <tr><td>洪盈屏</td><td>04/27</td><td>北三課</td><td>眼睛被衣架打到結膜受損</td><td>分選拉扯物品</td><td>3天</td></tr>
+        <tr><td>李暘陞</td><td>09/07</td><td>全興造粒</td><td>手背割傷縫4針</td><td>未戴防切割手套</td><td>2天</td></tr>
+        <tr><td>邱建智</td><td>08/09</td><td>家電回收</td><td>手部割傷縫3針</td><td>天雨手滑家電脫手</td><td>1天</td></tr>
+        <tr><td>丁功正</td><td>06/21</td><td>宏偉處理</td><td>右小腿鐵線刺劃傷</td><td>未與物料保持安全距離</td><td>0.5天</td></tr>
+      </table>
+      <div class="danger-card" style="margin-top:16px;">
+        <strong>系統性防護缺口：</strong>9 件切割傷中，至少 5 件涉及防護具不足或未穿戴（未戴防切割手套、未戴護目鏡、手套僅保護手部未延伸手臂）。
+        這不是個人疏忽，而是<strong>防護具配置制度</strong>的系統性問題。
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="ch3-fall">
+    <div class="card-header warning-header">3-2 墜落與跌倒分析（7 件）</div>
+    <div class="card-body">
+      <p style="margin-bottom:12px;">墜落（5件）與跌倒（2件）合計 7 件，佔工安事故的 24.1%。</p>
+      <ul class="styled-list">
+        <li class="danger-li"><strong>高處作業：</strong>李暘陞站於 1.8m 高成品上方踩空摔落（休3天）、徐基銀上17噸車未使用安全梯跌倒（休4天）</li>
+        <li class="danger-li"><strong>階梯/樓梯：</strong>趙文凱夾桿下來時鞋底油漬加雨天滑落（休3天）</li>
+        <li class="warning-li"><strong>環境因素：</strong>潘玉簪上班途中被闖紅燈機車撞到、劉高佑彰濱工業區轉彎與車碰撞</li>
+        <li><strong>地面不平：</strong>李慶川倒玻璃時沒站穩被玻璃刺傷（休1.25天）</li>
+      </ul>
+      <div class="warning-card" style="margin-top:12px;">
+        <strong>高處作業防護不足：</strong>李暘陞案例（未有防護措施站在成品上方）建議懲處，反映高架作業 SOP 未落實。
+        徐基銀案例（未使用安全上下設備）同樣顯示「求快心態」凌駕安全程序。
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="ch3-pinch">
+    <div class="card-header danger-header">3-3 被夾、被捲分析（2 件）— 含永久失能</div>
+    <div class="card-body">
+      <table>
+        <tr><th>案例</th><th>日期</th><th>媒介物</th><th>傷害</th><th>根本原因</th></tr>
+        <tr style="background:#ffebee;">
+          <td><span class="badge badge-danger">永久失能</span> 蘇密</td>
+          <td>02/28</td><td>四號造粒機過濾器</td>
+          <td>食指第一節截斷</td><td>徒手操作，未使用規定工具（括刀）</td>
+        </tr>
+        <tr>
+          <td>紀拉狄</td><td>12/12</td><td>處理二課機台鐵網</td>
+          <td>大拇指及食指夾傷縫7針</td><td>同仁未確認手指已移開即操作鐵網下降</td>
+        </tr>
+      </table>
+      <div class="danger-card" style="margin-top:16px;">
+        <strong>LOTO（上鎖掛牌）嚴重缺口：</strong>蘇密案例為典型的「能量隔離失效」— 機械設備運轉中徒手接觸旋轉部件。
+        紀拉狄案例為「雙人作業未確認」— 一人未確認另一人手指位置即操作。兩案皆反映 LOTO 制度亟需全面建立。
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="ch3-traffic">
+    <div class="card-header info-header">3-4 交通事故分析（15 件）</div>
+    <div class="card-body">
+      <p style="margin-bottom:12px;">2023 年交通事故 15 件，佔 33.3%。雖非年度主要問題，但仍需關注。</p>
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label">倒車/轉彎疏忽</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--danger);">5</div></div><div class="bar-value">5 件</div></div>
+        <div class="bar-row"><div class="bar-label">被動遭撞（無責）</div><div class="bar-track"><div class="bar-fill" style="width:80%;background:var(--info);">4</div></div><div class="bar-value">4 件</div></div>
+        <div class="bar-row"><div class="bar-label">上下班通勤自摔</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--primary-light);">3</div></div><div class="bar-value">3 件</div></div>
+        <div class="bar-row"><div class="bar-label">追撞/未保持車距</div><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--warning);">2</div></div><div class="bar-value">2 件</div></div>
+        <div class="bar-row"><div class="bar-label">酒駕</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:#9c27b0;">1</div></div><div class="bar-value">1 件</div></div>
+      </div>
+      <div class="danger-card" style="margin-top:12px;">
+        <strong>酒駕重大事件：</strong>林偉聖前晚飲酒，未依規定使用酒測 APP 即出車，下午酒測值達 <strong>0.57</strong>，已當場移送。
+        此為年度最嚴重的違規行為，屬「例外性違規（Exceptional Violation）」。
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第四章 ===== -->
+  <div class="chapter" id="ch4"><h2 class="chapter-title">第四章｜部門風險排名</h2><p class="chapter-subtitle">Department Risk Ranking</p></div>
+
+  <div class="card">
+    <div class="card-header danger-header">2023 年部門事故件數排名</div>
+    <div class="card-body">
+      <table>
+        <tr><th>排名</th><th>部門</th><th>件數</th><th>佔比</th><th>主要類型</th><th>風險等級</th></tr>
+        <tr><td>1</td><td><strong>中區業務一課</strong></td><td>5</td><td>11.1%</td><td>交通事故為主</td><td><span class="risk-high">高</span></td></tr>
+        <tr><td>2</td><td><strong>北區業務三課</strong></td><td>5</td><td>11.1%</td><td>工安（分選切割傷）</td><td><span class="risk-high">高</span></td></tr>
+        <tr><td>3</td><td><strong>中區業務三課</strong></td><td>5</td><td>11.1%</td><td>工安（切割+墜落）</td><td><span class="risk-high">高</span></td></tr>
+        <tr><td>4</td><td><strong>全興造粒課</strong></td><td>4</td><td>8.9%</td><td>工安（機台操作）</td><td><span class="risk-high">高</span></td></tr>
+        <tr><td>5</td><td><strong>北區業務二課</strong></td><td>3</td><td>6.7%</td><td>工安（化學+切割）</td><td><span class="risk-medium">中</span></td></tr>
+        <tr><td>6</td><td><strong>家電回收課</strong></td><td>2</td><td>4.4%</td><td>工安+交通</td><td><span class="risk-medium">中</span></td></tr>
+        <tr><td>7</td><td><strong>竹北站</strong></td><td>2</td><td>4.4%</td><td>工安（墜落+物體飛落）</td><td><span class="risk-medium">中</span></td></tr>
+        <tr><td>8</td><td><strong>和美站</strong></td><td>2</td><td>4.4%</td><td>交通事故</td><td><span class="risk-low">低</span></td></tr>
+        <tr><td>9</td><td><strong>北區業務一課</strong></td><td>2</td><td>4.4%</td><td>工安+交通</td><td><span class="risk-low">低</span></td></tr>
+      </table>
+      <div class="key-finding" style="margin-top:16px;">
+        <strong>80/20 法則：</strong>前 4 大部門合計 19 件，佔全年事故的 <strong>42.2%</strong>。
+        其中北三課與中三課以分選作業切割傷為主，全興造粒課以機台操作傷害為主。
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第五章 ===== -->
+  <div class="chapter" id="ch5"><h2 class="chapter-title">第五章｜嚴重度分析</h2><p class="chapter-subtitle">Severity Analysis</p></div>
+
+  <div class="card">
+    <div class="card-header danger-header">嚴重度分級統計</div>
+    <div class="card-body">
+      <table>
+        <tr><th>嚴重度</th><th>定義</th><th>件數</th><th>佔比</th></tr>
+        <tr style="background:#ffebee;"><td><span class="risk-extreme">永久失能</span></td><td>永久性身體功能損失</td><td>1</td><td>2.2%</td></tr>
+        <tr style="background:#ffebee;"><td><span class="risk-high">重大</span></td><td>休息 ≥ 30 天</td><td>0</td><td>0%</td></tr>
+        <tr><td><span class="risk-medium">中度</span></td><td>休息 3-29 天</td><td>12</td><td>26.7%</td></tr>
+        <tr><td><span class="risk-low">輕微</span></td><td>休息 0-2 天</td><td>32</td><td>71.1%</td></tr>
+      </table>
+      <div class="key-finding" style="margin-top:12px;">
+        <strong>分析：</strong>雖無 ≥30 天的重大事故，但有 1 件永久失能（蘇密手指截斷）。
+        中度事故佔 26.7%，主要為切割傷需縫合休養的案例。整體損失工日約 144 天，在三年中為最低。
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="ch5-perm">
+    <div class="card-header danger-header">永久失能案例：蘇密 — 手指截斷</div>
+    <div class="card-body">
+      <div class="danger-card">
+        <table style="font-size:0.9em;">
+          <tr><td style="width:90px;font-weight:600;">日期時間</td><td>2023/02/28 23:03（夜班）</td></tr>
+          <tr><td style="font-weight:600;">地點</td><td>全興廠造粒課四號造粒機</td></tr>
+          <tr><td style="font-weight:600;">傷害</td><td>食指第一節截斷（永久失能）</td></tr>
+          <tr><td style="font-weight:600;">直接原因</td><td>更換過濾器濾網時，徒手固定濾網，在操作機台時未及時收回手指，遭過濾器夾斷</td></tr>
+          <tr><td style="font-weight:600;">間接原因</td><td>未使用規定工具（括刀）固定膠膜及鐵網，違反 SOP 最後步驟</td></tr>
+          <tr><td style="font-weight:600;">根本原因</td><td>1. LOTO 制度未落實 2. 夜班監督不足 3. 安全訓練未確實內化</td></tr>
+          <tr><td style="font-weight:600;">改善要求</td><td>全面建立 LOTO 制度、加裝機台安全連鎖裝置、強化夜班安全監督</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第六章 ===== -->
+  <div class="chapter" id="ch6"><h2 class="chapter-title">第六章｜HSG48 人因分析</h2><p class="chapter-subtitle">Human Failure Mode Analysis</p></div>
+
+  <div class="card">
+    <div class="card-header">HSG48 人為失效分類框架</div>
+    <div class="card-body">
+      <div class="flow-section" style="justify-content:center;">
+        <div class="flow-box" style="background:#1565c0;">人為失效</div>
+        <div class="flow-arrow">→</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="flow-box" style="background:#42a5f5;">失誤 Error</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box" style="background:#90caf9;color:#333;">疏忽 Slip</div>
+            <div class="flow-box" style="background:#90caf9;color:#333;">遺忘 Lapse</div>
+            <div class="flow-box" style="background:#90caf9;color:#333;">錯誤判斷 Mistake</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="flow-box danger-box">違規 Violation</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box" style="background:#ef9a9a;color:#333;">例行性</div>
+            <div class="flow-box" style="background:#ef9a9a;color:#333;">情境性</div>
+            <div class="flow-box" style="background:#ef9a9a;color:#333;">例外性</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header danger-header">45 件事故人因分類統計</div>
+    <div class="card-body">
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label">例行性違規</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--danger);">15</div></div><div class="bar-value">15 件</div></div>
+        <div class="bar-row"><div class="bar-label">疏忽 Slip</div><div class="bar-track"><div class="bar-fill" style="width:80%;background:#42a5f5;">12</div></div><div class="bar-value">12 件</div></div>
+        <div class="bar-row"><div class="bar-label">錯誤判斷 Mistake</div><div class="bar-track"><div class="bar-fill" style="width:53%;background:#90caf9;">8</div></div><div class="bar-value">8 件</div></div>
+        <div class="bar-row"><div class="bar-label">遺忘 Lapse</div><div class="bar-track"><div class="bar-fill" style="width:33%;background:#bbdefb;">5</div></div><div class="bar-value">5 件</div></div>
+        <div class="bar-row"><div class="bar-label">情境性違規</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:#ef9a9a;">3</div></div><div class="bar-value">3 件</div></div>
+        <div class="bar-row"><div class="bar-label">例外性違規</div><div class="bar-track"><div class="bar-fill" style="width:13%;background:#ffcdd2;">2</div></div><div class="bar-value">2 件</div></div>
+      </div>
+      <div class="warning-card" style="margin-top:16px;">
+        <strong>2023 年人因特色：例行性違規佔比最高（33.3%）</strong><br>
+        主要表現為：未穿戴防切割手套即進行分選作業、未使用安全梯/安全帶進行高處作業、未依 SOP 使用規定工具。
+        這反映「一直這樣做也沒事」的僥倖心態已成為組織文化問題。
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第七章 ===== -->
+  <div class="chapter" id="ch7"><h2 class="chapter-title">第七章｜根本原因分析</h2><p class="chapter-subtitle">Root Cause Analysis</p></div>
+
+  <div class="card">
+    <div class="card-header">「基本原因」欄位統計</div>
+    <div class="card-body">
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label">缺乏知識或技能</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--danger);">26</div></div><div class="bar-value">26 件</div></div>
+        <div class="bar-row"><div class="bar-label">不符合工作標準</div><div class="bar-track"><div class="bar-fill" style="width:23%;background:var(--warning);">6</div></div><div class="bar-value">6 件</div></div>
+        <div class="bar-row"><div class="bar-label">其他（含交通事故等）</div><div class="bar-track"><div class="bar-fill" style="width:46%;background:var(--primary-light);">12</div></div><div class="bar-value">12 件</div></div>
+        <div class="bar-row"><div class="bar-label">工具或設備不足</div><div class="bar-track"><div class="bar-fill" style="width:4%;background:#607d8b;">1</div></div><div class="bar-value">1 件</div></div>
+      </div>
+      <div class="key-finding" style="margin-top:12px;">
+        <strong>深層分析：</strong>「缺乏知識或技能」佔 57.8%，但其中很大比例實為「已知規範但未落實」（如蘇密知道應用括刀但徒手操作），
+        反映訓練與實踐之間存在嚴重落差。
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="ch7-swiss">
+    <div class="card-header">瑞士乳酪模型 — 以蘇密案例為例</div>
+    <div class="card-body">
+      <p style="margin-bottom:16px;">蘇密手指截斷事故，是多層防護同時失效的結果：</p>
+      <div class="swiss-cheese">
+        <div class="cheese-layer" style="background:linear-gradient(180deg,#c8e6c9,#a5d6a7);">
+          <div class="hole"></div>
+          <div style="position:relative;z-index:1;">組織層<br><span style="font-size:0.75em;">LOTO 制度<br>未建立</span></div>
+        </div>
+        <div class="cheese-arrow">→</div>
+        <div class="cheese-layer" style="background:linear-gradient(180deg,#bbdefb,#90caf9);">
+          <div class="hole"></div>
+          <div style="position:relative;z-index:1;">監督層<br><span style="font-size:0.75em;">夜班監督<br>人力不足</span></div>
+        </div>
+        <div class="cheese-arrow">→</div>
+        <div class="cheese-layer" style="background:linear-gradient(180deg,#ffe0b2,#ffcc80);">
+          <div class="hole"></div>
+          <div style="position:relative;z-index:1;">設備層<br><span style="font-size:0.75em;">機台無<br>安全連鎖</span></div>
+        </div>
+        <div class="cheese-arrow">→</div>
+        <div class="cheese-layer" style="background:linear-gradient(180deg,#ffcdd2,#ef9a9a);">
+          <div class="hole"></div>
+          <div style="position:relative;z-index:1;">行為層<br><span style="font-size:0.75em;">徒手操作<br>未用工具</span></div>
+        </div>
+        <div class="cheese-arrow">→</div>
+        <div class="flow-box danger-box" style="font-size:0.85em;">事故<br>手指截斷</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第八章 ===== -->
+  <div class="chapter" id="ch8"><h2 class="chapter-title">第八章｜懲處與制度分析</h2><p class="chapter-subtitle">Disciplinary & System Analysis</p></div>
+
+  <div class="card">
+    <div class="card-header">2023 年懲處案件一覽</div>
+    <div class="card-body">
+      <table>
+        <tr><th>員工</th><th>日期</th><th>事由</th><th>嚴重度</th></tr>
+        <tr style="background:#ffebee;"><td><strong>林偉聖</strong></td><td>06/23</td><td>酒後駕車（酒測值 0.57），未依規定使用酒測 APP</td><td><span class="risk-extreme">極高</span></td></tr>
+        <tr><td>王紹齊</td><td>11/24</td><td>無堆高機證卻操作堆高機並撞傷人員</td><td><span class="risk-high">高</span></td></tr>
+        <tr><td>李暘陞</td><td>11/01</td><td>未依標準作業程序進行高架作業</td><td><span class="risk-medium">中</span></td></tr>
+        <tr><td>林君憲</td><td>09/23</td><td>手煞車未拉緊未放輪檔，車輛滑行撞後方車輛</td><td><span class="risk-medium">中</span></td></tr>
+        <tr><td>鄭汪斌</td><td>07/27</td><td>倒車時撞到後方機車</td><td><span class="risk-low">低</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" id="ch8-drunk">
+    <div class="card-header danger-header">重大案例：林偉聖酒駕事件</div>
+    <div class="card-body">
+      <div class="danger-card">
+        <p><strong>事實：</strong>林偉聖自陳前一天晚上喝酒，早上上班未依公司規定使用酒測 APP 就出車。
+        下午 3:35 因轉頭拿東西未注意前方車輛導致追撞。經警察酒測值達 <strong>0.57</strong>，當場移送。
+        後經調閱行車影像確認當天工作時間無飲酒，經詢問得知有酒精肝導致代謝不好。</p>
+        <hr class="divider">
+        <p><strong>HSG48 分類：例外性違規（Exceptional Violation）</strong></p>
+        <p>此案同時涉及：</p>
+        <ul style="padding-left:20px;margin-top:6px;">
+          <li>酒後駕駛 — 違反道路交通管理處罰條例</li>
+          <li>未使用酒測 APP — 違反公司內部駕駛前規定</li>
+          <li>駕駛時分心 — 轉頭拿東西導致追撞</li>
+        </ul>
+        <p style="margin-top:12px;"><strong>制度改善建議：</strong>酒測 APP 應改為「強制連動」（未完成酒測則無法啟動車輛 GPS），
+        而非僅依賴員工自律。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第九章 ===== -->
+  <div class="chapter" id="ch9"><h2 class="chapter-title">第九章｜改善建議</h2><p class="chapter-subtitle">Improvement Recommendations</p></div>
+
+  <div class="priority-card p1">
+    <div class="priority-rank">P1</div>
+    <div>
+      <h4 style="color:var(--danger);">LOTO 制度全面建立</h4>
+      <p>針對蘇密、紀拉狄案例，全興廠及所有有機台操作的場域必須建立上鎖掛牌制度。
+      所有旋轉/壓合設備維護前須完全停機、能量隔離、上鎖掛牌並經雙人確認。</p>
+    </div>
+  </div>
+  <div class="priority-card p1">
+    <div class="priority-rank">P1</div>
+    <div>
+      <h4 style="color:var(--danger);">分選作業防護具升級</h4>
+      <p>9 件切割傷為年度最大宗。立即措施：強制配發防切割手套、護目鏡、手臂護套。
+      分選區入口設置防護具檢查站，未配戴不得進入。</p>
+    </div>
+  </div>
+  <div class="priority-card p2">
+    <div class="priority-rank">P2</div>
+    <div>
+      <h4 style="color:var(--warning);">高處作業 SOP 強化</h4>
+      <p>李暘陞（踩空）、徐基銀（未用安全梯）等案例，需落實：1.8m 以上作業強制背負式安全帶、
+      車輛上下貨統一使用安全階梯椅、嚴禁站在貨物上方作業。</p>
+    </div>
+  </div>
+  <div class="priority-card p2">
+    <div class="priority-rank">P2</div>
+    <div>
+      <h4 style="color:var(--warning);">酒測制度強制連動</h4>
+      <p>林偉聖酒駕案例暴露酒測 APP 僅靠自律的漏洞。建議將酒測與車輛啟動/GPS 連動，
+      未完成酒測則紀錄異常並通報。</p>
+    </div>
+  </div>
+  <div class="priority-card p3">
+    <div class="priority-rank">P3</div>
+    <div>
+      <h4 style="color:var(--info);">堆高機操作資格管理</h4>
+      <p>王紹齊無證操作堆高機造成人員受傷。建議建立堆高機操作人員名冊及授權系統，
+      未取得證照者嚴禁操作，主管負連帶責任。</p>
+    </div>
+  </div>
+
+  <!-- ===== 第十章 ===== -->
+  <div class="chapter" id="ch10"><h2 class="chapter-title">第十章｜總結</h2><p class="chapter-subtitle">Summary & Key Takeaways</p></div>
+
+  <div class="card">
+    <div class="card-header accent-header">2023 年度核心發現</div>
+    <div class="card-body">
+      <div class="highlight-card">
+        <strong>1. 工安事故主導年度：</strong>29 件工安事故佔 64.4%，與後續年度交通事故為主的趨勢截然不同。
+      </div>
+      <div class="danger-card">
+        <strong>2. 切割傷為系統性問題：</strong>9 件被切割挫傷為年度最大宗，反映分選作業防護具配置嚴重不足。
+      </div>
+      <div class="danger-card">
+        <strong>3. 蘇密永久失能：</strong>手指截斷事故暴露 LOTO 制度空白，為最需優先改善的安全缺口。
+      </div>
+      <div class="warning-card">
+        <strong>4. 例行性違規文化：</strong>HSG48 分析顯示 33.3% 為例行性違規，「求快捷、省步驟」已成為常態。
+      </div>
+      <div class="info-card">
+        <strong>5. 損失工日較低：</strong>約 144 天為三年最低，但永久失能案例的隱性成本遠高於工日損失。
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    大豐環保｜法務及環安課｜2023 年度職災分析報告｜報告日期：2026 年 3 月 13 日
+    <br><a href="index.html" style="color:var(--primary);">← 返回報告總覽</a>
+  </div>
+
+</div>
+
+<script>
+  // 回頂部按鈕
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    backToTop.classList.toggle('visible', window.scrollY > 400);
+  });
+
+  // 手機側邊目錄
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    sidebar.classList.toggle('open');
+    if (sidebar.classList.contains('open')) {
+      overlay.style.display = 'block';
+      setTimeout(() => overlay.classList.add('active'), 10);
+    } else {
+      closeSidebar();
+    }
+  }
+  function closeSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+    setTimeout(() => overlay.style.display = 'none', 300);
+  }
+  // 點選目錄項目後自動關閉（手機）
+  document.querySelectorAll('.toc-chapter, .toc-sub').forEach(a => {
+    a.addEventListener('click', () => { if (window.innerWidth <= 480) closeSidebar(); });
+  });
+</script>
+</body>
+</html>
