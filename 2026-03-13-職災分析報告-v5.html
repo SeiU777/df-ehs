@@ -81,9 +81,12 @@
       overflow-y: auto;
       overflow-x: hidden;
     }
-    .sidebar-trigger:hover ~ .sidebar,
-    .sidebar:hover {
-      left: 0;
+    /* 桌面才用 hover 觸發，手機用 JS toggle */
+    @media (min-width: 481px) {
+      .sidebar-trigger:hover ~ .sidebar,
+      .sidebar:hover {
+        left: 0;
+      }
     }
 
     .sidebar-header {
@@ -683,7 +686,49 @@
       transform: translateY(-2px);
     }
 
-    /* ===== 響應式 ===== */
+    /* ===== 手機目錄開關按鈕 ===== */
+    .mobile-menu-btn {
+      display: none;
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      width: 42px;
+      height: 42px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.2em;
+      cursor: pointer;
+      z-index: 2001;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+      transition: all 0.3s;
+      line-height: 1;
+    }
+    .mobile-menu-btn:active {
+      transform: scale(0.92);
+    }
+
+    /* ===== 側邊目錄遮罩 ===== */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: 1998;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .sidebar-overlay.active {
+      opacity: 1;
+    }
+
+    /* ===== 表格響應式（空佔位，由 card-body overflow 處理） ===== */
+
+    /* ===== 響應式：平板 ===== */
     @media (max-width: 768px) {
       .two-col, .three-col { grid-template-columns: 1fr; }
       .cover-card { padding: 40px 20px; }
@@ -692,7 +737,117 @@
       .chart-container { flex-direction: column; }
       .bar-label { width: 100px; font-size: 0.8em; }
       .swiss-cheese { flex-direction: column; }
-      .sidebar { width: 260px; }
+      .sidebar { width: 280px; }
+      .flow-section { justify-content: center; }
+      .priority-card { flex-direction: column; gap: 10px; }
+      .priority-rank { font-size: 1.4em; }
+    }
+
+    /* ===== 響應式：手機 ===== */
+    @media (max-width: 480px) {
+      body { font-size: 14px; line-height: 1.6; }
+      .container { padding: 12px 10px; }
+
+      /* 隱藏 hover 觸發，改用按鈕 */
+      .sidebar-trigger { display: none; }
+      .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+
+      /* 側邊欄手機模式：靠 JS class 控制 */
+      .sidebar {
+        width: 80vw;
+        max-width: 300px;
+        left: -85vw;
+        transition: left 0.3s ease;
+      }
+      .sidebar.open { left: 0; }
+
+      /* 封面 */
+      .cover-card { padding: 30px 16px; margin-bottom: 20px; border-radius: 8px; }
+      .cover-card h1 { font-size: 1.35em; }
+      .cover-card .subtitle { font-size: 0.85em; }
+      .cover-card .date { font-size: 0.8em; margin-top: 12px; }
+
+      /* KPI */
+      .kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+      .kpi-card { padding: 16px 12px; border-radius: 8px; }
+      .kpi-card .big-number { font-size: 1.8em; }
+      .kpi-card .kpi-label { font-size: 0.75em; }
+
+      /* 章節 */
+      .chapter { margin-top: 28px; margin-bottom: 14px; }
+      .chapter-title { font-size: 1.2em; padding-left: 12px; border-left-width: 4px; }
+      .chapter-subtitle { font-size: 0.82em; padding-left: 16px; }
+
+      /* 卡片 */
+      .card { border-radius: 8px; margin-bottom: 16px; }
+      .card-header { padding: 12px 16px; font-size: 1em; }
+      .card-body { padding: 14px 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+      /* 高亮卡片 */
+      .highlight-card, .warning-card, .danger-card, .info-card {
+        padding: 14px 14px;
+        border-radius: 8px;
+        font-size: 0.9em;
+      }
+
+      /* 長條圖 */
+      .bar-label { width: 80px; font-size: 0.75em; }
+      .bar-value { width: 40px; font-size: 0.78em; }
+      .bar-fill { font-size: 0.7em; padding-left: 4px; }
+      .bar-track { height: 20px; }
+
+      /* 圓餅圖 */
+      .pie-chart { width: 160px; height: 160px; }
+      .legend-item { font-size: 0.82em; gap: 6px; }
+      .legend-color { width: 12px; height: 12px; }
+
+      /* 表格 */
+      table { font-size: 0.8em; min-width: 420px; }
+      th { padding: 8px 8px; font-size: 0.82em; white-space: nowrap; }
+      td { padding: 7px 8px; }
+
+      /* 流程圖 */
+      .flow-section { gap: 6px; }
+      .flow-box { padding: 8px 10px; font-size: 0.78em; }
+      .flow-arrow { font-size: 1.1em; }
+
+      /* 瑞士乳酪 */
+      .cheese-layer { min-width: 90px; padding: 10px 8px; font-size: 0.72em; }
+      .cheese-arrow { font-size: 1.3em; }
+
+      /* 益處格子 */
+      .benefits { grid-template-columns: 1fr; gap: 10px; }
+      .benefit-item { padding: 12px; }
+      .benefit-item h4 { font-size: 0.88em; }
+      .benefit-item p { font-size: 0.82em; }
+
+      /* 時間軸 */
+      .timeline { padding-left: 22px; }
+      .timeline-item { padding-left: 14px; margin-bottom: 14px; }
+      .timeline-item::before { left: -19px; width: 10px; height: 10px; }
+      .timeline-item h4 { font-size: 0.92em; }
+      .timeline-item p { font-size: 0.85em; }
+
+      /* 優先序卡 */
+      .priority-card { padding: 14px; flex-direction: column; gap: 8px; }
+      .priority-rank { font-size: 1.3em; }
+
+      /* 徽章 */
+      .badge { padding: 2px 7px; font-size: 0.72em; }
+      .risk-extreme, .risk-high, .risk-medium, .risk-low { padding: 3px 8px; font-size: 0.72em; }
+
+      /* key-finding */
+      .key-finding { padding: 10px 12px; font-size: 0.85em; }
+
+      /* 清單 */
+      .styled-list li { padding: 6px 0 6px 20px; font-size: 0.88em; }
+      .styled-list li::before { left: 4px; top: 12px; width: 6px; height: 6px; }
+
+      /* 回頂部 */
+      .back-to-top { width: 38px; height: 38px; bottom: 20px; right: 16px; font-size: 1.1em; }
+
+      /* 頁尾 */
+      .footer { font-size: 0.78em; padding: 20px 10px; }
     }
 
     /* ===== 列印樣式 ===== */
@@ -708,8 +863,14 @@
 </head>
 <body>
 
-<!-- ===== 側邊目錄觸發區 ===== -->
+<!-- ===== 手機目錄按鈕 ===== -->
+<button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleSidebar()" aria-label="開啟目錄">&#9776;</button>
+
+<!-- ===== 側邊目錄觸發區（桌面用） ===== -->
 <div class="sidebar-trigger"></div>
+
+<!-- ===== 側邊目錄遮罩（手機用） ===== -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
 <!-- ===== 側邊目錄面板 ===== -->
 <nav class="sidebar" id="sidebar">
@@ -814,7 +975,7 @@
     <a class="toc-sub" href="#ch14-benefit">預期效益</a>
   </div>
 
-  <div class="sidebar-footer">滑鼠移至左側邊緣開啟目錄</div>
+  <div class="sidebar-footer">桌面：滑鼠移至左側邊緣｜手機：點左上角按鈕</div>
 </nav>
 
 <!-- ===== 回頂部按鈕 ===== -->
@@ -2440,8 +2601,40 @@
 </div><!-- container 結束 -->
 
 <script>
-  // 回頂部按鈕顯示/隱藏
-  const backToTop = document.getElementById('backToTop');
+  // ===== 手機側邊目錄開關 =====
+  var sidebar = document.getElementById('sidebar');
+  var overlay = document.getElementById('sidebarOverlay');
+  var menuBtn = document.getElementById('mobileMenuBtn');
+
+  function toggleSidebar() {
+    var isOpen = sidebar.classList.contains('open');
+    if (isOpen) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  }
+
+  function openSidebar() {
+    sidebar.classList.add('open');
+    overlay.style.display = 'block';
+    requestAnimationFrame(function() {
+      overlay.classList.add('active');
+    });
+    menuBtn.innerHTML = '&#10005;';
+  }
+
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+    setTimeout(function() {
+      overlay.style.display = 'none';
+    }, 300);
+    menuBtn.innerHTML = '&#9776;';
+  }
+
+  // ===== 回頂部按鈕 =====
+  var backToTop = document.getElementById('backToTop');
   window.addEventListener('scroll', function() {
     if (window.scrollY > 400) {
       backToTop.classList.add('visible');
@@ -2450,19 +2643,27 @@
     }
   });
 
-  // 點擊目錄項目後平滑滾動
+  // ===== 點擊目錄項目：平滑滾動 + 手機自動關閉側邊欄 =====
   document.querySelectorAll('.sidebar a[href^="#"]').forEach(function(link) {
     link.addEventListener('click', function(e) {
       e.preventDefault();
       var targetId = this.getAttribute('href').substring(1);
       var target = document.getElementById(targetId);
       if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // 手機時先關閉側邊欄再滾動
+        if (window.innerWidth <= 480) {
+          closeSidebar();
+          setTimeout(function() {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 350);
+        } else {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       }
     });
   });
 
-  // 捲動時高亮目前所在章節
+  // ===== 捲動時高亮目前章節 =====
   var chapters = document.querySelectorAll('.chapter[id]');
   var tocLinks = document.querySelectorAll('.toc-chapter[href]');
 
