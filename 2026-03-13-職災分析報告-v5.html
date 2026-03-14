@@ -147,6 +147,14 @@
       border-top: 1px solid #f0f0f0;
     }
 
+    /* ===== 返回連結 ===== */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px;
+      background: white; color: var(--primary); border-radius: 8px; text-decoration: none;
+      font-size: 0.9em; font-weight: 600; box-shadow: var(--shadow); margin-bottom: 20px; transition: all 0.2s;
+    }
+    .back-link:hover { background: var(--primary); color: white; }
+
     /* ===== 主內容 ===== */
     .container {
       max-width: 1100px;
@@ -752,6 +760,9 @@
       .sidebar-trigger { display: none; }
       .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
 
+      /* 返回按鈕避開選單按鈕 */
+      .back-link { margin-left: 48px; }
+
       /* 側邊欄手機模式：靠 JS class 控制 */
       .sidebar {
         width: 80vw;
@@ -984,10 +995,12 @@
 <!-- ===== 主內容區 ===== -->
 <div class="container">
 
+  <a href="index.html" class="back-link">&#9664; 返回報告總覽</a>
+
   <!-- ===== 封面 ===== -->
   <div id="cover" class="cover-card">
     <h1>大豐環保 職業災害深度分析報告</h1>
-    <div class="subtitle">分析期間：2023 年 1 月 ～ 2025 年 12 月｜整合 HSG48 人因分析與三層原因模型</div>
+    <div class="subtitle">分析期間：2023 年 1 月 ～ 2025 年 12 月</div>
     <div class="date">報告日期：2026 年 3 月 13 日｜法務及環安課</div>
   </div>
 

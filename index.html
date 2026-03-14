@@ -132,13 +132,16 @@
 
     /* ===== 報告選擇卡片 ===== */
     .report-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      display: flex;
+      flex-wrap: wrap;
       gap: 24px;
+      justify-content: center;
       margin-bottom: 50px;
     }
 
     .report-card {
+      width: 260px;
+      flex-shrink: 0;
       background: var(--card-bg);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -342,6 +345,19 @@
       .kpi-item .num { font-size: 1.5em; }
       .main { padding: 24px 12px 40px; }
       .section-title { font-size: 1.2em; }
+      .report-grid {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        justify-content: flex-start;
+        padding: 4px 12px 16px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .report-card {
+        scroll-snap-align: center;
+        min-width: 240px;
+        width: 240px;
+      }
       .trend-chart { gap: 16px; }
       .trend-bar-stack { width: 56px; }
     }
@@ -354,7 +370,6 @@
       .kpi-item { min-width: 70px; }
       .kpi-item .num { font-size: 1.3em; }
       .kpi-item .label { font-size: 0.72em; }
-      .report-grid { grid-template-columns: 1fr; gap: 16px; }
       .report-card .card-top { padding: 24px 18px 16px; }
       .report-card .card-top h2 { font-size: 1.25em; }
       .report-card .card-body { padding: 16px 18px 20px; }
@@ -375,7 +390,7 @@
   <!-- ===== 頂部橫幅 ===== -->
   <div class="hero">
     <h1>大豐環保 職業災害分析報告</h1>
-    <div class="subtitle">分析期間：2023 年 1 月 ~ 2025 年 12 月｜整合 HSG48 人因分析與三層原因模型</div>
+    <div class="subtitle">分析期間：2023 年 1 月 ~ 2025 年 12 月</div>
     <div class="org">法務及環安課｜報告日期：2026 年 3 月 13 日</div>
   </div>
 
@@ -421,7 +436,7 @@
     <div class="report-grid">
 
       <!-- 總覽對比 -->
-      <a href="https://seiu777.github.io/df-ehs/2026-03-13-職災分析報告-v5.html" class="report-card card-overview">
+      <a href="2026-03-13-職災分析報告-v5.html" class="report-card card-overview">
         <div class="card-top">
           <h2>總覽對比</h2>
           <div class="period">2023 ~ 2025 三年度</div>
@@ -436,7 +451,7 @@
             <span class="stat-value">36 個月</span>
           </div>
           <div class="card-stat">
-            <span class="stat-label">報告特色</span>
+            <span class="stat-label">報告重點</span>
             <span class="stat-value">跨年趨勢比較</span>
           </div>
           <div>
@@ -464,7 +479,7 @@
             <span class="stat-value warning">~359 天</span>
           </div>
           <div class="card-stat">
-            <span class="stat-label">年度特色</span>
+            <span class="stat-label">年度重點</span>
             <span class="stat-value">交通事故急升</span>
           </div>
           <div>
@@ -492,7 +507,7 @@
             <span class="stat-value warning">~406 天</span>
           </div>
           <div class="card-stat">
-            <span class="stat-label">年度特色</span>
+            <span class="stat-label">年度重點</span>
             <span class="stat-value danger">含永久失能 1 例</span>
           </div>
           <div>
@@ -520,7 +535,7 @@
             <span class="stat-value">~144 天</span>
           </div>
           <div class="card-stat">
-            <span class="stat-label">年度特色</span>
+            <span class="stat-label">年度重點</span>
             <span class="stat-value danger">含永久失能 1 例</span>
           </div>
           <div>
@@ -541,7 +556,7 @@
         <!-- 2023 -->
         <div class="trend-bar-group">
           <div class="trend-bar-stack">
-            <div class="trend-bar-seg" style="height:116px;background:var(--info);">
+            <div class="trend-bar-seg" style="height:60px;background:var(--info);">
               <span class="seg-num">15</span>
             </div>
             <div class="trend-bar-seg" style="height:4px;background:var(--accent);">
