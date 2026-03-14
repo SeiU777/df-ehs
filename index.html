@@ -240,34 +240,7 @@
     .tag-safety { background: #fff3e0; color: #e65100; }
     .tag-near-miss { background: #e8f5e9; color: #2e7d32; }
 
-    /* ===== 總覽卡片多欄佈局 ===== */
-    .overview-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-    .overview-stat-item {
-      text-align: center;
-      padding: 14px 8px;
-      background: #f8f9fa;
-      border-radius: 8px;
-    }
-    .overview-stat-item .stat-num {
-      font-size: 1.6em;
-      font-weight: 800;
-      line-height: 1.2;
-    }
-    .overview-stat-item .stat-num.danger { color: var(--danger); }
-    .overview-stat-item .stat-num.warning { color: var(--warning); }
-    .overview-stat-item .stat-num.primary { color: var(--primary); }
-    .overview-stat-item .stat-num.accent { color: var(--accent); }
-    .overview-stat-item .stat-desc {
-      font-size: 0.78em;
-      color: var(--text-light);
-      margin-top: 4px;
-    }
-
+    /* ===== 總覽卡片兩欄佈局 ===== */
     .overview-cols {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -295,7 +268,6 @@
     .overview-col-item .col-value.down { color: var(--accent); }
 
     @media (max-width: 768px) {
-      .overview-stats,
       .overview-cols { display: none; }
       .overview-mobile { display: block; }
     }
@@ -420,17 +392,11 @@
       .kpi-item .num { font-size: 1.5em; }
       .main { padding: 24px 12px 40px; }
       .section-title { font-size: 1.2em; }
-      .report-row-overview {
-        margin-bottom: 16px;
-      }
-      .report-row-years {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 16px;
-      }
-      .report-card {
-        width: 100%;
-      }
+      .report-grid { display: flex; flex-direction: column; gap: 16px; }
+      .report-row-overview { margin-bottom: 0; }
+      .report-row-years { flex-direction: column; gap: 16px; }
+      .report-card { width: 100%; }
+      .report-row-overview .report-card { max-width: none; }
       .trend-chart { gap: 16px; }
       .trend-bar-stack { width: 56px; }
     }
@@ -517,73 +483,57 @@
           </div>
           <div class="card-body">
 
-            <!-- 核心 KPI 數字 -->
-            <div class="overview-stats">
-              <div class="overview-stat-item">
-                <div class="stat-num danger">142</div>
-                <div class="stat-desc">三年事故總數</div>
-              </div>
-              <div class="overview-stat-item">
-                <div class="stat-num warning">~910</div>
-                <div class="stat-desc">累計損失工日</div>
-              </div>
-              <div class="overview-stat-item">
-                <div class="stat-num primary">4.42</div>
-                <div class="stat-desc">月均事故件數</div>
-              </div>
-            </div>
-
-            <!-- 兩欄重點資訊 -->
+            <!-- 懶人包摘要（不重複頂端 KPI） -->
             <div class="overview-cols">
               <div>
-                <div class="overview-col-title">事故類型分布</div>
+                <div class="overview-col-title">⚠ 關鍵警示</div>
                 <div class="overview-col-item">
-                  <span class="col-label">交通事故</span>
-                  <span class="col-value">72 件（50.7%）</span>
+                  <span class="col-label">交通事故三年增幅</span>
+                  <span class="col-value up">+133%</span>
                 </div>
                 <div class="overview-col-item">
-                  <span class="col-label">工安事故</span>
-                  <span class="col-value">63 件（44.4%）</span>
-                </div>
-                <div class="overview-col-item">
-                  <span class="col-label">虛驚事故</span>
-                  <span class="col-value">7 件（4.9%）</span>
-                </div>
-                <div class="overview-col-item">
-                  <span class="col-label">永久失能</span>
-                  <span class="col-value up">2 例</span>
-                </div>
-              </div>
-              <div>
-                <div class="overview-col-title">年度趨勢變化</div>
-                <div class="overview-col-item">
-                  <span class="col-label">2025 vs 2024</span>
-                  <span class="col-value up">事故 +20.5%</span>
-                </div>
-                <div class="overview-col-item">
-                  <span class="col-label">交通事故趨勢</span>
-                  <span class="col-value up">逐年攀升</span>
-                </div>
-                <div class="overview-col-item">
-                  <span class="col-label">工安事故趨勢</span>
-                  <span class="col-value down">逐年下降</span>
+                  <span class="col-label">2025 事故數創新高</span>
+                  <span class="col-value up">53 件</span>
                 </div>
                 <div class="overview-col-item">
                   <span class="col-label">最高風險月份</span>
-                  <span class="col-value">3月、10月</span>
+                  <span class="col-value up">3月、10月</span>
+                </div>
+                <div class="overview-col-item">
+                  <span class="col-label">重複事故人員</span>
+                  <span class="col-value up">佔比偏高</span>
+                </div>
+              </div>
+              <div>
+                <div class="overview-col-title">✓ 改善亮點</div>
+                <div class="overview-col-item">
+                  <span class="col-label">工安事故三年趨勢</span>
+                  <span class="col-value down">逐年下降</span>
+                </div>
+                <div class="overview-col-item">
+                  <span class="col-label">2025 永久失能</span>
+                  <span class="col-value down">0 例</span>
+                </div>
+                <div class="overview-col-item">
+                  <span class="col-label">虛驚通報意識</span>
+                  <span class="col-value down">逐年提升</span>
+                </div>
+                <div class="overview-col-item">
+                  <span class="col-label">首要改善方向</span>
+                  <span class="col-value">交通安全管理</span>
                 </div>
               </div>
             </div>
 
-            <!-- 手機版簡化內容 -->
+            <!-- 手機版簡化內容（與年度卡片同格式） -->
             <div class="overview-mobile" style="display:none;">
               <div class="card-stat">
                 <span class="stat-label">事故總數</span>
                 <span class="stat-value danger">142 件</span>
               </div>
               <div class="card-stat">
-                <span class="stat-label">分析期間</span>
-                <span class="stat-value">36 個月</span>
+                <span class="stat-label">損失工日</span>
+                <span class="stat-value warning">~910 天</span>
               </div>
               <div class="card-stat">
                 <span class="stat-label">報告重點</span>
