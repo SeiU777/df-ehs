@@ -241,6 +241,7 @@
     .tag-near-miss { background: #e8f5e9; color: #2e7d32; }
 
     /* ===== 總覽卡片兩欄佈局 ===== */
+    .overview-mobile { display: none; }
     .overview-cols {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -526,7 +527,7 @@
             </div>
 
             <!-- 手機版簡化內容（與年度卡片同格式） -->
-            <div class="overview-mobile" style="display:none;">
+            <div class="overview-mobile">
               <div class="card-stat">
                 <span class="stat-label">事故總數</span>
                 <span class="stat-value danger">142 件</span>

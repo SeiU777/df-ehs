@@ -45,7 +45,7 @@
       background: white; box-shadow: 4px 0 20px rgba(0,0,0,0.15); z-index: 1999;
       transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; overflow-x: hidden;
     }
-    @media (min-width: 769px) {
+    @media (min-width: 1025px) {
       .sidebar-trigger:hover ~ .sidebar, .sidebar:hover { left: 0; }
     }
     .sidebar-header {
@@ -193,13 +193,15 @@
       .flow-section { justify-content: center; }
       .priority-card { flex-direction: column; gap: 10px; }
     }
-    @media (max-width: 768px) {
-      body { font-size: 14px; line-height: 1.6; }
-      .container { padding: 12px 10px; }
+    @media (max-width: 1024px) {
       .sidebar-trigger { display: none; }
       .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
       .sidebar { width: 80vw; max-width: 300px; left: -85vw; transition: left 0.3s ease; }
       .sidebar.open { left: 0; }
+    }
+    @media (max-width: 768px) {
+      body { font-size: 14px; line-height: 1.6; }
+      .container { padding: 12px 10px; }
       .cover-card { padding: 30px 16px; margin-bottom: 20px; border-radius: 8px; }
       .cover-card h1 { font-size: 1.35em; }
       .kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -748,7 +750,7 @@
     setTimeout(() => overlay.style.display = 'none', 300);
   }
   document.querySelectorAll('.toc-chapter, .toc-sub').forEach(a => {
-    a.addEventListener('click', () => { if (window.innerWidth <= 480) closeSidebar(); });
+    a.addEventListener('click', () => { if (window.innerWidth <= 1024) closeSidebar(); });
   });
 </script>
 </body>

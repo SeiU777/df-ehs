@@ -82,7 +82,7 @@
       overflow-x: hidden;
     }
     /* 桌面才用 hover 觸發，手機用 JS toggle */
-    @media (min-width: 769px) {
+    @media (min-width: 1025px) {
       .sidebar-trigger:hover ~ .sidebar,
       .sidebar:hover {
         left: 0;
@@ -751,19 +751,11 @@
       .priority-rank { font-size: 1.4em; }
     }
 
-    /* ===== 響應式：手機與平板 ===== */
-    @media (max-width: 768px) {
-      body { font-size: 14px; line-height: 1.6; }
-      .container { padding: 12px 10px; }
-
-      /* 隱藏 hover 觸發，改用按鈕 */
+    /* ===== 響應式：平板與手機 sidebar ===== */
+    @media (max-width: 1024px) {
       .sidebar-trigger { display: none; }
       .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
-
-      /* 返回按鈕避開選單按鈕 */
       .back-link { margin-left: 48px; }
-
-      /* 側邊欄手機模式：靠 JS class 控制 */
       .sidebar {
         width: 80vw;
         max-width: 300px;
@@ -771,6 +763,11 @@
         transition: left 0.3s ease;
       }
       .sidebar.open { left: 0; }
+    }
+    /* ===== 響應式：手機 ===== */
+    @media (max-width: 768px) {
+      body { font-size: 14px; line-height: 1.6; }
+      .container { padding: 12px 10px; }
 
       /* 封面 */
       .cover-card { padding: 30px 16px; margin-bottom: 20px; border-radius: 8px; }
@@ -2664,7 +2661,7 @@
       var target = document.getElementById(targetId);
       if (target) {
         // 手機時先關閉側邊欄再滾動
-        if (window.innerWidth <= 480) {
+        if (window.innerWidth <= 1024) {
           closeSidebar();
           setTimeout(function() {
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
