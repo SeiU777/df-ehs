@@ -6,8 +6,8 @@
   <title>2024 年度職災報告｜重點概覽</title>
   <link rel="stylesheet" href="../css/common.css">
   <style>
-    body { background: white; font-size: 13px; line-height: 1.5; }
-    .summary-page { max-width: 800px; margin: 0 auto; padding: 20px 24px; }
+    body { background: white; font-size: 14px; line-height: 1.5; }
+    .summary-page { max-width: 1000px; margin: 0 auto; padding: 20px 24px; }
     .summary-header {
       background: linear-gradient(135deg, #e65100 0%, #ff9800 50%, #ffb74d 100%);
       color: white; padding: 18px 24px; border-radius: 10px; margin-bottom: 16px;
@@ -42,11 +42,16 @@
     .finding.green { background: #e8f5e9; border-left-color: var(--accent); }
     .summary-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid #e0e0e0; font-size: 0.8em; color: var(--text-light); }
     .summary-footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    .tip-wrap { position: relative; display: inline-flex; align-items: center; gap: 6px; }
+    .tip-icon { display: inline-flex; align-items: center; justify-content: center; width: 11px; height: 11px; border-radius: 50%; background: var(--primary); color: white; font-size: 7px; font-weight: 700; cursor: help; flex-shrink: 0; line-height: 1; }
+    .tip-text { display: none; position: absolute; left: 100%; top: 50%; transform: translateY(-50%); margin-left: 6px; padding: 6px 10px; background: #333; color: white; font-size: 0.88em; font-weight: 400; border-radius: 6px; white-space: nowrap; z-index: 99; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .tip-wrap:hover .tip-text { display: block; }
     @media print {
       body { font-size: 11px; }
       .summary-page { padding: 10px; max-width: none; }
       .back-link { display: none !important; }
       .summary-footer a { display: none; }
+      .tip-icon { display: none; }
     }
     @media (max-width: 768px) {
       .kpi-row { grid-template-columns: repeat(3, 1fr); }
@@ -132,10 +137,10 @@
       <div class="sec-title">HSG48 人因分析</div>
       <table class="compact-table">
         <tr><th>人因類型</th><th>佔比</th><th>趨勢</th></tr>
-        <tr class="highlight"><td>疏忽（Slip）</td><td>31.8%</td><td style="color:var(--danger);">取代違規成首位</td></tr>
-        <tr><td>例行性違規</td><td>25.0%</td><td style="color:var(--accent);">下降中</td></tr>
-        <tr><td>遺忘</td><td>13.6%</td><td>—</td></tr>
-        <tr><td>壓力/疲勞（新增）</td><td>4.5%</td><td>新出現</td></tr>
+        <tr class="highlight"><td><span class="tip-wrap">疏忽<span class="tip-icon">?</span><span class="tip-text">Slip — 想做對，但操作動作做錯（非故意）</span></span></td><td>31.8%</td><td style="color:var(--danger);">取代違規成首位</td></tr>
+        <tr><td><span class="tip-wrap">例行性違規<span class="tip-icon">?</span><span class="tip-text">Routine Violation — 違規變成日常習慣（故意）</span></span></td><td>25.0%</td><td style="color:var(--accent);">下降中</td></tr>
+        <tr><td><span class="tip-wrap">遺忘<span class="tip-icon">?</span><span class="tip-text">Lapse — 想做對，但忘了做某步驟（非故意）</span></span></td><td>13.6%</td><td>—</td></tr>
+        <tr><td><span class="tip-wrap">壓力/疲勞<span class="tip-icon">?</span><span class="tip-text">因工作壓力或疲勞導致注意力下降（非故意）</span></span></td><td>4.5%</td><td>新出現</td></tr>
       </table>
 
       <div class="sec-title green">改善建議優先序</div>

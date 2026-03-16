@@ -328,6 +328,24 @@ tr:hover { background: #e3f2fd; }
 .flow-box.accent-box { background: var(--accent); }
 .flow-arrow { font-size: 1.5em; color: var(--text-light); }
 
+/* ===== 流程圖 Tooltip ===== */
+.flow-box .tip-wrap { position: relative; display: inline; }
+.flow-box .tip-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 11px; height: 11px; border-radius: 50%;
+  background: rgba(255,255,255,.45); color: inherit;
+  font-size: 8px; font-weight: 700; line-height: 1;
+  margin-left: 3px; vertical-align: super; cursor: help;
+}
+.flow-box .tip-text {
+  display: none; position: absolute; bottom: calc(100% + 6px); left: 50%;
+  transform: translateX(-50%); width: max-content; max-width: 220px;
+  background: #222; color: #fff; font-size: 0.88em; line-height: 1.4;
+  padding: 6px 10px; border-radius: 6px; z-index: 10;
+  white-space: normal; text-align: left; pointer-events: none;
+}
+.flow-box .tip-wrap:hover .tip-text { display: block; }
+
 /* ===== 瑞士乳酪模型 ===== */
 .swiss-cheese { display: flex; align-items: center; gap: 8px; overflow-x: auto; padding: 20px 0; }
 .cheese-layer {
