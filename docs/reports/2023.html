@@ -15,6 +15,30 @@
     .sidebar-header {
       background: linear-gradient(135deg, var(--accent), var(--accent-light));
     }
+
+    /* 頁面專屬：益處格子（PSF 四大分類用） */
+    .benefits {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .benefit-item {
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 16px;
+      border-left: 3px solid var(--accent);
+    }
+    .benefit-item h4 { color: var(--primary); margin-bottom: 6px; font-size: 0.95em; }
+    .benefit-item p { font-size: 0.88em; color: var(--text-light); }
+
+    /* 頁面專屬響應式 */
+    @media (max-width: 768px) {
+      .benefits { grid-template-columns: 1fr; gap: 10px; }
+      .benefit-item { padding: 12px; }
+      .benefit-item h4 { font-size: 0.88em; }
+      .benefit-item p { font-size: 0.82em; }
+    }
   </style>
 </head>
 <body>
@@ -43,28 +67,56 @@
     <a class="toc-sub" href="#ch3-traffic">3-4 交通事故（15件）</a>
   </div>
   <div class="toc-group">
-    <a class="toc-chapter" href="#ch4">第四章｜部門風險排名</a>
+    <a class="toc-chapter" href="#ch4">第四章｜工作場域交叉分析</a>
+    <a class="toc-sub" href="#ch4-venue">場域分類統計</a>
   </div>
   <div class="toc-group">
-    <a class="toc-chapter" href="#ch5">第五章｜嚴重度分析</a>
-    <a class="toc-sub" href="#ch5-perm">蘇密永久失能案例</a>
+    <a class="toc-chapter" href="#ch5">第五章｜部門風險排名</a>
+    <a class="toc-sub" href="#ch5-rank">部門排名</a>
   </div>
   <div class="toc-group">
-    <a class="toc-chapter" href="#ch6">第六章｜HSG48 人因分析</a>
+    <a class="toc-chapter" href="#ch6">第六章｜重複事故者分析</a>
+    <a class="toc-sub" href="#ch6-list">重複事故人員</a>
   </div>
   <div class="toc-group">
-    <a class="toc-chapter" href="#ch7">第七章｜根本原因分析</a>
-    <a class="toc-sub" href="#ch7-swiss">瑞士乳酪模型</a>
+    <a class="toc-chapter" href="#ch7">第七章｜嚴重度分析</a>
+    <a class="toc-sub" href="#ch7-grade">嚴重度分級</a>
+    <a class="toc-sub" href="#ch7-perm">蘇密永久失能案例</a>
   </div>
   <div class="toc-group">
-    <a class="toc-chapter" href="#ch8">第八章｜懲處與制度分析</a>
-    <a class="toc-sub" href="#ch8-drunk">林偉聖酒駕案例</a>
+    <a class="toc-chapter" href="#ch8">第八章｜HSG48 人因分析</a>
+    <a class="toc-sub" href="#ch8-frame">人為失效分類框架</a>
+    <a class="toc-sub" href="#ch8-stat">人因分類統計</a>
+    <a class="toc-sub" href="#ch8-cases">典型案例</a>
   </div>
   <div class="toc-group">
-    <a class="toc-chapter" href="#ch9">第九章｜改善建議</a>
+    <a class="toc-chapter" href="#ch9">第九章｜根本原因質性分析</a>
+    <a class="toc-sub" href="#ch9-3layer">三層原因分析</a>
+    <a class="toc-sub" href="#ch9-swiss">瑞士乳酪模型</a>
   </div>
   <div class="toc-group">
-    <a class="toc-chapter" href="#ch10">第十章｜總結</a>
+    <a class="toc-chapter" href="#ch10">第十章｜績效塑造因素分析</a>
+    <a class="toc-sub" href="#ch10-psf">PSF 四大分類</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch11">第十一章｜組織制度面分析</a>
+    <a class="toc-sub" href="#ch11-punish">懲處案件</a>
+    <a class="toc-sub" href="#ch11-drunk">林偉聖酒駕案例</a>
+    <a class="toc-sub" href="#ch11-improve">改善時效</a>
+    <a class="toc-sub" href="#ch11-foreign">外籍員工事故</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch12">第十二章｜改善對策建議</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch13">第十三章｜年度回顧與展望</a>
+    <a class="toc-sub" href="#ch13-review">2023 回顧與 2024 展望</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch14">第十四章｜結論與行動優先序</a>
+    <a class="toc-sub" href="#ch14-summary">核心發現摘要</a>
+    <a class="toc-sub" href="#ch14-matrix">行動優先序矩陣</a>
+    <a class="toc-sub" href="#ch14-benefit">預期效益</a>
   </div>
   <div class="sidebar-footer">桌面：滑鼠移至左側邊緣｜手機：點左上角按鈕</div>
 </nav>
@@ -258,10 +310,69 @@
     </div>
   </div>
 
-  <!-- ===== 第四章 ===== -->
-  <div class="chapter" id="ch4"><h2 class="chapter-title">第四章｜部門風險排名</h2><p class="chapter-subtitle">Department Risk Ranking</p></div>
+  <!-- ===== 第四章（新增）===== -->
+  <div class="chapter" id="ch4">
+    <h2 class="chapter-title">第四章｜工作場域交叉分析</h2>
+    <p class="chapter-subtitle">Workplace Cross-Analysis</p>
+  </div>
 
-  <div class="card">
+  <div class="card" id="ch4-venue">
+    <div class="card-header">2023 年事故發生場域分類</div>
+    <div class="card-body">
+      <div class="bar-chart">
+        <div class="bar-row">
+          <div class="bar-label">公司廠區</div>
+          <div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--warning);">18</div></div>
+          <div class="bar-value">18 件</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">公共道路</div>
+          <div class="bar-track"><div class="bar-fill" style="width:72%;background:var(--info);">13</div></div>
+          <div class="bar-value">13 件</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">客戶端場域</div>
+          <div class="bar-track"><div class="bar-fill" style="width:44%;background:var(--danger);">8</div></div>
+          <div class="bar-value">8 件</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">處理廠/其他</div>
+          <div class="bar-track"><div class="bar-fill" style="width:33%;background:#78909c;">6</div></div>
+          <div class="bar-value">6 件</div>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-top:20px;">
+        <div class="warning-card">
+          <strong>客戶端場域風險</strong><br>
+          8 件事故發生於客戶端（台積電、矽品等），佔 17.8%。
+          這些場域的環境控制權不在公司手中，需透過「承攬管理」與「駐廠安全規範」來降低風險。
+          <br><br>
+          <strong>典型場景：</strong>
+          <ul style="margin-top:6px;padding-left:20px;font-size:0.92em;">
+            <li>客戶端地面濕滑、動線不熟悉</li>
+            <li>配合客戶作業節奏省略安全步驟</li>
+            <li>客戶端操作設備（堆高機等）造成傷害</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <strong>廠區事故特徵</strong><br>
+          18 件廠區事故（全興廠、五股廠、分選站等）以工安事故為主：
+          <ul style="margin-top:6px;padding-left:20px;font-size:0.92em;">
+            <li>分選作業切割傷（北三課、中三課）</li>
+            <li>機台操作被夾被捲（全興造粒課）</li>
+            <li>高處作業墜落（成品堆、17噸車）</li>
+            <li>廠區內堆高機衝撞</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第五章 ===== -->
+  <div class="chapter" id="ch5"><h2 class="chapter-title">第五章｜部門風險排名</h2><p class="chapter-subtitle">Department Risk Ranking</p></div>
+
+  <div class="card" id="ch5-rank">
     <div class="card-header danger-header">2023 年部門事故件數排名</div>
     <div class="card-body">
       <table>
@@ -283,27 +394,68 @@
     </div>
   </div>
 
-  <!-- ===== 第五章 ===== -->
-  <div class="chapter" id="ch5"><h2 class="chapter-title">第五章｜嚴重度分析</h2><p class="chapter-subtitle">Severity Analysis</p></div>
+  <!-- ===== 第六章（新增）===== -->
+  <div class="chapter" id="ch6">
+    <h2 class="chapter-title">第六章｜重複事故者分析</h2>
+    <p class="chapter-subtitle">Repeat Offender Analysis</p>
+  </div>
 
-  <div class="card">
+  <div class="card" id="ch6-list">
+    <div class="card-header danger-header">2023 年重複發生事故人員</div>
+    <div class="card-body">
+      <p style="margin-bottom:12px;">2023 年度共 <strong>1 位</strong>員工在年內發生 2 次以上事故。</p>
+
+      <table>
+        <tr><th>姓名</th><th>次數</th><th>部門</th><th>事故類型</th><th>時間跨度</th><th>風險評估</th></tr>
+        <tr style="background:#ffebee;">
+          <td><strong>李暘陞</strong></td>
+          <td><span class="badge badge-warning">2 次</span></td>
+          <td>全興造粒課</td>
+          <td>被切割挫傷 + 墜落滾落</td>
+          <td>2023/09/07 - 2023/11/01（55天）</td>
+          <td><span class="risk-high">高</span></td>
+        </tr>
+      </table>
+
+      <div class="danger-card" style="margin-top:16px;">
+        <strong>李暘陞案例分析</strong><br>
+        <ul style="padding-left:20px;margin-top:8px;">
+          <li><strong>第一次（09/07）：</strong>手背割傷縫 4 針 — 未戴防切割手套進行作業</li>
+          <li><strong>第二次（11/01）：</strong>站於 1.8m 高成品上方踩空摔落 — 未依標準作業程序進行高架作業，建議懲處</li>
+        </ul>
+        <p style="margin-top:8px;">兩次事故均發生在全興造粒課，間隔僅 55 天。第一次為防護具未穿戴，第二次為高處作業 SOP 違規，
+        反映該員工安全意識嚴重不足，且第一次事故後的安全教育未達成行為改變。</p>
+      </div>
+
+      <div class="info-card" style="margin-top:12px;">
+        <strong>Just Culture（公正文化）觀點：</strong><br>
+        李暘陞兩次事故均涉及「例行性違規」（未穿戴防護具、未遵循 SOP），而非單純的失誤。
+        建議：1. 個別安全輔導與再培訓 2. 主管強化現場監督 3. 評估是否為組織文化因素（全興造粒課整體安全氛圍）。
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第七章 ===== -->
+  <div class="chapter" id="ch7"><h2 class="chapter-title">第七章｜嚴重度分析</h2><p class="chapter-subtitle">Severity Analysis</p></div>
+
+  <div class="card" id="ch7-grade">
     <div class="card-header danger-header">嚴重度分級統計</div>
     <div class="card-body">
       <table>
         <tr><th>嚴重度</th><th>定義</th><th>件數</th><th>佔比</th></tr>
         <tr style="background:#ffebee;"><td><span class="risk-extreme">永久失能</span></td><td>永久性身體功能損失</td><td>1</td><td>2.2%</td></tr>
-        <tr style="background:#ffebee;"><td><span class="risk-high">重大</span></td><td>休息 ≥ 30 天</td><td>0</td><td>0%</td></tr>
+        <tr style="background:#ffebee;"><td><span class="risk-high">重大</span></td><td>休息 &ge; 30 天</td><td>0</td><td>0%</td></tr>
         <tr><td><span class="risk-medium">中度</span></td><td>休息 3-29 天</td><td>12</td><td>26.7%</td></tr>
         <tr><td><span class="risk-low">輕微</span></td><td>休息 0-2 天</td><td>32</td><td>71.1%</td></tr>
       </table>
       <div class="key-finding" style="margin-top:12px;">
-        <strong>分析：</strong>雖無 ≥30 天的重大事故，但有 1 件永久失能（蘇密手指截斷）。
+        <strong>分析：</strong>雖無 &ge;30 天的重大事故，但有 1 件永久失能（蘇密手指截斷）。
         中度事故佔 26.7%，主要為切割傷需縫合休養的案例。整體損失工日約 144 天，在三年中為最低。
       </div>
     </div>
   </div>
 
-  <div class="card" id="ch5-perm">
+  <div class="card" id="ch7-perm">
     <div class="card-header danger-header">永久失能案例：蘇密 — 手指截斷</div>
     <div class="card-body">
       <div class="danger-card">
@@ -320,26 +472,31 @@
     </div>
   </div>
 
-  <!-- ===== 第六章 ===== -->
-  <div class="chapter" id="ch6"><h2 class="chapter-title">第六章｜HSG48 人因分析</h2><p class="chapter-subtitle">Human Failure Mode Analysis</p></div>
+  <!-- ===== 第八章 ===== -->
+  <div class="chapter" id="ch8"><h2 class="chapter-title">第八章｜HSG48 人為失效模式分析</h2><p class="chapter-subtitle">Human Failure Mode Analysis</p></div>
 
-  <div class="card">
+  <div class="card" id="ch8-frame">
     <div class="card-header">HSG48 人為失效分類框架</div>
     <div class="card-body">
+      <p style="margin-bottom:16px;">
+        依據英國健康安全署（HSE）HSG48《Reducing Error and Influencing Behaviour》之人為失效分類框架，
+        將 45 件事故依其人因特徵分為三大類：<strong>失誤（Error）</strong>與<strong>違規（Violation）</strong>。
+        失誤再細分為疏忽（Slip）、遺忘（Lapse）、錯誤判斷（Mistake）。
+      </p>
       <div class="flow-section" style="justify-content:center;">
         <div class="flow-box" style="background:#1565c0;">人為失效</div>
-        <div class="flow-arrow">→</div>
+        <div class="flow-arrow">&rarr;</div>
         <div style="display:flex;flex-direction:column;gap:8px;">
           <div style="display:flex;align-items:center;gap:8px;">
             <div class="flow-box" style="background:#42a5f5;"><span class="tip-wrap">失誤 Error<span class="tip-icon">?</span><span class="tip-text">行為結果沒有達成原本正確的意圖，且此偏差並非出於故意違反規定</span></span></div>
-            <div class="flow-arrow">→</div>
+            <div class="flow-arrow">&rarr;</div>
             <div class="flow-box" style="background:#90caf9;color:#333;"><span class="tip-wrap">疏忽 Slip<span class="tip-icon">?</span><span class="tip-text">原本想做對，但在動作執行階段做錯了</span></span></div>
             <div class="flow-box" style="background:#90caf9;color:#333;"><span class="tip-wrap">遺忘 Lapse<span class="tip-icon">?</span><span class="tip-text">原本知道要做，也曾經打算做，但在記憶或注意保持上失敗，導致漏做、忘做</span></span></div>
             <div class="flow-box" style="background:#90caf9;color:#333;"><span class="tip-wrap">錯誤判斷 Mistake<span class="tip-icon">?</span><span class="tip-text">行動本身執行得很正確，但一開始的判斷、選擇、理解或計畫就是錯的</span></span></div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
             <div class="flow-box danger-box"><span class="tip-wrap">違規 Violation<span class="tip-icon">?</span><span class="tip-text">有意識地偏離規則、程序、標準或安全要求</span></span></div>
-            <div class="flow-arrow">→</div>
+            <div class="flow-arrow">&rarr;</div>
             <div class="flow-box" style="background:#ef9a9a;color:#333;"><span class="tip-wrap">例行性<span class="tip-icon">?</span><span class="tip-text">違規已經變成習慣、常態或默認的作法</span></span></div>
             <div class="flow-box" style="background:#ef9a9a;color:#333;"><span class="tip-wrap">情境性<span class="tip-icon">?</span><span class="tip-text">因當下環境、資源、時間、設備、作業條件限制，而產生的違規</span></span></div>
             <div class="flow-box" style="background:#ef9a9a;color:#333;"><span class="tip-wrap">例外性<span class="tip-icon">?</span><span class="tip-text">平常並不違規的人，在特殊、罕見、異常或緊急情況下，做出一次性的偏離行為</span></span></div>
@@ -349,7 +506,7 @@
     </div>
   </div>
 
-  <div class="card">
+  <div class="card" id="ch8-stat">
     <div class="card-header danger-header">45 件事故人因分類統計</div>
     <div class="card-body">
       <div class="bar-chart">
@@ -365,11 +522,90 @@
         主要表現為：未穿戴防切割手套即進行分選作業、未使用安全梯/安全帶進行高處作業、未依 SOP 使用規定工具。
         這反映「一直這樣做也沒事」的僥倖心態已成為組織文化問題。
       </div>
+
+      <hr class="divider">
+
+      <h4 style="color:var(--primary);margin-bottom:12px;" id="ch8-cases">各類型典型案例</h4>
+      <table style="font-size:0.88em;">
+        <tr><th>失效類型</th><th>案例</th><th>行為描述</th><th>HSG48 分析</th></tr>
+        <tr>
+          <td><span class="badge badge-info">疏忽 Slip</span></td>
+          <td>鄭汪斌（倒車撞機車）</td>
+          <td>倒車時未注意後方停放機車</td>
+          <td>注意力資源分配失敗，環境掃描不足</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-info">遺忘 Lapse</span></td>
+          <td>林君憲（手煞車）</td>
+          <td>手煞車未拉上、未放輪檔</td>
+          <td>自動化行為中遺漏關鍵步驟</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-info">錯誤判斷 Mistake</span></td>
+          <td>蔡建傑（涵洞判斷）</td>
+          <td>涵洞高度判斷錯誤車輛卡住</td>
+          <td>空間感知錯誤（Knowledge-based Mistake）</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-danger">例行性違規</span></td>
+          <td>蘇密（徒手操作）</td>
+          <td>未使用規定工具（括刀）</td>
+          <td>為求快速跳過標準程序（最常見違規類型）</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-warning">情境性違規</span></td>
+          <td>客戶端作業</td>
+          <td>配合客戶端要求省略步驟</td>
+          <td>外部壓力下偏離安全程序</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-danger">例外性違規</span></td>
+          <td>林偉聖（酒駕）</td>
+          <td>酒後駕車（酒測 0.57）</td>
+          <td>嚴重違反法規，屬蓄意違規</td>
+        </tr>
+      </table>
     </div>
   </div>
 
-  <!-- ===== 第七章 ===== -->
-  <div class="chapter" id="ch7"><h2 class="chapter-title">第七章｜根本原因分析</h2><p class="chapter-subtitle">Root Cause Analysis</p></div>
+  <!-- ===== 第九章 ===== -->
+  <div class="chapter" id="ch9"><h2 class="chapter-title">第九章｜根本原因質性分析</h2><p class="chapter-subtitle">Root Cause Analysis with Swiss Cheese Model</p></div>
+
+  <div class="card" id="ch9-3layer">
+    <div class="card-header">三層原因分析模型</div>
+    <div class="card-body">
+      <p style="margin-bottom:16px;">
+        依據事故調查制度實務指南手冊之三層原因分析法，將事故原因從表象到深層逐層解析：
+      </p>
+      <div class="flow-section" style="justify-content:center;">
+        <div class="flow-box danger-box" style="min-width:160px;">直接原因<br><span style="font-size:0.8em;">Direct Cause</span></div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box warning-box" style="min-width:160px;">間接原因<br><span style="font-size:0.8em;">Contributory Cause</span></div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box" style="min-width:160px;">根本原因<br><span style="font-size:0.8em;">Root Cause</span></div>
+      </div>
+
+      <h4 style="color:var(--primary);margin:20px 0 12px;">蘇密案例三層分析</h4>
+      <table style="font-size:0.88em;">
+        <tr><th>分析層</th><th>原因</th><th>說明</th></tr>
+        <tr>
+          <td><span class="badge badge-danger">直接原因</span></td>
+          <td>徒手固定濾網，手指遭過濾器夾斷</td>
+          <td>機械運轉中直接接觸旋轉部件</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-warning">間接原因</span></td>
+          <td>未使用規定工具（括刀）、夜班監督不足</td>
+          <td>SOP 最後步驟被跳過，夜班無人監督</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-info">根本原因</span></td>
+          <td>LOTO 制度未建立、安全訓練未內化</td>
+          <td>組織層面缺乏能量隔離制度與有效的安全文化</td>
+        </tr>
+      </table>
+    </div>
+  </div>
 
   <div class="card">
     <div class="card-header">「基本原因」欄位統計</div>
@@ -387,7 +623,7 @@
     </div>
   </div>
 
-  <div class="card" id="ch7-swiss">
+  <div class="card" id="ch9-swiss">
     <div class="card-header">瑞士乳酪模型 — 以蘇密案例為例</div>
     <div class="card-body">
       <p style="margin-bottom:16px;">蘇密手指截斷事故，是多層防護同時失效的結果：</p>
@@ -396,31 +632,86 @@
           <div class="hole"></div>
           <div style="position:relative;z-index:1;">組織層<br><span style="font-size:0.75em;">LOTO 制度<br>未建立</span></div>
         </div>
-        <div class="cheese-arrow">→</div>
+        <div class="cheese-arrow">&rarr;</div>
         <div class="cheese-layer" style="background:linear-gradient(180deg,#bbdefb,#90caf9);">
           <div class="hole"></div>
           <div style="position:relative;z-index:1;">監督層<br><span style="font-size:0.75em;">夜班監督<br>人力不足</span></div>
         </div>
-        <div class="cheese-arrow">→</div>
+        <div class="cheese-arrow">&rarr;</div>
         <div class="cheese-layer" style="background:linear-gradient(180deg,#ffe0b2,#ffcc80);">
           <div class="hole"></div>
           <div style="position:relative;z-index:1;">設備層<br><span style="font-size:0.75em;">機台無<br>安全連鎖</span></div>
         </div>
-        <div class="cheese-arrow">→</div>
+        <div class="cheese-arrow">&rarr;</div>
         <div class="cheese-layer" style="background:linear-gradient(180deg,#ffcdd2,#ef9a9a);">
           <div class="hole"></div>
           <div style="position:relative;z-index:1;">行為層<br><span style="font-size:0.75em;">徒手操作<br>未用工具</span></div>
         </div>
-        <div class="cheese-arrow">→</div>
+        <div class="cheese-arrow">&rarr;</div>
         <div class="flow-box danger-box" style="font-size:0.85em;">事故<br>手指截斷</div>
       </div>
     </div>
   </div>
 
-  <!-- ===== 第八章 ===== -->
-  <div class="chapter" id="ch8"><h2 class="chapter-title">第八章｜懲處與制度分析</h2><p class="chapter-subtitle">Disciplinary & System Analysis</p></div>
+  <!-- ===== 第十章（新增）===== -->
+  <div class="chapter" id="ch10">
+    <h2 class="chapter-title">第十章｜績效塑造因素分析</h2>
+    <p class="chapter-subtitle">Performance Shaping Factors (PSF) Analysis</p>
+  </div>
 
-  <div class="card">
+  <div class="card" id="ch10-psf">
+    <div class="card-header">2023 年績效塑造因素分類與影響</div>
+    <div class="card-body">
+      <p style="margin-bottom:16px;">
+        績效塑造因素（PSF）是影響人員行為與績效的外在與內在條件。
+        依 HSG48 框架，將 2023 年度影響因素分為四大類：任務因素、個人因素、組織因素、環境因素。
+      </p>
+
+      <div class="benefits">
+        <div class="benefit-item" style="border-left-color:var(--danger);">
+          <h4 style="color:var(--danger);">任務因素（Task Factors）</h4>
+          <p>
+            <strong>高風險任務：</strong>分選作業需處理各式廢棄物（玻璃、金屬、鐵線）、
+            機台操作需精確手部動作（造粒機過濾器更換）、高處作業（覆網、理貨）<br>
+            <strong>涉及件數：</strong>約 25 件（55.6%）<br>
+            <strong>改善方向：</strong>任務簡化、SOP 視覺化、防護工具改良
+          </p>
+        </div>
+        <div class="benefit-item" style="border-left-color:var(--warning);">
+          <h4 style="color:var(--warning);">個人因素（Individual Factors）</h4>
+          <p>
+            <strong>求快心態：</strong>為趕工省略防護具穿戴或安全步驟（~10 件）<br>
+            <strong>技能內化不足：</strong>知道規定但未養成習慣（~8 件）<br>
+            <strong>夜班疲勞：</strong>蘇密案例發生於 23:03 夜班時段<br>
+            <strong>改善方向：</strong>定期再培訓、技能考核、合理排班
+          </p>
+        </div>
+        <div class="benefit-item" style="border-left-color:var(--info);">
+          <h4 style="color:var(--info);">組織因素（Organisational Factors）</h4>
+          <p>
+            <strong>LOTO 制度空白：</strong>造粒課、處理課無完整上鎖掛牌程序<br>
+            <strong>夜班監督不足：</strong>夜班期間主管/安全人員配置不足<br>
+            <strong>防護具配發不完善：</strong>分選作業防切割手套、護目鏡配發制度缺乏<br>
+            <strong>改善方向：</strong>建立 LOTO 制度、強化夜班監督、完善 PPE 配發
+          </p>
+        </div>
+        <div class="benefit-item" style="border-left-color:#9c27b0;">
+          <h4 style="color:#9c27b0;">環境因素（Environmental Factors）</h4>
+          <p>
+            <strong>客戶端環境不可控：</strong>約 8 件事故發生於客戶端場域<br>
+            <strong>地面濕滑：</strong>雨天造成地面/路面濕滑（~3 件跌倒滑落）<br>
+            <strong>物料堆積：</strong>廠區物料堆放影響通道與視線<br>
+            <strong>改善方向：</strong>客戶端安全協議、止滑處理、物料管理
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第十一章 ===== -->
+  <div class="chapter" id="ch11"><h2 class="chapter-title">第十一章｜組織制度面分析</h2><p class="chapter-subtitle">Organizational &amp; Institutional Analysis</p></div>
+
+  <div class="card" id="ch11-punish">
     <div class="card-header">2023 年懲處案件一覽</div>
     <div class="card-body">
       <table>
@@ -434,7 +725,7 @@
     </div>
   </div>
 
-  <div class="card" id="ch8-drunk">
+  <div class="card" id="ch11-drunk">
     <div class="card-header danger-header">重大案例：林偉聖酒駕事件</div>
     <div class="card-body">
       <div class="danger-card">
@@ -455,8 +746,54 @@
     </div>
   </div>
 
-  <!-- ===== 第九章 ===== -->
-  <div class="chapter" id="ch9"><h2 class="chapter-title">第九章｜改善建議</h2><p class="chapter-subtitle">Improvement Recommendations</p></div>
+  <div class="two-col">
+    <div class="card" id="ch11-improve">
+      <div class="card-header">改善完成時效分析</div>
+      <div class="card-body">
+        <p style="margin-bottom:12px;">2023 年事故發生至改善完成日期的時間差統計：</p>
+        <ul class="styled-list">
+          <li><strong>3 天以內</strong>：約 60% 的案例（簡單財損或輕傷）</li>
+          <li><strong>7-14 天</strong>：約 25% 的案例（需要調查釐清）</li>
+          <li><strong>15-30 天</strong>：約 10% 的案例（涉及工程改善）</li>
+          <li class="warning-li"><strong>30 天以上</strong>：約 5% 的案例（跨部門或制度面改善，如 LOTO 制度建立）</li>
+        </ul>
+        <div class="key-finding" style="margin-top:8px;">
+          <strong>發現：</strong>多數改善集中在「事後處置」（如送醫、休息），較少涉及系統性的預防措施改善。
+          蘇密案例後的 LOTO 制度建立屬於少數涉及根本改善的案例。
+        </div>
+      </div>
+    </div>
+    <div class="card" id="ch11-foreign">
+      <div class="card-header">外籍員工事故分析</div>
+      <div class="card-body">
+        <p style="margin-bottom:12px;">2023 年涉及外籍員工的事故案例：</p>
+        <table style="font-size:0.88em;">
+          <tr><th>姓名</th><th>部門</th><th>事故</th><th>備註</th></tr>
+          <tr style="background:#ffebee;">
+            <td>蘇密</td><td>全興造粒課</td><td>手指截斷（永久失能）</td><td>徒手操作造粒機</td>
+          </tr>
+          <tr>
+            <td>丁功正</td><td>宏偉處理課</td><td>右小腿鐵線刺劃傷</td><td>未與物料保持安全距離</td>
+          </tr>
+          <tr>
+            <td>吉拉沙</td><td>全興造粒課</td><td>上班途中與汽車擦撞</td><td>通勤交通事故</td>
+          </tr>
+          <tr>
+            <td>紀拉狄</td><td>全興處理二課</td><td>手指被夾縫7針</td><td>同仁未確認即操作鐵網下降</td>
+          </tr>
+        </table>
+        <div class="warning-card" style="margin-top:8px;">
+          <strong>語言障礙風險：</strong>外籍員工 4 件事故中有 3 件為廠區內工安事故，
+          且嚴重度偏高（含 1 件永久失能）。語言障礙可能影響安全教育訓練成效，
+          建議加強<strong>母語安全教育</strong>（泰語、越語）及<strong>圖示化 SOP</strong>，
+          確保外籍員工完全理解作業安全要求。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第十二章 ===== -->
+  <div class="chapter" id="ch12"><h2 class="chapter-title">第十二章｜改善對策建議</h2><p class="chapter-subtitle">Improvement Recommendations</p></div>
 
   <div class="priority-card p1">
     <div class="priority-rank">P1</div>
@@ -499,33 +836,143 @@
     </div>
   </div>
 
-  <!-- ===== 第十章 ===== -->
-  <div class="chapter" id="ch10"><h2 class="chapter-title">第十章｜總結</h2><p class="chapter-subtitle">Summary & Key Takeaways</p></div>
+  <!-- ===== 第十三章（新增）===== -->
+  <div class="chapter" id="ch13">
+    <h2 class="chapter-title">第十三章｜年度回顧與展望</h2>
+    <p class="chapter-subtitle">Annual Review & Outlook</p>
+  </div>
 
-  <div class="card">
-    <div class="card-header accent-header">2023 年度核心發現</div>
+  <div class="card" id="ch13-review">
+    <div class="card-header">2023 年回顧與 2024 年展望</div>
     <div class="card-body">
-      <div class="highlight-card">
-        <strong>1. 工安事故主導年度：</strong>29 件工安事故佔 64.4%，與後續年度交通事故為主的趨勢截然不同。
+      <div class="two-col">
+        <div class="danger-card">
+          <h4 style="color:var(--danger);margin-bottom:8px;">2023 年最需改善項目</h4>
+          <ul class="styled-list">
+            <li class="danger-li"><strong>LOTO 制度建立：</strong>蘇密永久失能案例暴露能量隔離制度空白，為最優先且最急迫的改善項目。造粒課、處理課所有機台維護作業必須建立完整 LOTO 程序。</li>
+            <li class="danger-li"><strong>分選作業防護具：</strong>9 件切割傷為年度最大宗，反映防護具配置嚴重不足。需全面盤點分選作業防護需求，建立強制配發與檢查制度。</li>
+            <li class="warning-li"><strong>高處作業 SOP：</strong>李暘陞、徐基銀等案例顯示高處作業安全規範形同虛設，需重新建立並嚴格執行。</li>
+          </ul>
+        </div>
+        <div class="accent-card">
+          <h4 style="color:var(--accent);margin-bottom:8px;">2024 年預期重點</h4>
+          <ul class="styled-list">
+            <li><strong>延續 LOTO 改善：</strong>2023 年啟動的 LOTO 制度需在 2024 年全面落實並驗證成效，擴大至所有有動力設備的場域。</li>
+            <li><strong>關注交通事故趨勢：</strong>2023 年交通事故僅佔 33.3%，但需預防其上升趨勢。強化防禦駕駛訓練與車輛安全設備。</li>
+            <li><strong>虛驚通報文化：</strong>2023 年僅 1 件虛驚通報（鋰電池起火），需建立鼓勵通報的正向文化，以提前發現潛在風險。</li>
+          </ul>
+        </div>
       </div>
-      <div class="danger-card">
-        <strong>2. 切割傷為系統性問題：</strong>9 件被切割挫傷為年度最大宗，反映分選作業防護具配置嚴重不足。
+    </div>
+  </div>
+
+  <!-- ===== 第十四章 ===== -->
+  <div class="chapter" id="ch14">
+    <h2 class="chapter-title">第十四章｜結論與行動優先序</h2>
+    <p class="chapter-subtitle">Conclusion &amp; Action Priority Matrix</p>
+  </div>
+
+  <div class="card" id="ch14-summary">
+    <div class="card-header">核心發現摘要</div>
+    <div class="card-body">
+      <div class="three-col">
+        <div class="danger-card">
+          <h4 style="color:var(--danger);">最大威脅</h4>
+          <p><strong>LOTO 制度空白</strong>：蘇密永久失能事故暴露造粒課/處理課缺乏能量隔離制度，為最需優先改善的安全缺口。</p>
+        </div>
+        <div class="highlight-card">
+          <h4 style="color:var(--accent);">最大成果</h4>
+          <p><strong>損失工日三年最低</strong>：約 144 天為三年最低，多數事故為輕微傷害，顯示整體傷害控制尚可。</p>
+        </div>
+        <div class="warning-card">
+          <h4 style="color:var(--warning);">最大風險</h4>
+          <p><strong>例行性違規文化</strong>：HSG48 分析顯示 33.3% 為例行性違規，「求快捷、省步驟」的僥倖心態已成為組織文化問題。</p>
+        </div>
       </div>
-      <div class="danger-card">
-        <strong>3. 蘇密永久失能：</strong>手指截斷事故暴露 LOTO 制度空白，為最需優先改善的安全缺口。
+    </div>
+  </div>
+
+  <div class="card" id="ch14-matrix">
+    <div class="card-header danger-header">行動優先序矩陣</div>
+    <div class="card-body">
+
+      <div class="priority-card p1">
+        <div class="priority-rank">P1</div>
+        <div>
+          <h4 style="color:var(--danger);margin-bottom:4px;">即刻行動</h4>
+          <ul style="padding-left:20px;font-size:0.92em;margin-top:6px;">
+            <li>全興廠造粒課/處理課全面建立 LOTO 制度</li>
+            <li>配發防切割手套（Level 5）與護目鏡至所有分選作業人員</li>
+            <li>蘇密案例後機台加裝安全連鎖裝置</li>
+            <li>酒測 APP 與車輛啟動系統連動</li>
+          </ul>
+        </div>
       </div>
-      <div class="warning-card">
-        <strong>4. 例行性違規文化：</strong>HSG48 分析顯示 33.3% 為例行性違規，「求快捷、省步驟」已成為常態。
+
+      <div class="priority-card p2">
+        <div class="priority-rank">P2</div>
+        <div>
+          <h4 style="color:var(--warning);margin-bottom:4px;">短期計畫</h4>
+          <ul style="padding-left:20px;font-size:0.92em;margin-top:6px;">
+            <li>高處作業 SOP 重新制定並強制執行（1.8m 以上強制安全帶）</li>
+            <li>堆高機操作人員授權名冊建立</li>
+            <li>外籍員工母語安全教育影片與圖示化 SOP 製作</li>
+            <li>夜班安全監督人力強化</li>
+          </ul>
+        </div>
       </div>
-      <div class="info-card">
-        <strong>5. 損失工日較低：</strong>約 144 天為三年最低，但永久失能案例的隱性成本遠高於工日損失。
+
+      <div class="priority-card p3">
+        <div class="priority-rank">P3</div>
+        <div>
+          <h4 style="color:var(--info);margin-bottom:4px;">中期制度建設</h4>
+          <ul style="padding-left:20px;font-size:0.92em;margin-top:6px;">
+            <li>虛驚事故通報獎勵制度建立</li>
+            <li>防禦駕駛訓練課程建立</li>
+            <li>客戶端駐廠安全協議簽訂</li>
+            <li>安全績效與獎金連結制度設計</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card" id="ch14-benefit">
+    <div class="card-header accent-header">預期效益</div>
+    <div class="card-body">
+      <div class="benefits">
+        <div class="benefit-item">
+          <h4>事故降低</h4>
+          <p>透過 LOTO 制度與防護具升級，預期 2024 年工安事故從 29 件降至 20 件以下</p>
+        </div>
+        <div class="benefit-item">
+          <h4>永久失能歸零</h4>
+          <p>機台安全連鎖裝置與 LOTO 制度全面落實後，杜絕被夾被捲型永久失能事故</p>
+        </div>
+        <div class="benefit-item">
+          <h4>損失工日減少</h4>
+          <p>年度損失工日從 ~144 天進一步降低至 ~100 天以下</p>
+        </div>
+        <div class="benefit-item">
+          <h4>安全文化提升</h4>
+          <p>例行性違規比例從 33.3% 降至 20% 以下，建立正向安全文化</p>
+        </div>
+        <div class="benefit-item">
+          <h4>虛驚通報增加</h4>
+          <p>虛驚事故通報數從 1 件/年提升至 10 件/年以上</p>
+        </div>
+        <div class="benefit-item">
+          <h4>法規遵循</h4>
+          <p>降低勞動檢查裁罰風險，強化企業社會責任形象</p>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="footer">
     大豐環保｜法務及環安課｜2023 年度職災分析報告
-    <br><a href="../index.html" style="color:var(--primary);">← 返回報告總覽</a>
+    <br><a href="../index.html" style="color:var(--primary);">&larr; 返回報告總覽</a>
   </div>
 
 </div>
