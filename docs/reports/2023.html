@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大豐環保 2023 年度職業災害分析報告</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/sidebar.css">
+  <style>
+    /* 頁面專屬：封面漸層色（綠色系） */
+    .cover-card {
+      background: linear-gradient(135deg, var(--accent) 0%, #66bb6a 50%, #43a047 100%);
+    }
+    /* 頁面專屬：sidebar 標頭顏色 */
+    .sidebar-header {
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    }
+  </style>
+</head>
+<body>
+
+<button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleSidebar()" aria-label="開啟目錄">&#9776;</button>
+<div class="sidebar-trigger"></div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">2023 年度職災分析報告<small>大豐環保｜法務及環安課</small></div>
+  <div class="toc-group"><a class="toc-chapter" href="#cover">封面與 KPI 總覽</a></div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch1">第一章｜月度趨勢分析</a>
+    <a class="toc-sub" href="#ch1-month">月份事故分布</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch2">第二章｜事故分類分析</a>
+    <a class="toc-sub" href="#ch2-pie">分類佔比</a>
+    <a class="toc-sub" href="#ch2-detail">工安/交通細分</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch3">第三章｜事故類型深度分析</a>
+    <a class="toc-sub" href="#ch3-cut">3-1 被切割挫傷（9件）</a>
+    <a class="toc-sub" href="#ch3-fall">3-2 墜落與跌倒（7件）</a>
+    <a class="toc-sub" href="#ch3-pinch">3-3 被夾被捲（含永久失能）</a>
+    <a class="toc-sub" href="#ch3-traffic">3-4 交通事故（15件）</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch4">第四章｜部門風險排名</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch5">第五章｜嚴重度分析</a>
+    <a class="toc-sub" href="#ch5-perm">蘇密永久失能案例</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch6">第六章｜HSG48 人因分析</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch7">第七章｜根本原因分析</a>
+    <a class="toc-sub" href="#ch7-swiss">瑞士乳酪模型</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch8">第八章｜懲處與制度分析</a>
+    <a class="toc-sub" href="#ch8-drunk">林偉聖酒駕案例</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch9">第九章｜改善建議</a>
+  </div>
+  <div class="toc-group">
+    <a class="toc-chapter" href="#ch10">第十章｜總結</a>
+  </div>
+  <div class="sidebar-footer">桌面：滑鼠移至左側邊緣｜手機：點左上角按鈕</div>
+</nav>
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到頂部">&#9650;</button>
+
+<div class="container">
+
+  <a href="../index.html" class="back-link">&#9664; 返回報告總覽</a>
+
+  <!-- ===== 封面 ===== -->
+  <div id="cover" class="cover-card">
+    <h1>大豐環保 2023 年度職業災害分析報告</h1>
+    <div class="subtitle">分析期間：2023 年 1 月 ～ 2023 年 12 月</div>
+    <div class="date">法務及環安課</div>
+  </div>
+
+  <!-- ===== KPI ===== -->
+  <div class="kpi-grid">
+    <div class="kpi-card danger"><div class="big-number">45</div><div class="kpi-label">事故總件數</div></div>
+    <div class="kpi-card warning"><div class="big-number">3.75</div><div class="kpi-label">月均事故件數</div></div>
+    <div class="kpi-card"><div class="big-number">~144</div><div class="kpi-label">累計損失工日（天）</div></div>
+    <div class="kpi-card warning"><div class="big-number">29</div><div class="kpi-label">工安事故（64.4%）</div></div>
+    <div class="kpi-card info"><div class="big-number">15</div><div class="kpi-label">交通事故（33.3%）</div></div>
+    <div class="kpi-card danger"><div class="big-number">1</div><div class="kpi-label">永久性失能案例</div></div>
+  </div>
+
+  <!-- ===== 第一章 ===== -->
+  <div class="chapter" id="ch1"><h2 class="chapter-title">第一章｜月度趨勢分析</h2><p class="chapter-subtitle">Monthly Trend Analysis</p></div>
+
+  <div class="card" id="ch1-month">
+    <div class="card-header">2023 年各月事故件數分布</div>
+    <div class="card-body">
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label">1 月</div><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--primary);">2</div></div><div class="bar-value">2</div></div>
+        <div class="bar-row"><div class="bar-label">2 月</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--primary);">3</div></div><div class="bar-value">3</div></div>
+        <div class="bar-row"><div class="bar-label">3 月</div><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--primary);">2</div></div><div class="bar-value">2</div></div>
+        <div class="bar-row"><div class="bar-label">4 月</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--primary);">3</div></div><div class="bar-value">3</div></div>
+        <div class="bar-row"><div class="bar-label">5 月</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--warning);">3</div></div><div class="bar-value">3</div></div>
+        <div class="bar-row"><div class="bar-label">6 月</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--warning);">3</div></div><div class="bar-value">3</div></div>
+        <div class="bar-row"><div class="bar-label">7 月</div><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--primary);">2</div></div><div class="bar-value">2</div></div>
+        <div class="bar-row"><div class="bar-label">8 月</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--warning);">3</div></div><div class="bar-value">3</div></div>
+        <div class="bar-row"><div class="bar-label">9 月</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--danger);">5</div></div><div class="bar-value">5</div></div>
+        <div class="bar-row"><div class="bar-label">10 月</div><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--primary);">2</div></div><div class="bar-value">2</div></div>
+        <div class="bar-row"><div class="bar-label">11 月</div><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--primary);">2</div></div><div class="bar-value">2</div></div>
+        <div class="bar-row"><div class="bar-label">12 月</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--primary);">1</div></div><div class="bar-value">1</div></div>
+      </div>
+      <div class="key-finding"><strong>關鍵發現：</strong>9 月為全年高峰（5件），包含蘇密手指截斷永久失能案例（2/28夜班）、切割傷、交通事故等集中爆發。整體呈現均勻分布，無明顯季節性。</div>
+    </div>
+  </div>
+
+  <!-- ===== 第二章 ===== -->
+  <div class="chapter" id="ch2"><h2 class="chapter-title">第二章｜事故分類分析</h2><p class="chapter-subtitle">Accident Classification Breakdown</p></div>
+
+  <div class="card" id="ch2-pie">
+    <div class="card-header">2023 年事故分類佔比</div>
+    <div class="card-body">
+      <div class="chart-container">
+        <div class="pie-chart" style="background: conic-gradient(var(--warning) 0deg 232deg, var(--info) 232deg 352deg, var(--accent) 352deg 360deg);"></div>
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-color" style="background:var(--warning);"></div><span><strong>工安事故：29 件（64.4%）</strong> — 年度最大宗</span></div>
+          <div class="legend-item"><div class="legend-color" style="background:var(--info);"></div><span>交通事故：15 件（33.3%）</span></div>
+          <div class="legend-item"><div class="legend-color" style="background:var(--accent);"></div><span>虛驚事故：1 件（2.2%）</span></div>
+        </div>
+      </div>
+      <div class="danger-card" style="margin-top:16px;">
+        <strong>2023 年度特色：工安事故佔絕對多數</strong><br>
+        與 2024、2025 年交通事故為主的型態截然不同，2023 年工安事故（29件）佔全年 <strong>64.4%</strong>。
+        這反映當年度廠區內作業安全管理仍有顯著缺口，特別是在分選作業、機台操作、高處作業等環節。
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col" id="ch2-detail">
+    <div class="card">
+      <div class="card-header warning-header">工安事故細分（29 件）</div>
+      <div class="card-body">
+        <table>
+          <tr><th>事故類型</th><th>件數</th><th>佔比</th></tr>
+          <tr><td><strong>被切、割、挫傷</strong></td><td><strong>9</strong></td><td><strong>31.0%</strong></td></tr>
+          <tr><td>墜落、滾落</td><td>5</td><td>17.2%</td></tr>
+          <tr><td>衝撞</td><td>3</td><td>10.3%</td></tr>
+          <tr><td>被夾、被捲</td><td>2</td><td>6.9%</td></tr>
+          <tr><td>跌倒</td><td>2</td><td>6.9%</td></tr>
+          <tr><td>被撞</td><td>2</td><td>6.9%</td></tr>
+          <tr><td>物體飛落</td><td>1</td><td>3.4%</td></tr>
+          <tr><td>有害物接觸</td><td>1</td><td>3.4%</td></tr>
+          <tr><td>其他（含上下班交通、狗咬等）</td><td>4</td><td>13.8%</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header info-header">交通事故細分（15 件）</div>
+      <div class="card-body">
+        <table>
+          <tr><th>子類型</th><th>件數</th><th>佔比</th></tr>
+          <tr><td>一般交通事故（含衝撞、被撞）</td><td>8</td><td>53.3%</td></tr>
+          <tr><td>上下班交通事故</td><td>7</td><td>46.7%</td></tr>
+        </table>
+        <div class="key-finding" style="margin-top:12px;">
+          <strong>分析：</strong>2023 年交通事故僅 15 件，但上下班通勤事故佔比高達 46.7%，
+          顯示員工通勤安全意識仍需強化。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第三章 ===== -->
+  <div class="chapter" id="ch3"><h2 class="chapter-title">第三章｜事故類型深度分析</h2><p class="chapter-subtitle">Deep Dive by Accident Type</p></div>
+
+  <div class="card" id="ch3-cut">
+    <div class="card-header danger-header">3-1 被切、割、挫傷分析（9 件）— 年度最大宗</div>
+    <div class="card-body">
+      <p style="margin-bottom:12px;">切割挫傷是 2023 年度最突出的安全問題，佔工安事故 <strong>31%</strong>，涉及刀具使用、分選作業、金屬處理等多元場景。</p>
+      <table>
+        <tr><th>案例</th><th>日期</th><th>部門</th><th>傷害</th><th>原因</th><th>休息</th></tr>
+        <tr><td>林建芳</td><td>04/19</td><td>北一課</td><td>右腳被堆高機撞到挫傷</td><td>未人車分離</td><td>20天</td></tr>
+        <tr><td>鍾雲青</td><td>05/18</td><td>北二課</td><td>手臂撕裂傷縫15針</td><td>僅戴手套未保護手臂</td><td>16天</td></tr>
+        <tr><td>恩波</td><td>03/02</td><td>中三課</td><td>額頭撕裂傷+牙齒斷裂</td><td>鋼索斷裂</td><td>7天</td></tr>
+        <tr><td>劉祥志</td><td>05/20</td><td>再生處理部</td><td>大腿膝蓋撕裂傷縫3針</td><td>香蕉刀使用不當</td><td>5天</td></tr>
+        <tr><td>潘玉簪</td><td>06/15</td><td>中三課</td><td>小腿割傷縫5針</td><td>美工刀割傷</td><td>3天</td></tr>
+        <tr><td>洪盈屏</td><td>04/27</td><td>北三課</td><td>眼睛被衣架打到結膜受損</td><td>分選拉扯物品</td><td>3天</td></tr>
+        <tr><td>李暘陞</td><td>09/07</td><td>全興造粒</td><td>手背割傷縫4針</td><td>未戴防切割手套</td><td>2天</td></tr>
+        <tr><td>邱建智</td><td>08/09</td><td>家電回收</td><td>手部割傷縫3針</td><td>天雨手滑家電脫手</td><td>1天</td></tr>
+        <tr><td>丁功正</td><td>06/21</td><td>宏偉處理</td><td>右小腿鐵線刺劃傷</td><td>未與物料保持安全距離</td><td>0.5天</td></tr>
+      </table>
+      <div class="danger-card" style="margin-top:16px;">
+        <strong>系統性防護缺口：</strong>9 件切割傷中，至少 5 件涉及防護具不足或未穿戴（未戴防切割手套、未戴護目鏡、手套僅保護手部未延伸手臂）。
+        這不是個人疏忽，而是<strong>防護具配置制度</strong>的系統性問題。
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="ch3-fall">
+    <div class="card-header warning-header">3-2 墜落與跌倒分析（7 件）</div>
+    <div class="card-body">
+      <p style="margin-bottom:12px;">墜落（5件）與跌倒（2件）合計 7 件，佔工安事故的 24.1%。</p>
+      <ul class="styled-list">
+        <li class="danger-li"><strong>高處作業：</strong>李暘陞站於 1.8m 高成品上方踩空摔落（休3天）、徐基銀上17噸車未使用安全梯跌倒（休4天）</li>
+        <li class="danger-li"><strong>階梯/樓梯：</strong>趙文凱夾桿下來時鞋底油漬加雨天滑落（休3天）</li>
+        <li class="warning-li"><strong>環境因素：</strong>潘玉簪上班途中被闖紅燈機車撞到、劉高佑彰濱工業區轉彎與車碰撞</li>
+        <li><strong>地面不平：</strong>李慶川倒玻璃時沒站穩被玻璃刺傷（休1.25天）</li>
+      </ul>
+      <div class="warning-card" style="margin-top:12px;">
+        <strong>高處作業防護不足：</strong>李暘陞案例（未有防護措施站在成品上方）建議懲處，反映高架作業 SOP 未落實。
+        徐基銀案例（未使用安全上下設備）同樣顯示「求快心態」凌駕安全程序。
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="ch3-pinch">
+    <div class="card-header danger-header">3-3 被夾、被捲分析（2 件）— 含永久失能</div>
+    <div class="card-body">
+      <table>
+        <tr><th>案例</th><th>日期</th><th>媒介物</th><th>傷害</th><th>根本原因</th></tr>
+        <tr style="background:#ffebee;">
+          <td><span class="badge badge-danger">永久失能</span> 蘇密</td>
+          <td>02/28</td><td>四號造粒機過濾器</td>
+          <td>食指第一節截斷</td><td>徒手操作，未使用規定工具（括刀）</td>
+        </tr>
+        <tr>
+          <td>紀拉狄</td><td>12/12</td><td>處理二課機台鐵網</td>
+          <td>大拇指及食指夾傷縫7針</td><td>同仁未確認手指已移開即操作鐵網下降</td>
+        </tr>
+      </table>
+      <div class="danger-card" style="margin-top:16px;">
+        <strong>LOTO（上鎖掛牌）嚴重缺口：</strong>蘇密案例為典型的「能量隔離失效」— 機械設備運轉中徒手接觸旋轉部件。
+        紀拉狄案例為「雙人作業未確認」— 一人未確認另一人手指位置即操作。兩案皆反映 LOTO 制度亟需全面建立。
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="ch3-traffic">
+    <div class="card-header info-header">3-4 交通事故分析（15 件）</div>
+    <div class="card-body">
+      <p style="margin-bottom:12px;">2023 年交通事故 15 件，佔 33.3%。雖非年度主要問題，但仍需關注。</p>
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label">倒車/轉彎疏忽</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--danger);">5</div></div><div class="bar-value">5 件</div></div>
+        <div class="bar-row"><div class="bar-label">被動遭撞（無責）</div><div class="bar-track"><div class="bar-fill" style="width:80%;background:var(--info);">4</div></div><div class="bar-value">4 件</div></div>
+        <div class="bar-row"><div class="bar-label">上下班通勤自摔</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--primary-light);">3</div></div><div class="bar-value">3 件</div></div>
+        <div class="bar-row"><div class="bar-label">追撞/未保持車距</div><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--warning);">2</div></div><div class="bar-value">2 件</div></div>
+        <div class="bar-row"><div class="bar-label">酒駕</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:#9c27b0;">1</div></div><div class="bar-value">1 件</div></div>
+      </div>
+      <div class="danger-card" style="margin-top:12px;">
+        <strong>酒駕重大事件：</strong>林偉聖前晚飲酒，未依規定使用酒測 APP 即出車，下午酒測值達 <strong>0.57</strong>，已當場移送。
+        此為年度最嚴重的違規行為，屬「例外性違規（Exceptional Violation）」。
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第四章 ===== -->
+  <div class="chapter" id="ch4"><h2 class="chapter-title">第四章｜部門風險排名</h2><p class="chapter-subtitle">Department Risk Ranking</p></div>
+
+  <div class="card">
+    <div class="card-header danger-header">2023 年部門事故件數排名</div>
+    <div class="card-body">
+      <table>
+        <tr><th>排名</th><th>部門</th><th>件數</th><th>佔比</th><th>主要類型</th><th>風險等級</th></tr>
+        <tr><td>1</td><td><strong>中區業務一課</strong></td><td>5</td><td>11.1%</td><td>交通事故為主</td><td><span class="risk-high">高</span></td></tr>
+        <tr><td>2</td><td><strong>北區業務三課</strong></td><td>5</td><td>11.1%</td><td>工安（分選切割傷）</td><td><span class="risk-high">高</span></td></tr>
+        <tr><td>3</td><td><strong>中區業務三課</strong></td><td>5</td><td>11.1%</td><td>工安（切割+墜落）</td><td><span class="risk-high">高</span></td></tr>
+        <tr><td>4</td><td><strong>全興造粒課</strong></td><td>4</td><td>8.9%</td><td>工安（機台操作）</td><td><span class="risk-high">高</span></td></tr>
+        <tr><td>5</td><td><strong>北區業務二課</strong></td><td>3</td><td>6.7%</td><td>工安（化學+切割）</td><td><span class="risk-medium">中</span></td></tr>
+        <tr><td>6</td><td><strong>家電回收課</strong></td><td>2</td><td>4.4%</td><td>工安+交通</td><td><span class="risk-medium">中</span></td></tr>
+        <tr><td>7</td><td><strong>竹北站</strong></td><td>2</td><td>4.4%</td><td>工安（墜落+物體飛落）</td><td><span class="risk-medium">中</span></td></tr>
+        <tr><td>8</td><td><strong>和美站</strong></td><td>2</td><td>4.4%</td><td>交通事故</td><td><span class="risk-low">低</span></td></tr>
+        <tr><td>9</td><td><strong>北區業務一課</strong></td><td>2</td><td>4.4%</td><td>工安+交通</td><td><span class="risk-low">低</span></td></tr>
+      </table>
+      <div class="key-finding" style="margin-top:16px;">
+        <strong>80/20 法則：</strong>前 4 大部門合計 19 件，佔全年事故的 <strong>42.2%</strong>。
+        其中北三課與中三課以分選作業切割傷為主，全興造粒課以機台操作傷害為主。
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第五章 ===== -->
+  <div class="chapter" id="ch5"><h2 class="chapter-title">第五章｜嚴重度分析</h2><p class="chapter-subtitle">Severity Analysis</p></div>
+
+  <div class="card">
+    <div class="card-header danger-header">嚴重度分級統計</div>
+    <div class="card-body">
+      <table>
+        <tr><th>嚴重度</th><th>定義</th><th>件數</th><th>佔比</th></tr>
+        <tr style="background:#ffebee;"><td><span class="risk-extreme">永久失能</span></td><td>永久性身體功能損失</td><td>1</td><td>2.2%</td></tr>
+        <tr style="background:#ffebee;"><td><span class="risk-high">重大</span></td><td>休息 ≥ 30 天</td><td>0</td><td>0%</td></tr>
+        <tr><td><span class="risk-medium">中度</span></td><td>休息 3-29 天</td><td>12</td><td>26.7%</td></tr>
+        <tr><td><span class="risk-low">輕微</span></td><td>休息 0-2 天</td><td>32</td><td>71.1%</td></tr>
+      </table>
+      <div class="key-finding" style="margin-top:12px;">
+        <strong>分析：</strong>雖無 ≥30 天的重大事故，但有 1 件永久失能（蘇密手指截斷）。
+        中度事故佔 26.7%，主要為切割傷需縫合休養的案例。整體損失工日約 144 天，在三年中為最低。
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="ch5-perm">
+    <div class="card-header danger-header">永久失能案例：蘇密 — 手指截斷</div>
+    <div class="card-body">
+      <div class="danger-card">
+        <table style="font-size:0.9em;">
+          <tr><td style="width:90px;font-weight:600;">日期時間</td><td>2023/02/28 23:03（夜班）</td></tr>
+          <tr><td style="font-weight:600;">地點</td><td>全興廠造粒課四號造粒機</td></tr>
+          <tr><td style="font-weight:600;">傷害</td><td>食指第一節截斷（永久失能）</td></tr>
+          <tr><td style="font-weight:600;">直接原因</td><td>更換過濾器濾網時，徒手固定濾網，在操作機台時未及時收回手指，遭過濾器夾斷</td></tr>
+          <tr><td style="font-weight:600;">間接原因</td><td>未使用規定工具（括刀）固定膠膜及鐵網，違反 SOP 最後步驟</td></tr>
+          <tr><td style="font-weight:600;">根本原因</td><td>1. LOTO 制度未落實 2. 夜班監督不足 3. 安全訓練未確實內化</td></tr>
+          <tr><td style="font-weight:600;">改善要求</td><td>全面建立 LOTO 制度、加裝機台安全連鎖裝置、強化夜班安全監督</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第六章 ===== -->
+  <div class="chapter" id="ch6"><h2 class="chapter-title">第六章｜HSG48 人因分析</h2><p class="chapter-subtitle">Human Failure Mode Analysis</p></div>
+
+  <div class="card">
+    <div class="card-header">HSG48 人為失效分類框架</div>
+    <div class="card-body">
+      <div class="flow-section" style="justify-content:center;">
+        <div class="flow-box" style="background:#1565c0;">人為失效</div>
+        <div class="flow-arrow">→</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="flow-box" style="background:#42a5f5;">失誤 Error</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box" style="background:#90caf9;color:#333;">疏忽 Slip</div>
+            <div class="flow-box" style="background:#90caf9;color:#333;">遺忘 Lapse</div>
+            <div class="flow-box" style="background:#90caf9;color:#333;">錯誤判斷 Mistake</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="flow-box danger-box">違規 Violation</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box" style="background:#ef9a9a;color:#333;">例行性</div>
+            <div class="flow-box" style="background:#ef9a9a;color:#333;">情境性</div>
+            <div class="flow-box" style="background:#ef9a9a;color:#333;">例外性</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header danger-header">45 件事故人因分類統計</div>
+    <div class="card-body">
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label">例行性違規</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--danger);">15</div></div><div class="bar-value">15 件</div></div>
+        <div class="bar-row"><div class="bar-label">疏忽 Slip</div><div class="bar-track"><div class="bar-fill" style="width:80%;background:#42a5f5;">12</div></div><div class="bar-value">12 件</div></div>
+        <div class="bar-row"><div class="bar-label">錯誤判斷 Mistake</div><div class="bar-track"><div class="bar-fill" style="width:53%;background:#90caf9;">8</div></div><div class="bar-value">8 件</div></div>
+        <div class="bar-row"><div class="bar-label">遺忘 Lapse</div><div class="bar-track"><div class="bar-fill" style="width:33%;background:#bbdefb;">5</div></div><div class="bar-value">5 件</div></div>
+        <div class="bar-row"><div class="bar-label">情境性違規</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:#ef9a9a;">3</div></div><div class="bar-value">3 件</div></div>
+        <div class="bar-row"><div class="bar-label">例外性違規</div><div class="bar-track"><div class="bar-fill" style="width:13%;background:#ffcdd2;">2</div></div><div class="bar-value">2 件</div></div>
+      </div>
+      <div class="warning-card" style="margin-top:16px;">
+        <strong>2023 年人因特色：例行性違規佔比最高（33.3%）</strong><br>
+        主要表現為：未穿戴防切割手套即進行分選作業、未使用安全梯/安全帶進行高處作業、未依 SOP 使用規定工具。
+        這反映「一直這樣做也沒事」的僥倖心態已成為組織文化問題。
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第七章 ===== -->
+  <div class="chapter" id="ch7"><h2 class="chapter-title">第七章｜根本原因分析</h2><p class="chapter-subtitle">Root Cause Analysis</p></div>
+
+  <div class="card">
+    <div class="card-header">「基本原因」欄位統計</div>
+    <div class="card-body">
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label">缺乏知識或技能</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--danger);">26</div></div><div class="bar-value">26 件</div></div>
+        <div class="bar-row"><div class="bar-label">不符合工作標準</div><div class="bar-track"><div class="bar-fill" style="width:23%;background:var(--warning);">6</div></div><div class="bar-value">6 件</div></div>
+        <div class="bar-row"><div class="bar-label">其他（含交通事故等）</div><div class="bar-track"><div class="bar-fill" style="width:46%;background:var(--primary-light);">12</div></div><div class="bar-value">12 件</div></div>
+        <div class="bar-row"><div class="bar-label">工具或設備不足</div><div class="bar-track"><div class="bar-fill" style="width:4%;background:#607d8b;">1</div></div><div class="bar-value">1 件</div></div>
+      </div>
+      <div class="key-finding" style="margin-top:12px;">
+        <strong>深層分析：</strong>「缺乏知識或技能」佔 57.8%，但其中很大比例實為「已知規範但未落實」（如蘇密知道應用括刀但徒手操作），
+        反映訓練與實踐之間存在嚴重落差。
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="ch7-swiss">
+    <div class="card-header">瑞士乳酪模型 — 以蘇密案例為例</div>
+    <div class="card-body">
+      <p style="margin-bottom:16px;">蘇密手指截斷事故，是多層防護同時失效的結果：</p>
+      <div class="swiss-cheese">
+        <div class="cheese-layer" style="background:linear-gradient(180deg,#c8e6c9,#a5d6a7);">
+          <div class="hole"></div>
+          <div style="position:relative;z-index:1;">組織層<br><span style="font-size:0.75em;">LOTO 制度<br>未建立</span></div>
+        </div>
+        <div class="cheese-arrow">→</div>
+        <div class="cheese-layer" style="background:linear-gradient(180deg,#bbdefb,#90caf9);">
+          <div class="hole"></div>
+          <div style="position:relative;z-index:1;">監督層<br><span style="font-size:0.75em;">夜班監督<br>人力不足</span></div>
+        </div>
+        <div class="cheese-arrow">→</div>
+        <div class="cheese-layer" style="background:linear-gradient(180deg,#ffe0b2,#ffcc80);">
+          <div class="hole"></div>
+          <div style="position:relative;z-index:1;">設備層<br><span style="font-size:0.75em;">機台無<br>安全連鎖</span></div>
+        </div>
+        <div class="cheese-arrow">→</div>
+        <div class="cheese-layer" style="background:linear-gradient(180deg,#ffcdd2,#ef9a9a);">
+          <div class="hole"></div>
+          <div style="position:relative;z-index:1;">行為層<br><span style="font-size:0.75em;">徒手操作<br>未用工具</span></div>
+        </div>
+        <div class="cheese-arrow">→</div>
+        <div class="flow-box danger-box" style="font-size:0.85em;">事故<br>手指截斷</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第八章 ===== -->
+  <div class="chapter" id="ch8"><h2 class="chapter-title">第八章｜懲處與制度分析</h2><p class="chapter-subtitle">Disciplinary & System Analysis</p></div>
+
+  <div class="card">
+    <div class="card-header">2023 年懲處案件一覽</div>
+    <div class="card-body">
+      <table>
+        <tr><th>員工</th><th>日期</th><th>事由</th><th>嚴重度</th></tr>
+        <tr style="background:#ffebee;"><td><strong>林偉聖</strong></td><td>06/23</td><td>酒後駕車（酒測值 0.57），未依規定使用酒測 APP</td><td><span class="risk-extreme">極高</span></td></tr>
+        <tr><td>王紹齊</td><td>11/24</td><td>無堆高機證卻操作堆高機並撞傷人員</td><td><span class="risk-high">高</span></td></tr>
+        <tr><td>李暘陞</td><td>11/01</td><td>未依標準作業程序進行高架作業</td><td><span class="risk-medium">中</span></td></tr>
+        <tr><td>林君憲</td><td>09/23</td><td>手煞車未拉緊未放輪檔，車輛滑行撞後方車輛</td><td><span class="risk-medium">中</span></td></tr>
+        <tr><td>鄭汪斌</td><td>07/27</td><td>倒車時撞到後方機車</td><td><span class="risk-low">低</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" id="ch8-drunk">
+    <div class="card-header danger-header">重大案例：林偉聖酒駕事件</div>
+    <div class="card-body">
+      <div class="danger-card">
+        <p><strong>事實：</strong>林偉聖自陳前一天晚上喝酒，早上上班未依公司規定使用酒測 APP 就出車。
+        下午 3:35 因轉頭拿東西未注意前方車輛導致追撞。經警察酒測值達 <strong>0.57</strong>，當場移送。
+        後經調閱行車影像確認當天工作時間無飲酒，經詢問得知有酒精肝導致代謝不好。</p>
+        <hr class="divider">
+        <p><strong>HSG48 分類：例外性違規（Exceptional Violation）</strong></p>
+        <p>此案同時涉及：</p>
+        <ul style="padding-left:20px;margin-top:6px;">
+          <li>酒後駕駛 — 違反道路交通管理處罰條例</li>
+          <li>未使用酒測 APP — 違反公司內部駕駛前規定</li>
+          <li>駕駛時分心 — 轉頭拿東西導致追撞</li>
+        </ul>
+        <p style="margin-top:12px;"><strong>制度改善建議：</strong>酒測 APP 應改為「強制連動」（未完成酒測則無法啟動車輛 GPS），
+        而非僅依賴員工自律。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 第九章 ===== -->
+  <div class="chapter" id="ch9"><h2 class="chapter-title">第九章｜改善建議</h2><p class="chapter-subtitle">Improvement Recommendations</p></div>
+
+  <div class="priority-card p1">
+    <div class="priority-rank">P1</div>
+    <div>
+      <h4 style="color:var(--danger);">LOTO 制度全面建立</h4>
+      <p>針對蘇密、紀拉狄案例，全興廠及所有有機台操作的場域必須建立上鎖掛牌制度。
+      所有旋轉/壓合設備維護前須完全停機、能量隔離、上鎖掛牌並經雙人確認。</p>
+    </div>
+  </div>
+  <div class="priority-card p1">
+    <div class="priority-rank">P1</div>
+    <div>
+      <h4 style="color:var(--danger);">分選作業防護具升級</h4>
+      <p>9 件切割傷為年度最大宗。立即措施：強制配發防切割手套、護目鏡、手臂護套。
+      分選區入口設置防護具檢查站，未配戴不得進入。</p>
+    </div>
+  </div>
+  <div class="priority-card p2">
+    <div class="priority-rank">P2</div>
+    <div>
+      <h4 style="color:var(--warning);">高處作業 SOP 強化</h4>
+      <p>李暘陞（踩空）、徐基銀（未用安全梯）等案例，需落實：1.8m 以上作業強制背負式安全帶、
+      車輛上下貨統一使用安全階梯椅、嚴禁站在貨物上方作業。</p>
+    </div>
+  </div>
+  <div class="priority-card p2">
+    <div class="priority-rank">P2</div>
+    <div>
+      <h4 style="color:var(--warning);">酒測制度強制連動</h4>
+      <p>林偉聖酒駕案例暴露酒測 APP 僅靠自律的漏洞。建議將酒測與車輛啟動/GPS 連動，
+      未完成酒測則紀錄異常並通報。</p>
+    </div>
+  </div>
+  <div class="priority-card p3">
+    <div class="priority-rank">P3</div>
+    <div>
+      <h4 style="color:var(--info);">堆高機操作資格管理</h4>
+      <p>王紹齊無證操作堆高機造成人員受傷。建議建立堆高機操作人員名冊及授權系統，
+      未取得證照者嚴禁操作，主管負連帶責任。</p>
+    </div>
+  </div>
+
+  <!-- ===== 第十章 ===== -->
+  <div class="chapter" id="ch10"><h2 class="chapter-title">第十章｜總結</h2><p class="chapter-subtitle">Summary & Key Takeaways</p></div>
+
+  <div class="card">
+    <div class="card-header accent-header">2023 年度核心發現</div>
+    <div class="card-body">
+      <div class="highlight-card">
+        <strong>1. 工安事故主導年度：</strong>29 件工安事故佔 64.4%，與後續年度交通事故為主的趨勢截然不同。
+      </div>
+      <div class="danger-card">
+        <strong>2. 切割傷為系統性問題：</strong>9 件被切割挫傷為年度最大宗，反映分選作業防護具配置嚴重不足。
+      </div>
+      <div class="danger-card">
+        <strong>3. 蘇密永久失能：</strong>手指截斷事故暴露 LOTO 制度空白，為最需優先改善的安全缺口。
+      </div>
+      <div class="warning-card">
+        <strong>4. 例行性違規文化：</strong>HSG48 分析顯示 33.3% 為例行性違規，「求快捷、省步驟」已成為常態。
+      </div>
+      <div class="info-card">
+        <strong>5. 損失工日較低：</strong>約 144 天為三年最低，但永久失能案例的隱性成本遠高於工日損失。
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    大豐環保｜法務及環安課｜2023 年度職災分析報告
+    <br><a href="../index.html" style="color:var(--primary);">← 返回報告總覽</a>
+  </div>
+
+</div>
+
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

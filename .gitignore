@@ -1,0 +1,13 @@
+# 系統檔案
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 編輯器
+*.swp
+*.swo
+*~
+.vscode/
+
+# Node（若未來加入建置工具）
+node_modules/
