@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2024 年度職災報告｜重點概覽</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <style>
+    body { background: white; font-size: 13px; line-height: 1.5; }
+    .summary-page { max-width: 800px; margin: 0 auto; padding: 20px 24px; }
+    .summary-header {
+      background: linear-gradient(135deg, #e65100 0%, #ff9800 50%, #ffb74d 100%);
+      color: white; padding: 18px 24px; border-radius: 10px; margin-bottom: 16px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .summary-header h1 { font-size: 1.35em; font-weight: 800; }
+    .summary-header .period { font-size: 0.85em; opacity: 0.9; }
+    .kpi-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 14px; }
+    .kpi-mini { text-align: center; padding: 8px 4px; background: #f8f9fa; border-radius: 8px; border-top: 3px solid var(--primary); }
+    .kpi-mini.danger { border-top-color: var(--danger); }
+    .kpi-mini.warning { border-top-color: var(--warning); }
+    .kpi-mini.accent { border-top-color: var(--accent); }
+    .kpi-mini.info { border-top-color: var(--info); }
+    .kpi-mini .num { font-size: 1.5em; font-weight: 800; color: var(--primary); }
+    .kpi-mini.danger .num { color: var(--danger); }
+    .kpi-mini.warning .num { color: var(--warning); }
+    .kpi-mini.accent .num { color: var(--accent); }
+    .kpi-mini.info .num { color: var(--info); }
+    .kpi-mini .lbl { font-size: 0.72em; color: var(--text-light); margin-top: 2px; }
+    .sec-title { font-size: 0.88em; font-weight: 700; color: white; background: var(--warning); padding: 5px 12px; border-radius: 6px; margin: 12px 0 6px; display: inline-block; }
+    .sec-title.blue { background: var(--primary); }
+    .sec-title.red { background: var(--danger); }
+    .sec-title.green { background: var(--accent); }
+    .compact-table { width: 100%; border-collapse: collapse; font-size: 0.85em; margin-bottom: 10px; }
+    .compact-table th { background: var(--primary); color: white; padding: 5px 8px; text-align: left; font-size: 0.88em; }
+    .compact-table td { padding: 4px 8px; border-bottom: 1px solid #eee; }
+    .compact-table tr:nth-child(even) { background: #f8f9fa; }
+    .compact-table .highlight { background: #fff3e0; font-weight: 600; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .finding { background: #fff3e0; border-left: 3px solid var(--warning); padding: 6px 10px; font-size: 0.82em; border-radius: 0 6px 6px 0; margin: 6px 0; }
+    .finding.danger { background: #ffebee; border-left-color: var(--danger); }
+    .finding.green { background: #e8f5e9; border-left-color: var(--accent); }
+    .summary-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid #e0e0e0; font-size: 0.8em; color: var(--text-light); }
+    .summary-footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    @media print {
+      body { font-size: 11px; }
+      .summary-page { padding: 10px; max-width: none; }
+      .back-link { display: none !important; }
+      .summary-footer a { display: none; }
+    }
+    @media (max-width: 768px) {
+      .kpi-row { grid-template-columns: repeat(3, 1fr); }
+      .two-col { grid-template-columns: 1fr; }
+      .summary-header { flex-direction: column; text-align: center; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="summary-page">
+
+  <div class="top-nav">
+    <a href="../index.html" class="back-link">&#9664; 返回報告總覽</a>
+    <a href="2024.html" class="summary-link">&#9654; 查看完整報告</a>
+  </div>
+
+  <div class="summary-header">
+    <div>
+      <h1>2024 年度職災分析｜重點概覽</h1>
+      <div class="period">大豐環保｜法務及環安課</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:0.85em;opacity:0.85;">分析期間</div>
+      <div style="font-size:1.1em;font-weight:700;">2024.01 ~ 2024.12</div>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-mini danger"><div class="num">44</div><div class="lbl">事故總數</div></div>
+    <div class="kpi-mini warning"><div class="num">3.67</div><div class="lbl">月均事故</div></div>
+    <div class="kpi-mini danger"><div class="num">~407</div><div class="lbl">損失工日（三年最高）</div></div>
+    <div class="kpi-mini info"><div class="num">22</div><div class="lbl">交通事故(50%)</div></div>
+    <div class="kpi-mini warning"><div class="num">21</div><div class="lbl">工安事故(47.7%)</div></div>
+    <div class="kpi-mini danger"><div class="num">1</div><div class="lbl">永久失能</div></div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <div class="sec-title">事故分類與趨勢</div>
+      <table class="compact-table">
+        <tr><th>類別</th><th>件數</th><th>佔比</th><th>較2023</th></tr>
+        <tr class="highlight"><td>交通事故</td><td>22</td><td>50.0%</td><td style="color:var(--danger);">+46.7%</td></tr>
+        <tr><td>工安事故</td><td>21</td><td>47.7%</td><td style="color:var(--accent);">-27.6%</td></tr>
+        <tr><td>虛驚事故</td><td>1</td><td>2.3%</td><td>持平</td></tr>
+      </table>
+
+      <div class="finding danger"><strong>年度轉折：</strong>交通事故首次超越工安事故，成為最大宗（50%）</div>
+      <div class="finding danger"><strong>損失工日暴增：</strong>~407天，較2023年（~144天）增加 +182.6%</div>
+
+      <div class="sec-title blue">月度高峰</div>
+      <table class="compact-table">
+        <tr><th>月份</th><th>件數</th><th>說明</th></tr>
+        <tr class="highlight"><td>12 月</td><td>8</td><td>全年最高（年末趕工）</td></tr>
+        <tr><td>10~12 月合計</td><td>18</td><td>佔全年 40.9%</td></tr>
+        <tr><td>5 月、10 月</td><td>各 5</td><td>次高峰</td></tr>
+      </table>
+
+      <div class="sec-title red">部門風險 Top 5</div>
+      <table class="compact-table">
+        <tr><th>部門</th><th>件數</th><th>佔比</th><th>風險</th></tr>
+        <tr class="highlight"><td>中區業務三課</td><td>8</td><td>18.2%</td><td><span style="color:var(--danger);font-weight:700;">極高</span></td></tr>
+        <tr><td>南區業務一課</td><td>6</td><td>13.6%</td><td><span style="color:var(--danger);">高</span></td></tr>
+        <tr><td>中區業務一課</td><td>5</td><td>11.4%</td><td><span style="color:var(--danger);">高</span></td></tr>
+        <tr><td>北區業務一課</td><td>5</td><td>11.4%</td><td><span style="color:var(--danger);">高</span></td></tr>
+        <tr><td>北區業務二課</td><td>5</td><td>11.4%</td><td><span style="color:var(--danger);">高</span></td></tr>
+      </table>
+    </div>
+
+    <div>
+      <div class="sec-title red">永久失能與重大傷害</div>
+      <table class="compact-table">
+        <tr><th>人員</th><th>傷害</th><th>休息</th><th>類型</th></tr>
+        <tr style="background:#ffcdd2;font-weight:600;"><td>劉宥杉</td><td>腳趾截肢</td><td>90天</td><td>交通(永久失能)</td></tr>
+        <tr class="highlight"><td>林維香</td><td>骨折開刀</td><td>90天</td><td>墜落</td></tr>
+        <tr class="highlight"><td>張芷佩</td><td>尾骶骨骨折</td><td>60天</td><td>交通</td></tr>
+        <tr class="highlight"><td>孫佳鍹</td><td>車禍傷害</td><td>60天</td><td>交通</td></tr>
+        <tr><td>郭毓翔</td><td>腳踝骨裂開刀</td><td>30天</td><td>跌倒</td></tr>
+        <tr><td>徐尉琳</td><td>堆高機壓腳背</td><td>30天</td><td>被夾</td></tr>
+        <tr><td>蔡孟樺</td><td>肋骨骨折+撕裂傷</td><td>20天</td><td>墜落</td></tr>
+      </table>
+
+      <div class="sec-title">HSG48 人因分析</div>
+      <table class="compact-table">
+        <tr><th>人因類型</th><th>佔比</th><th>趨勢</th></tr>
+        <tr class="highlight"><td>疏忽（Slip）</td><td>31.8%</td><td style="color:var(--danger);">取代違規成首位</td></tr>
+        <tr><td>例行性違規</td><td>25.0%</td><td style="color:var(--accent);">下降中</td></tr>
+        <tr><td>遺忘</td><td>13.6%</td><td>—</td></tr>
+        <tr><td>壓力/疲勞（新增）</td><td>4.5%</td><td>新出現</td></tr>
+      </table>
+
+      <div class="sec-title green">改善建議優先序</div>
+      <table class="compact-table">
+        <tr><th>優先</th><th>項目</th></tr>
+        <tr class="highlight"><td><strong>P1</strong></td><td>通勤安全強化（防衛駕駛、路線風險評估）</td></tr>
+        <tr class="highlight"><td><strong>P1</strong></td><td>LOTO 制度持續落實</td></tr>
+        <tr class="highlight"><td><strong>P1</strong></td><td>協力廠商安全管理（徐尉琳案）</td></tr>
+        <tr><td>P2</td><td>環境巡檢與地面管理</td></tr>
+        <tr><td>P2</td><td>鋰電池辨識 SOP</td></tr>
+        <tr><td>P3</td><td>虛驚通報文化建立（全年僅1件）</td></tr>
+      </table>
+
+      <div class="finding"><strong>系統性問題：</strong>地面環境管理不足 — 林維香、郭毓翔、楊逸棋、鄒羽軒均涉及地面狀況</div>
+    </div>
+  </div>
+
+  <div class="summary-footer">
+    <span>大豐環保｜法務及環安課｜2024 年度職災分析重點概覽</span>
+    <a href="2024.html">查看完整報告 →</a>
+  </div>
+
+</div>
+
+</body>
+</html>

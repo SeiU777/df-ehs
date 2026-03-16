@@ -140,9 +140,6 @@
       box-shadow: var(--shadow);
       overflow: hidden;
       transition: transform 0.25s, box-shadow 0.25s;
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
       display: flex;
       flex-direction: column;
     }
@@ -254,25 +251,49 @@
     .card-cta {
       margin-top: auto;
       padding-top: 16px;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+    .card-cta a {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.85em;
+      font-weight: 600;
+      text-decoration: none;
+      transition: filter 0.2s, transform 0.15s;
       text-align: center;
     }
-    .card-cta span {
-      display: inline-block;
-      padding: 8px 28px;
+    .card-cta a:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .card-cta .btn-full {
       background: var(--primary);
       color: white;
-      border-radius: 8px;
-      font-size: 0.9em;
-      font-weight: 600;
-      transition: background 0.2s;
     }
-    .card-overview .card-cta span { background: var(--primary); }
-    .card-2025 .card-cta span { background: var(--danger); }
-    .card-2024 .card-cta span { background: var(--warning); }
-    .card-2023 .card-cta span { background: var(--accent); }
-    .report-card:hover .card-cta span {
-      filter: brightness(1.1);
+    .card-cta .btn-summary {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
     }
+    .card-cta .btn-summary:hover {
+      background: var(--primary);
+      color: white;
+    }
+    .card-overview .card-cta .btn-full { background: var(--primary); }
+    .card-overview .card-cta .btn-summary { color: var(--primary); border-color: var(--primary); }
+    .card-overview .card-cta .btn-summary:hover { background: var(--primary); }
+    .card-2025 .card-cta .btn-full { background: var(--danger); }
+    .card-2025 .card-cta .btn-summary { color: var(--danger); border-color: var(--danger); }
+    .card-2025 .card-cta .btn-summary:hover { background: var(--danger); color: white; }
+    .card-2024 .card-cta .btn-full { background: var(--warning); }
+    .card-2024 .card-cta .btn-summary { color: var(--warning); border-color: var(--warning); }
+    .card-2024 .card-cta .btn-summary:hover { background: var(--warning); color: white; }
+    .card-2023 .card-cta .btn-full { background: var(--accent); }
+    .card-2023 .card-cta .btn-summary { color: var(--accent); border-color: var(--accent); }
+    .card-2023 .card-cta .btn-summary:hover { background: var(--accent); color: white; }
 
     /* ===== 年度趨勢快覽 ===== */
     .trend-section {
@@ -457,7 +478,7 @@
 
       <!-- 第一排：總覽對比 -->
       <div class="report-row-overview">
-        <a href="reports/overview.html" class="report-card card-overview">
+        <div class="report-card card-overview">
           <div class="card-top">
             <h2>總覽對比</h2>
             <div class="period">2023 ~ 2025 三年度跨年趨勢分析</div>
@@ -527,16 +548,19 @@
               <span class="card-tag tag-safety">工安 63</span>
               <span class="card-tag tag-near-miss">虛驚 7</span>
             </div>
-            <div class="card-cta"><span>查看完整報告</span></div>
+            <div class="card-cta">
+              <a href="reports/overview.html" class="btn-full">查看完整報告</a>
+              <a href="reports/overview-summary.html" class="btn-summary">重點概覽</a>
+            </div>
           </div>
-        </a>
+        </div>
       </div>
 
       <!-- 第二排：年度報告 -->
       <div class="report-row-years">
 
       <!-- 2025 年度 -->
-      <a href="reports/2025.html" class="report-card card-2025">
+      <div class="report-card card-2025">
         <div class="card-top">
           <h2>2025 年度</h2>
           <div class="period">2025 年 1 月 ~ 12 月</div>
@@ -559,12 +583,15 @@
             <span class="card-tag tag-safety">工安 13</span>
             <span class="card-tag tag-near-miss">虛驚 5</span>
           </div>
-          <div class="card-cta"><span>查看完整報告</span></div>
+          <div class="card-cta">
+            <a href="reports/2025.html" class="btn-full">完整報告</a>
+            <a href="reports/2025-summary.html" class="btn-summary">重點概覽</a>
+          </div>
         </div>
-      </a>
+      </div>
 
       <!-- 2024 年度 -->
-      <a href="reports/2024.html" class="report-card card-2024">
+      <div class="report-card card-2024">
         <div class="card-top">
           <h2>2024 年度</h2>
           <div class="period">2024 年 1 月 ~ 12 月</div>
@@ -587,12 +614,15 @@
             <span class="card-tag tag-safety">工安 21</span>
             <span class="card-tag tag-near-miss">虛驚 1</span>
           </div>
-          <div class="card-cta"><span>查看完整報告</span></div>
+          <div class="card-cta">
+            <a href="reports/2024.html" class="btn-full">完整報告</a>
+            <a href="reports/2024-summary.html" class="btn-summary">重點概覽</a>
+          </div>
         </div>
-      </a>
+      </div>
 
       <!-- 2023 年度 -->
-      <a href="reports/2023.html" class="report-card card-2023">
+      <div class="report-card card-2023">
         <div class="card-top">
           <h2>2023 年度</h2>
           <div class="period">2023 年 1 月 ~ 12 月</div>
@@ -615,9 +645,12 @@
             <span class="card-tag tag-traffic">交通 15</span>
             <span class="card-tag tag-near-miss">虛驚 1</span>
           </div>
-          <div class="card-cta"><span>查看完整報告</span></div>
+          <div class="card-cta">
+            <a href="reports/2023.html" class="btn-full">完整報告</a>
+            <a href="reports/2023-summary.html" class="btn-summary">重點概覽</a>
+          </div>
         </div>
-      </a>
+      </div>
 
       </div><!-- /report-row-years -->
     </div>

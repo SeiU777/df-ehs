@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2023 年度職災報告｜重點概覽</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <style>
+    body { background: white; font-size: 13px; line-height: 1.5; }
+    .summary-page { max-width: 800px; margin: 0 auto; padding: 20px 24px; }
+    .summary-header {
+      background: linear-gradient(135deg, #1b5e20 0%, #4caf50 50%, #81c784 100%);
+      color: white; padding: 18px 24px; border-radius: 10px; margin-bottom: 16px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .summary-header h1 { font-size: 1.35em; font-weight: 800; }
+    .summary-header .period { font-size: 0.85em; opacity: 0.9; }
+    .kpi-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 14px; }
+    .kpi-mini { text-align: center; padding: 8px 4px; background: #f8f9fa; border-radius: 8px; border-top: 3px solid var(--primary); }
+    .kpi-mini.danger { border-top-color: var(--danger); }
+    .kpi-mini.warning { border-top-color: var(--warning); }
+    .kpi-mini.accent { border-top-color: var(--accent); }
+    .kpi-mini.info { border-top-color: var(--info); }
+    .kpi-mini .num { font-size: 1.5em; font-weight: 800; color: var(--primary); }
+    .kpi-mini.danger .num { color: var(--danger); }
+    .kpi-mini.warning .num { color: var(--warning); }
+    .kpi-mini.accent .num { color: var(--accent); }
+    .kpi-mini.info .num { color: var(--info); }
+    .kpi-mini .lbl { font-size: 0.72em; color: var(--text-light); margin-top: 2px; }
+    .sec-title { font-size: 0.88em; font-weight: 700; color: white; background: var(--accent); padding: 5px 12px; border-radius: 6px; margin: 12px 0 6px; display: inline-block; }
+    .sec-title.blue { background: var(--primary); }
+    .sec-title.red { background: var(--danger); }
+    .sec-title.orange { background: var(--warning); }
+    .compact-table { width: 100%; border-collapse: collapse; font-size: 0.85em; margin-bottom: 10px; }
+    .compact-table th { background: var(--primary); color: white; padding: 5px 8px; text-align: left; font-size: 0.88em; }
+    .compact-table td { padding: 4px 8px; border-bottom: 1px solid #eee; }
+    .compact-table tr:nth-child(even) { background: #f8f9fa; }
+    .compact-table .highlight { background: #e8f5e9; font-weight: 600; }
+    .compact-table .highlight-danger { background: #ffebee; font-weight: 600; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .finding { background: #e8f5e9; border-left: 3px solid var(--accent); padding: 6px 10px; font-size: 0.82em; border-radius: 0 6px 6px 0; margin: 6px 0; }
+    .finding.danger { background: #ffebee; border-left-color: var(--danger); }
+    .finding.orange { background: #fff3e0; border-left-color: var(--warning); }
+    .summary-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid #e0e0e0; font-size: 0.8em; color: var(--text-light); }
+    .summary-footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    @media print {
+      body { font-size: 11px; }
+      .summary-page { padding: 10px; max-width: none; }
+      .back-link { display: none !important; }
+      .summary-footer a { display: none; }
+    }
+    @media (max-width: 768px) {
+      .kpi-row { grid-template-columns: repeat(3, 1fr); }
+      .two-col { grid-template-columns: 1fr; }
+      .summary-header { flex-direction: column; text-align: center; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="summary-page">
+
+  <div class="top-nav">
+    <a href="../index.html" class="back-link">&#9664; 返回報告總覽</a>
+    <a href="2023.html" class="summary-link">&#9654; 查看完整報告</a>
+  </div>
+
+  <div class="summary-header">
+    <div>
+      <h1>2023 年度職災分析｜重點概覽</h1>
+      <div class="period">大豐環保｜法務及環安課</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:0.85em;opacity:0.85;">分析期間</div>
+      <div style="font-size:1.1em;font-weight:700;">2023.01 ~ 2023.12</div>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-mini danger"><div class="num">45</div><div class="lbl">事故總數</div></div>
+    <div class="kpi-mini warning"><div class="num">3.75</div><div class="lbl">月均事故</div></div>
+    <div class="kpi-mini"><div class="num">~144</div><div class="lbl">損失工日（三年最低）</div></div>
+    <div class="kpi-mini warning"><div class="num">29</div><div class="lbl">工安事故(64.4%)</div></div>
+    <div class="kpi-mini info"><div class="num">15</div><div class="lbl">交通事故(33.3%)</div></div>
+    <div class="kpi-mini danger"><div class="num">1</div><div class="lbl">永久失能</div></div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <div class="sec-title red">事故分類（工安為主）</div>
+      <table class="compact-table">
+        <tr><th>類別</th><th>件數</th><th>佔比</th><th>特點</th></tr>
+        <tr class="highlight-danger"><td>工安事故</td><td>29</td><td>64.4%</td><td>年度最大宗</td></tr>
+        <tr><td>交通事故</td><td>15</td><td>33.3%</td><td>三年最低</td></tr>
+        <tr><td>虛驚事故</td><td>1</td><td>2.2%</td><td>通報不足</td></tr>
+      </table>
+
+      <div class="finding danger"><strong>年度特色：</strong>工安事故佔 64.4%（三年最高），切割傷 9 件為最大宗，反映廠區安全管理缺口</div>
+
+      <div class="sec-title blue">工安事故類型 Top 5</div>
+      <table class="compact-table">
+        <tr><th>類型</th><th>件數</th><th>佔工安比</th></tr>
+        <tr class="highlight-danger"><td>被切、割、挫傷</td><td>9</td><td>31.0%</td></tr>
+        <tr><td>墜落、滾落</td><td>5</td><td>17.2%</td></tr>
+        <tr><td>衝撞</td><td>3</td><td>10.3%</td></tr>
+        <tr><td>被夾、被捲</td><td>2</td><td>6.9%</td></tr>
+        <tr><td>跌倒</td><td>2</td><td>6.9%</td></tr>
+      </table>
+
+      <div class="sec-title orange">部門風險 Top 5</div>
+      <table class="compact-table">
+        <tr><th>部門</th><th>件數</th><th>佔比</th><th>風險</th></tr>
+        <tr class="highlight-danger"><td>中區業務一課</td><td>5</td><td>11.1%</td><td><span style="color:var(--danger);">高</span></td></tr>
+        <tr class="highlight-danger"><td>北區業務三課</td><td>5</td><td>11.1%</td><td><span style="color:var(--danger);">高</span></td></tr>
+        <tr class="highlight-danger"><td>中區業務三課</td><td>5</td><td>11.1%</td><td><span style="color:var(--danger);">高</span></td></tr>
+        <tr><td>全興造粒課</td><td>4</td><td>8.9%</td><td><span style="color:var(--danger);">高</span></td></tr>
+        <tr><td>北區業務二課</td><td>3</td><td>6.7%</td><td><span style="color:var(--warning);">中</span></td></tr>
+      </table>
+
+      <div class="finding orange"><strong>月度高峰：</strong>9 月最高（5件），含永久失能案例。整體分布均勻，無明顯季節性</div>
+    </div>
+
+    <div>
+      <div class="sec-title red">永久失能與重大案例</div>
+      <table class="compact-table">
+        <tr><th>人員</th><th>傷害</th><th>休息</th><th>說明</th></tr>
+        <tr style="background:#ffcdd2;font-weight:600;"><td>蘇密</td><td>食指第一節截斷</td><td>—</td><td>永久失能・LOTO未落實</td></tr>
+        <tr class="highlight-danger"><td>林建芳</td><td>右腳挫傷</td><td>20天</td><td>堆高機碰撞</td></tr>
+        <tr class="highlight-danger"><td>鍾雲青</td><td>撕裂傷縫15針</td><td>16天</td><td>手臂防護不足</td></tr>
+        <tr><td>恩波</td><td>額頭撕裂+牙齒斷</td><td>7天</td><td>鋼索斷裂</td></tr>
+        <tr><td>劉祥志</td><td>撕裂傷縫3針</td><td>5天</td><td>香蕉刀使用不當</td></tr>
+      </table>
+
+      <div class="finding danger"><strong>蘇密案核心教訓：</strong>四號造粒機徒手操作未使用括刀，LOTO 制度未建立，夜班監督不足，設備無安全連鎖</div>
+
+      <div class="sec-title blue">HSG48 人因分析</div>
+      <table class="compact-table">
+        <tr><th>人因類型</th><th>佔比</th><th>說明</th></tr>
+        <tr class="highlight-danger"><td>例行性違規</td><td>33.3%</td><td>年度最高・僥倖文化</td></tr>
+        <tr><td>疏忽（Slip）</td><td>28.9%</td><td>—</td></tr>
+        <tr><td>遺忘</td><td>13.3%</td><td>—</td></tr>
+        <tr><td>錯誤判斷</td><td>11.1%</td><td>—</td></tr>
+      </table>
+
+      <div class="sec-title">改善建議優先序</div>
+      <table class="compact-table">
+        <tr><th>優先</th><th>項目</th></tr>
+        <tr class="highlight-danger"><td><strong>P1</strong></td><td>LOTO 制度全面建立（蘇密案教訓）</td></tr>
+        <tr class="highlight-danger"><td><strong>P1</strong></td><td>分選作業防護具升級（9件切割傷）</td></tr>
+        <tr><td>P2</td><td>高處作業 SOP 強化</td></tr>
+        <tr><td>P2</td><td>酒測制度強制連動（林偉聖酒駕案）</td></tr>
+        <tr><td>P3</td><td>堆高機操作資格管理</td></tr>
+      </table>
+
+      <div class="finding"><strong>防護具系統缺口：</strong>9件切割傷中至少5件涉及防護具不足（未戴防切割手套、護目鏡等），非個人疏忽而是配置制度問題</div>
+    </div>
+  </div>
+
+  <div class="summary-footer">
+    <span>大豐環保｜法務及環安課｜2023 年度職災分析重點概覽</span>
+    <a href="2023.html">查看完整報告 →</a>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2025 年度職災報告｜重點概覽</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <style>
+    /* 一頁式摘要專屬樣式 */
+    body { background: white; font-size: 13px; line-height: 1.5; }
+    .summary-page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+
+    /* 頂部標題列 */
+    .summary-header {
+      background: linear-gradient(135deg, #b71c1c 0%, #e53935 50%, #ef5350 100%);
+      color: white;
+      padding: 18px 24px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .summary-header h1 { font-size: 1.35em; font-weight: 800; }
+    .summary-header .period { font-size: 0.85em; opacity: 0.9; }
+
+    /* KPI 橫排 */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .kpi-mini {
+      text-align: center;
+      padding: 8px 4px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-top: 3px solid var(--primary);
+    }
+    .kpi-mini.danger { border-top-color: var(--danger); }
+    .kpi-mini.warning { border-top-color: var(--warning); }
+    .kpi-mini.accent { border-top-color: var(--accent); }
+    .kpi-mini.info { border-top-color: var(--info); }
+    .kpi-mini .num { font-size: 1.5em; font-weight: 800; color: var(--primary); }
+    .kpi-mini.danger .num { color: var(--danger); }
+    .kpi-mini.warning .num { color: var(--warning); }
+    .kpi-mini.accent .num { color: var(--accent); }
+    .kpi-mini.info .num { color: var(--info); }
+    .kpi-mini .lbl { font-size: 0.72em; color: var(--text-light); margin-top: 2px; }
+
+    /* 區塊標題 */
+    .sec-title {
+      font-size: 0.88em;
+      font-weight: 700;
+      color: white;
+      background: var(--danger);
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin: 12px 0 6px;
+      display: inline-block;
+    }
+    .sec-title.blue { background: var(--primary); }
+    .sec-title.orange { background: var(--warning); }
+    .sec-title.green { background: var(--accent); }
+
+    /* 緊湊表格 */
+    .compact-table { width: 100%; border-collapse: collapse; font-size: 0.85em; margin-bottom: 10px; }
+    .compact-table th {
+      background: var(--primary);
+      color: white;
+      padding: 5px 8px;
+      text-align: left;
+      font-size: 0.88em;
+    }
+    .compact-table td { padding: 4px 8px; border-bottom: 1px solid #eee; }
+    .compact-table tr:nth-child(even) { background: #f8f9fa; }
+    .compact-table .highlight { background: #ffebee; font-weight: 600; }
+
+    /* 雙欄 */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+    /* 關鍵發現 */
+    .finding {
+      background: #fff3e0;
+      border-left: 3px solid var(--warning);
+      padding: 6px 10px;
+      font-size: 0.82em;
+      border-radius: 0 6px 6px 0;
+      margin: 6px 0;
+    }
+    .finding.danger {
+      background: #ffebee;
+      border-left-color: var(--danger);
+    }
+    .finding.green {
+      background: #e8f5e9;
+      border-left-color: var(--accent);
+    }
+
+    /* 底部連結 */
+    .summary-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid #e0e0e0;
+      font-size: 0.8em;
+      color: var(--text-light);
+    }
+    .summary-footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* 列印優化 */
+    @media print {
+      body { font-size: 11px; }
+      .summary-page { padding: 10px; max-width: none; }
+      .summary-header { padding: 12px 16px; }
+      .back-link { display: none !important; }
+      .summary-footer a { display: none; }
+    }
+
+    /* 手機 */
+    @media (max-width: 768px) {
+      .kpi-row { grid-template-columns: repeat(3, 1fr); }
+      .two-col, .three-col { grid-template-columns: 1fr; }
+      .summary-header { flex-direction: column; text-align: center; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="summary-page">
+
+  <div class="top-nav">
+    <a href="../index.html" class="back-link">&#9664; 返回報告總覽</a>
+    <a href="2025.html" class="summary-link">&#9654; 查看完整報告</a>
+  </div>
+
+  <!-- 標題 -->
+  <div class="summary-header">
+    <div>
+      <h1>2025 年度職災分析｜重點概覽</h1>
+      <div class="period">大豐環保｜法務及環安課</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:0.85em;opacity:0.85;">分析期間</div>
+      <div style="font-size:1.1em;font-weight:700;">2025.01 ~ 2025.12</div>
+    </div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-row">
+    <div class="kpi-mini danger"><div class="num">53</div><div class="lbl">事故總數（三年最高）</div></div>
+    <div class="kpi-mini warning"><div class="num">4.42</div><div class="lbl">月均事故</div></div>
+    <div class="kpi-mini warning"><div class="num">~359</div><div class="lbl">損失工日</div></div>
+    <div class="kpi-mini danger"><div class="num">35</div><div class="lbl">交通事故(66%)</div></div>
+    <div class="kpi-mini info"><div class="num">13</div><div class="lbl">工安事故(24.5%)</div></div>
+    <div class="kpi-mini accent"><div class="num">0</div><div class="lbl">永久失能</div></div>
+  </div>
+
+  <div class="two-col">
+    <!-- 左欄 -->
+    <div>
+      <!-- 事故分類 -->
+      <div class="sec-title">事故分類與趨勢</div>
+      <table class="compact-table">
+        <tr><th>類別</th><th>件數</th><th>佔比</th><th>較2024</th></tr>
+        <tr class="highlight"><td>交通事故</td><td>35</td><td>66.0%</td><td style="color:var(--danger);">+59.1%</td></tr>
+        <tr><td>工安事故</td><td>13</td><td>24.5%</td><td style="color:var(--accent);">-38.1%</td></tr>
+        <tr><td>虛驚事故</td><td>5</td><td>9.4%</td><td style="color:var(--accent);">+400%</td></tr>
+      </table>
+
+      <div class="finding danger"><strong>交通事故三年趨勢：</strong>15→22→35 件，三年增長 +133%，已成為最大威脅</div>
+      <div class="finding green"><strong>正面訊號：</strong>工安事故從 29 件降至 13 件（-55%），廠區安全管理顯著改善</div>
+
+      <!-- 月度高峰 -->
+      <div class="sec-title blue">月度高峰</div>
+      <table class="compact-table">
+        <tr><th>月份</th><th>件數</th><th>說明</th></tr>
+        <tr class="highlight"><td>4 月</td><td>9</td><td>全年最高峰</td></tr>
+        <tr class="highlight"><td>7 月</td><td>8</td><td>次高峰</td></tr>
+        <tr><td>下半年合計</td><td>31</td><td>佔全年 58.5%</td></tr>
+      </table>
+
+      <!-- 部門排名 -->
+      <div class="sec-title">部門風險 Top 5</div>
+      <table class="compact-table">
+        <tr><th>部門</th><th>件數</th><th>佔比</th><th>風險</th></tr>
+        <tr class="highlight"><td>中區業務一課</td><td>14</td><td>26.4%</td><td><span style="color:var(--danger);font-weight:700;">極高</span></td></tr>
+        <tr><td>南區業務一課</td><td>9</td><td>17.0%</td><td><span style="color:var(--danger);">高</span></td></tr>
+        <tr><td>北區業務二課</td><td>4</td><td>7.5%</td><td><span style="color:var(--warning);">中</span></td></tr>
+        <tr><td>全興處理一課</td><td>4</td><td>7.5%</td><td><span style="color:var(--warning);">中</span></td></tr>
+        <tr><td>其他部門</td><td>22</td><td>41.5%</td><td>—</td></tr>
+      </table>
+
+      <div class="finding danger"><strong>極端異常：</strong>中區業務一課 14 件佔全公司 26.4%，需立即專案管理</div>
+    </div>
+
+    <!-- 右欄 -->
+    <div>
+      <!-- 重大傷害 -->
+      <div class="sec-title blue">重大傷害案例（≥10天）</div>
+      <table class="compact-table">
+        <tr><th>人員</th><th>傷害</th><th>休息</th><th>類型</th></tr>
+        <tr class="highlight"><td>孔吉</td><td>鎖骨+手骨折</td><td>90天</td><td>交通</td></tr>
+        <tr class="highlight"><td>林兆韋</td><td>尾錐著地</td><td>90天</td><td>跌倒</td></tr>
+        <tr><td>吳孟葦</td><td>雙踝骨折</td><td>60天</td><td>跌倒</td></tr>
+        <tr><td>江修斌</td><td>骨裂+韌帶斷</td><td>60天</td><td>跌倒</td></tr>
+        <tr><td>林于翔</td><td>大範圍擦傷</td><td>14天</td><td>交通</td></tr>
+        <tr><td>趙智偉</td><td>膝踝擦挫傷</td><td>10天</td><td>跌倒</td></tr>
+        <tr><td>徐基銀</td><td>肩踝挫傷</td><td>10天</td><td>交通</td></tr>
+      </table>
+
+      <!-- 人因分析 -->
+      <div class="sec-title orange">HSG48 人因分析</div>
+      <table class="compact-table">
+        <tr><th>人因類型</th><th>佔比</th><th>趨勢</th></tr>
+        <tr class="highlight"><td>疏忽（Slip）</td><td>37.7%</td><td>持續主導</td></tr>
+        <tr><td>例行性違規</td><td>13.2%</td><td style="color:var(--accent);">大幅下降</td></tr>
+        <tr><td>遺忘</td><td>15.1%</td><td>—</td></tr>
+        <tr><td>錯誤判斷</td><td>11.3%</td><td>—</td></tr>
+      </table>
+
+      <!-- 改善建議 -->
+      <div class="sec-title green">改善建議優先序</div>
+      <table class="compact-table">
+        <tr><th>優先</th><th>項目</th></tr>
+        <tr class="highlight"><td><strong>P1</strong></td><td>車隊安全管理系統（行車紀錄器 AI 分析）</td></tr>
+        <tr class="highlight"><td><strong>P1</strong></td><td>使用手機駕駛零容忍政策</td></tr>
+        <tr class="highlight"><td><strong>P1</strong></td><td>中區業務一課專案改善</td></tr>
+        <tr><td>P2</td><td>樓梯/通道防滑工程（3案合計210天）</td></tr>
+        <tr><td>P3</td><td>虛驚通報文化建立（目標月均5件）</td></tr>
+      </table>
+
+      <div class="finding"><strong>使用手機駕駛：</strong>田瑋群、林奕宇為年度唯二懲處案件，皆因使用手機，已成系統性風險</div>
+    </div>
+  </div>
+
+  <!-- 底部 -->
+  <div class="summary-footer">
+    <span>大豐環保｜法務及環安課｜2025 年度職災分析重點概覽</span>
+    <a href="2025.html">查看完整報告 →</a>
+  </div>
+
+</div>
+
+</body>
+</html>
