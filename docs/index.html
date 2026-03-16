@@ -424,9 +424,130 @@
       .hero { padding: 20px; }
       .report-card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
     }
+
+    /* ===== 登入覆蓋層 ===== */
+    .login-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, #1e4a6e 0%, #2a6496 40%, #1b5e20 100%);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.4s;
+    }
+    .login-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .login-box {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+      padding: 48px 40px 40px;
+      width: 380px;
+      max-width: 90vw;
+      text-align: center;
+    }
+    .login-box .login-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: white;
+    }
+    .login-box h2 {
+      font-size: 1.4em;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+    .login-box .login-subtitle {
+      font-size: 0.88em;
+      color: var(--text-light);
+      margin-bottom: 28px;
+    }
+    .login-box input[type="password"] {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1em;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+    .login-box input[type="password"]:focus {
+      border-color: var(--primary);
+    }
+    .login-box input[type="password"].error {
+      border-color: var(--danger);
+      animation: shake 0.4s;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .login-box .login-btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      font-weight: 700;
+      cursor: pointer;
+      transition: filter 0.2s, transform 0.15s;
+      font-family: inherit;
+    }
+    .login-box .login-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .login-box .login-error {
+      color: var(--danger);
+      font-size: 0.85em;
+      margin-top: 12px;
+      min-height: 1.2em;
+    }
+    .login-box .login-footer {
+      margin-top: 24px;
+      font-size: 0.78em;
+      color: #bbb;
+    }
+
+    /* 頁面內容隱藏（未登入時） */
+    .page-content.locked {
+      display: none;
+    }
   </style>
 </head>
 <body>
+
+  <!-- ===== 登入畫面 ===== -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+      <div class="login-icon">&#128274;</div>
+      <h2>職災分析報告系統</h2>
+      <div class="login-subtitle">大豐環保｜法務及環安課</div>
+      <form id="loginForm" onsubmit="return handleLogin(event)">
+        <input type="password" id="loginPassword" placeholder="請輸入密碼" autocomplete="off" autofocus>
+        <button type="submit" class="login-btn">登入</button>
+        <div class="login-error" id="loginError"></div>
+      </form>
+      <div class="login-footer">僅限授權人員存取</div>
+    </div>
+  </div>
+
+  <!-- ===== 頁面內容（未登入時隱藏） ===== -->
+  <div class="page-content locked" id="pageContent">
 
   <!-- ===== 頂部橫幅 ===== -->
   <div class="hero">
@@ -728,6 +849,37 @@
   <div class="footer">
     大豐環保｜法務及環安課｜職業災害分析報告系統｜2026 年 3 月
   </div>
+
+  </div><!-- /page-content -->
+
+  <!-- ===== 驗證腳本 ===== -->
+  <script src="js/auth.js"></script>
+  <script>
+    function handleLogin(e) {
+      e.preventDefault();
+      var pwd = document.getElementById('loginPassword');
+      var err = document.getElementById('loginError');
+      if (dfAuth.verify(pwd.value)) {
+        dfAuth.setAuthenticated();
+        document.getElementById('loginOverlay').classList.add('hidden');
+        document.getElementById('pageContent').classList.remove('locked');
+        err.textContent = '';
+      } else {
+        err.textContent = '密碼錯誤，請重新輸入';
+        pwd.classList.add('error');
+        pwd.value = '';
+        pwd.focus();
+        setTimeout(function() { pwd.classList.remove('error'); }, 500);
+      }
+      return false;
+    }
+
+    /* 已登入時直接顯示內容 */
+    if (dfAuth.isAuthenticated()) {
+      document.getElementById('loginOverlay').classList.add('hidden');
+      document.getElementById('pageContent').classList.remove('locked');
+    }
+  </script>
 
 </body>
 </html>
