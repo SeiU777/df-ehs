@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>大豐環保 職業災害分析報告</title>
   <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/dark.css">
+  <script src="js/theme.js"></script>
   <style>
     /* ===== 首頁專屬：覆蓋 body ===== */
     body {
@@ -298,6 +300,9 @@
     .card-2023 .card-cta .btn-full { background: var(--accent); }
     .card-2023 .card-cta .btn-summary { color: var(--accent); border-color: var(--accent); }
     .card-2023 .card-cta .btn-summary:hover { background: var(--accent); color: white; }
+    .card-special .card-cta .btn-full { background: #0d7377; }
+    .card-special .card-cta .btn-summary { color: #0d7377; border-color: #0d7377; }
+    .card-special .card-cta .btn-summary:hover { background: #0d7377; color: white; }
 
     /* ===== 年度趨勢快覽 ===== */
     .trend-section {
@@ -778,6 +783,39 @@
       </div>
 
       </div><!-- /report-row-years -->
+
+      <!-- 專題分析區域 -->
+      <div class="report-row-special" style="margin-top: 40px;">
+        <h2 style="width: 100%; text-align: center; color: var(--text); font-size: 1.3em; margin-bottom: 20px; position: relative;">
+          <span style="background: var(--bg); padding: 0 20px; position: relative; z-index: 1;">專題分析</span>
+          <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border); z-index: 0;"></div>
+        </h2>
+        <div class="report-card card-special" style="width: 100%; max-width: 560px; margin: 0 auto;">
+          <div class="card-top" style="background: linear-gradient(135deg, #0d7377, #14919b, #45b7aa);">
+            <h2>環境與外部因素專題分析</h2>
+            <div class="period">2023.3 ~ 2025.12 跨年度分析</div>
+          </div>
+          <div class="card-body">
+            <div class="card-stat">
+              <span class="stat-label">分析維度</span>
+              <span class="stat-value" style="color: #14919b;">6 大維度</span>
+            </div>
+            <div class="card-stat">
+              <span class="stat-label">事故樣本</span>
+              <span class="stat-value danger">135 件</span>
+            </div>
+            <div class="card-stat">
+              <span class="stat-label">涵蓋範圍</span>
+              <span class="stat-value">天氣 · 作業型態 · 時間模式 · 地理熱點</span>
+            </div>
+            <div class="card-cta">
+              <a href="reports/environmental-factors.html" class="btn-full">完整報告</a>
+              <a href="reports/environmental-factors-summary.html" class="btn-summary">重點概覽</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- ===== 年度趨勢快覽 ===== -->
@@ -851,7 +889,7 @@
 
   <!-- ===== 頁尾 ===== -->
   <div class="footer">
-    大豐環保｜法務及環安課｜職業災害分析報告系統｜2026 年 3 月
+    大豐環保｜法務及環安課 張清柔｜職業災害分析報告系統｜2026 年 3 月
   </div>
 
   </div><!-- /page-content -->

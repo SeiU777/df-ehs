@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>環境與外部因素專題分析｜重點概覽</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/dark.css">
+  <script src="../js/theme.js"></script>
+  <style>
+    /* 一頁式摘要專屬樣式 */
+    body { background: white; font-size: 14px; line-height: 1.5; }
+    .summary-page { max-width: 1000px; margin: 0 auto; padding: 20px 24px; }
+
+    /* 頂部標題列 - 青綠色系 */
+    .summary-header {
+      background: linear-gradient(135deg, #0d7377 0%, #14919b 50%, #45b7aa 100%);
+      color: white; padding: 18px 24px; border-radius: 10px; margin-bottom: 16px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .summary-header h1 { font-size: 1.35em; font-weight: 800; }
+    .summary-header .period { font-size: 0.85em; opacity: 0.9; }
+
+    /* KPI 橫排 */
+    .kpi-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 14px; }
+    .kpi-mini { text-align: center; padding: 8px 4px; background: #f8f9fa; border-radius: 8px; border-top: 3px solid #14919b; }
+    .kpi-mini.danger { border-top-color: var(--danger); }
+    .kpi-mini.warning { border-top-color: var(--warning); }
+    .kpi-mini.accent { border-top-color: var(--accent); }
+    .kpi-mini.info { border-top-color: var(--info); }
+    .kpi-mini.teal { border-top-color: #0d7377; }
+    .kpi-mini .num { font-size: 1.5em; font-weight: 800; color: #0d7377; }
+    .kpi-mini.danger .num { color: var(--danger); }
+    .kpi-mini.warning .num { color: var(--warning); }
+    .kpi-mini.accent .num { color: var(--accent); }
+    .kpi-mini.info .num { color: var(--info); }
+    .kpi-mini .lbl { font-size: 0.72em; color: var(--text-light); margin-top: 2px; }
+
+    /* 區塊標題 */
+    .sec-title { font-size: 0.88em; font-weight: 700; color: white; background: #0d7377; padding: 5px 12px; border-radius: 6px; margin: 12px 0 6px; display: inline-block; }
+    .sec-title.red { background: var(--danger); }
+    .sec-title.orange { background: var(--warning); }
+    .sec-title.green { background: var(--accent); }
+    .sec-title.blue { background: var(--primary); }
+
+    /* 緊湊表格 */
+    .compact-table { width: 100%; border-collapse: collapse; font-size: 0.85em; margin-bottom: 10px; }
+    .compact-table th { background: #0d7377; color: white; padding: 5px 8px; text-align: left; font-size: 0.88em; }
+    .compact-table td { padding: 4px 8px; border-bottom: 1px solid #eee; }
+    .compact-table tr:nth-child(even) { background: #f8f9fa; }
+    .compact-table .highlight { background: #e0f2f1; font-weight: 600; }
+    .compact-table .highlight-danger { background: #ffebee; font-weight: 600; }
+
+    /* 雙欄 */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* 關鍵發現 */
+    .finding { background: #e0f2f1; border-left: 3px solid #14919b; padding: 6px 10px; font-size: 0.82em; border-radius: 0 6px 6px 0; margin: 6px 0; }
+    .finding.danger { background: #ffebee; border-left-color: var(--danger); }
+    .finding.green { background: #e8f5e9; border-left-color: var(--accent); }
+    .finding.orange { background: #fff3e0; border-left-color: var(--warning); }
+
+    /* 底部連結 */
+    .summary-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid #e0e0e0; font-size: 0.8em; color: var(--text-light); }
+    .summary-footer a { color: #0d7377; text-decoration: none; font-weight: 600; }
+
+    /* 列印優化 */
+    @media print {
+      body { font-size: 11px; }
+      .summary-page { padding: 10px; max-width: none; }
+      .back-link { display: none !important; }
+      .summary-footer a { display: none; }
+    }
+
+    /* 手機 */
+    @media (max-width: 768px) {
+      .kpi-row { grid-template-columns: repeat(3, 1fr); }
+      .two-col { grid-template-columns: 1fr; }
+      .summary-header { flex-direction: column; text-align: center; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="summary-page">
+
+  <div class="top-nav">
+    <a href="../index.html" class="back-link">&#9664; 返回報告總覽</a>
+    <a href="environmental-factors.html" class="summary-link">&#9654; 查看完整報告</a>
+  </div>
+
+  <!-- 標題 -->
+  <div class="summary-header">
+    <div>
+      <h1>環境與外部因素專題分析｜重點概覽</h1>
+      <div class="period">大豐環保｜法務及環安課</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:0.85em;opacity:0.85;">分析期間</div>
+      <div style="font-size:1.1em;font-weight:700;">2023.03 ~ 2025.12</div>
+    </div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-row">
+    <div class="kpi-mini danger"><div class="num">135</div><div class="lbl">事故總件數（34 個月）</div></div>
+    <div class="kpi-mini teal"><div class="num">6</div><div class="lbl">分析維度</div></div>
+    <div class="kpi-mini warning"><div class="num">週一</div><div class="lbl">最危險星期（27 件）</div></div>
+    <div class="kpi-mini danger"><div class="num">5.4x</div><div class="lbl">天氣事故嚴重度倍率</div></div>
+    <div class="kpi-mini accent"><div class="num">40 天</div><div class="lbl">最長安全天數</div></div>
+    <div class="kpi-mini info"><div class="num">~831</div><div class="lbl">累計損失工日</div></div>
+  </div>
+
+  <div class="two-col">
+    <!-- 左欄 -->
+    <div>
+      <!-- 天氣與職災 -->
+      <div class="sec-title">天氣與職災關聯</div>
+      <table class="compact-table">
+        <tr><th>指標</th><th>天氣相關</th><th>非天氣</th><th>倍率</th></tr>
+        <tr class="highlight-danger"><td>平均損失工日</td><td><strong>26.7 天</strong></td><td>4.9 天</td><td style="color:var(--danger);font-weight:700;">5.4 倍</td></tr>
+        <tr><td>事故件數</td><td>7 件（5.2%）</td><td>128 件</td><td>—</td></tr>
+        <tr><td>累計損失工日</td><td>187 天</td><td>644 天</td><td>—</td></tr>
+      </table>
+
+      <div class="finding danger"><strong>致命組合：</strong>雨天 + 搬運作業 → 2 起 60 天以上骨折重傷（90 天尾錐骨折、60 天骨裂韌帶斷）</div>
+
+      <!-- 作業型態 -->
+      <div class="sec-title">七大作業型態風險排名</div>
+      <table class="compact-table">
+        <tr><th>作業型態</th><th>件數</th><th>佔比</th><th>均損失工日</th></tr>
+        <tr><td>駕駛運輸</td><td>39</td><td>28.9%</td><td>0.5 天</td></tr>
+        <tr><td>通勤</td><td>33</td><td>24.4%</td><td>9.1 天</td></tr>
+        <tr><td>客戶端作業</td><td>14</td><td>10.4%</td><td>4.6 天</td></tr>
+        <tr class="highlight-danger"><td>製程操作</td><td>11</td><td>8.1%</td><td style="color:var(--danger);font-weight:700;">17.4 天</td></tr>
+        <tr><td>廠內分選</td><td>10</td><td>7.4%</td><td>2.8 天</td></tr>
+        <tr><td>站點/倉儲</td><td>8</td><td>5.9%</td><td>3.0 天</td></tr>
+        <tr><td>裝卸搬運</td><td>7</td><td>5.2%</td><td>9.6 天</td></tr>
+      </table>
+
+      <div class="finding orange"><strong>嚴重度最高：</strong>製程操作均損失 17.4 天/件，2 件 90 天重傷均在全興廠粉碎/造粒作業區</div>
+
+      <!-- 業務線 -->
+      <div class="sec-title blue">五大業務線事故分布</div>
+      <table class="compact-table">
+        <tr><th>業務線</th><th>件數</th><th>佔比</th><th>最高風險單位</th></tr>
+        <tr class="highlight-danger"><td>回收業務</td><td>88</td><td>65.2%</td><td>中區業務一課（22 件）</td></tr>
+        <tr><td>再生處理</td><td>17</td><td>12.6%</td><td>全興造粒課（7 件）</td></tr>
+        <tr><td>站點營運</td><td>11</td><td>8.1%</td><td>和美站（4 件）</td></tr>
+        <tr><td>家電/廢車</td><td>8</td><td>5.9%</td><td>家電回收課（4 件）</td></tr>
+        <tr><td>行政管理</td><td>8</td><td>5.9%</td><td>全為通勤事故</td></tr>
+      </table>
+
+      <!-- 地理 -->
+      <div class="sec-title">地理區域分布</div>
+      <table class="compact-table">
+        <tr><th>區域</th><th>件數</th><th>佔比</th><th>主要熱點</th></tr>
+        <tr class="highlight"><td>中區</td><td>58</td><td>43%</td><td>全興廠 13 件、台積電中科 3 件</td></tr>
+        <tr><td>北區</td><td>49</td><td>36%</td><td>五股分選廠 12 件</td></tr>
+        <tr><td>南區</td><td>18</td><td>13%</td><td>安定倉 5 件</td></tr>
+        <tr><td>國道/快速道路</td><td>12</td><td>9%</td><td>國道一號最多</td></tr>
+      </table>
+    </div>
+
+    <!-- 右欄 -->
+    <div>
+      <!-- 時間模式 -->
+      <div class="sec-title">星期幾效應</div>
+      <table class="compact-table">
+        <tr><th>星期</th><th>件數</th><th>佔比</th><th>備註</th></tr>
+        <tr class="highlight-danger"><td>週一</td><td>27</td><td>20.0%</td><td style="color:var(--danger);font-weight:700;">最危險</td></tr>
+        <tr class="highlight"><td>週三</td><td>25</td><td>18.5%</td><td>次高</td></tr>
+        <tr><td>週四</td><td>24</td><td>17.8%</td><td>—</td></tr>
+        <tr><td>週二</td><td>22</td><td>16.3%</td><td>—</td></tr>
+        <tr><td>週五</td><td>21</td><td>15.6%</td><td>—</td></tr>
+        <tr><td>週六</td><td>11</td><td>8.1%</td><td>—</td></tr>
+        <tr><td>週日</td><td>5</td><td>3.7%</td><td>—</td></tr>
+      </table>
+
+      <div class="finding danger"><strong>週一效應：</strong>假日後安全意識回落，中區週一事故佔該區 25%</div>
+
+      <!-- 事故密度 -->
+      <div class="sec-title red">事故密度與群聚</div>
+      <table class="compact-table">
+        <tr><th>指標</th><th>數據</th></tr>
+        <tr><td>平均事故間隔</td><td><strong>7.5 天</strong>（每週至少 1 起）</td></tr>
+        <tr><td>最長安全天數</td><td><strong>39 天</strong>（含春節假期）</td></tr>
+        <tr><td>同日多起事故</td><td>12 次</td></tr>
+        <tr class="highlight-danger"><td>單日最高紀錄</td><td>3 件（2025/02/10 開工週一）</td></tr>
+        <tr><td>最密集群聚</td><td>2023 年 9 月下旬（9 天 7 件）</td></tr>
+      </table>
+
+      <!-- 季節性 -->
+      <div class="sec-title orange">季節性分析</div>
+      <table class="compact-table">
+        <tr><th>季節</th><th>件數</th><th>佔比</th><th>主要風險</th></tr>
+        <tr class="highlight-danger"><td>夏季（6-9月）</td><td>45</td><td>33%</td><td>交通事故 + 切割傷</td></tr>
+        <tr><td>春季（3-5月）</td><td>37</td><td>27%</td><td>梅雨季滑倒</td></tr>
+        <tr><td>冬季（12-2月）</td><td>28</td><td>21%</td><td>墜落/跌倒最多</td></tr>
+        <tr><td>秋季（10-11月）</td><td>25</td><td>19%</td><td>火災佔比最高</td></tr>
+      </table>
+
+      <!-- 十大發現摘要 -->
+      <div class="sec-title green">十大關鍵發現（摘要）</div>
+      <table class="compact-table">
+        <tr><th>#</th><th>發現</th></tr>
+        <tr class="highlight-danger"><td>1</td><td>天氣事故嚴重度 5.4 倍（雨天+搬運=致命組合）</td></tr>
+        <tr class="highlight-danger"><td>2</td><td>週一佔事故 20%，假日後安全意識回落</td></tr>
+        <tr class="highlight-danger"><td>3</td><td>交通事故佔 42%，通勤事故佔交通的 58%</td></tr>
+        <tr><td>4</td><td>全興廠處理一課：最危險工作區（均損失 16.5 天）</td></tr>
+        <tr><td>5</td><td>夏季（6-9月）事故佔全年 33%</td></tr>
+        <tr><td>6</td><td>60 天以上重傷 7 件，全涉及跌倒/墜落</td></tr>
+        <tr><td>7</td><td>堆高機事故年增率 100%（2→2→4 件）</td></tr>
+        <tr><td>8</td><td>手機分心駕駛已造成 3 起可避免事故</td></tr>
+      </table>
+
+      <!-- 對策優先 -->
+      <div class="sec-title green">優先對策建議</div>
+      <table class="compact-table">
+        <tr><th style="background:var(--danger);">立即執行（1 個月內）</th></tr>
+        <tr><td>全興廠止滑安全鞋全面配置、週一安全晨會制度化、手機禁用規範</td></tr>
+      </table>
+      <table class="compact-table">
+        <tr><th style="background:var(--warning);">短期推動（3 個月內）</th></tr>
+        <tr><td>雨天作業 SOP、客戶端安全協議、LOTO 稽核機制建立</td></tr>
+      </table>
+      <table class="compact-table">
+        <tr><th style="background:var(--accent);">中長期規劃（6-12 個月）</th></tr>
+        <tr><td>天氣預警系統建置、安全績效 KPI 制度、疲勞偵測系統導入評估</td></tr>
+      </table>
+
+      <div class="finding green"><strong>預期效益：</strong>12 個月內月均事故率降低 20%、嚴重傷害件數降低 50%</div>
+    </div>
+  </div>
+
+  <!-- 底部 -->
+  <div class="summary-footer">
+    <span>大豐環保｜法務及環安課 張清柔｜環境與外部因素專題分析 重點概覽</span>
+    <a href="environmental-factors.html">查看完整報告 →</a>
+  </div>
+
+</div>
+
+</body>
+</html>
