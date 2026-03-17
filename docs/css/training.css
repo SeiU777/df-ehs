@@ -1,0 +1,776 @@
+/* =============================================
+   training.css — 教育訓練教材專用樣式
+   大豐環保｜法務及環安課
+   ============================================= */
+
+/* ===== 教材色系變數 ===== */
+:root {
+  --t-primary: #1a365d;
+  --t-primary-light: #2c5282;
+  --t-accent: #e67e22;
+  --t-accent-light: #f39c12;
+  --t-green: #27ae60;
+  --t-red: #e74c3c;
+  --t-teal: #0d7377;
+  --t-purple: #6c5ce7;
+  --t-slide-bg: #ffffff;
+  --t-slide-border: #e2e8f0;
+}
+
+/* ===== 進度列（頂部固定） ===== */
+.progress-bar-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: #e2e8f0;
+  z-index: 3000;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--t-primary), var(--t-accent));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* ===== 教材頂部導航 ===== */
+.training-nav {
+  position: fixed;
+  top: 5px;
+  left: 0;
+  width: 100%;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 2500;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.training-nav .nav-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 10px;
+  background: var(--t-primary);
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.72em;
+  font-weight: 600;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nav-back-btn:hover {
+  background: var(--t-primary-light);
+  transform: translateX(-2px);
+}
+.training-nav .nav-title {
+  font-size: 0.9em;
+  font-weight: 700;
+  color: var(--t-primary);
+}
+.training-nav .nav-location {
+  font-size: 0.75em;
+  color: var(--t-accent);
+  font-weight: 600;
+  background: #fff3e0;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.training-nav .nav-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8em;
+  color: var(--text-light);
+}
+.training-nav .nav-progress {
+  font-weight: 600;
+  color: var(--t-primary);
+}
+
+/* ===== 章節導航按鈕群 ===== */
+.chapter-nav {
+  position: fixed;
+  top: 48px;
+  left: 0;
+  width: 100%;
+  background: var(--t-primary);
+  z-index: 2499;
+  padding: 6px 12px;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.chapter-nav::-webkit-scrollbar { display: none; }
+.chapter-nav-btn {
+  flex-shrink: 0;
+  padding: 6px 16px;
+  border: none;
+  border-radius: 16px;
+  font-size: 0.88em;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.8);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.chapter-nav-btn:hover {
+  background: rgba(255,255,255,0.3);
+  color: white;
+}
+.chapter-nav-btn.active {
+  background: var(--t-accent);
+  color: white;
+}
+.chapter-nav-btn.completed {
+  background: rgba(39,174,96,0.3);
+  color: #81c784;
+}
+
+/* ===== 主內容區 ===== */
+.training-content {
+  padding-top: 90px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 80px;
+}
+
+/* ===== 投影片卡片 ===== */
+.slide {
+  background: var(--t-slide-bg);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  margin-bottom: 24px;
+  overflow: hidden;
+  border: 1px solid var(--t-slide-border);
+  scroll-margin-top: 100px;
+}
+.slide-header {
+  padding: 20px 28px 14px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.slide-number {
+  font-size: 0.72em;
+  font-weight: 700;
+  color: white;
+  background: var(--t-primary);
+  padding: 2px 10px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+.slide-number.accent { background: var(--t-accent); }
+.slide-number.green { background: var(--t-green); }
+.slide-number.red { background: var(--t-red); }
+.slide-number.teal { background: var(--t-teal); }
+.slide-number.purple { background: var(--t-purple); }
+.slide-title {
+  font-size: 1.35em;
+  font-weight: 800;
+  color: var(--t-primary);
+  line-height: 1.3;
+}
+.slide-body {
+  padding: 20px 28px 24px;
+}
+
+/* ===== 章節封面投影片 ===== */
+.slide.chapter-cover {
+  background: linear-gradient(135deg, var(--t-primary) 0%, var(--t-primary-light) 100%);
+  color: white;
+  text-align: center;
+  padding: 50px 30px;
+  border: none;
+}
+.slide.chapter-cover .chapter-icon {
+  font-size: 3em;
+  margin-bottom: 12px;
+}
+.slide.chapter-cover .chapter-label {
+  font-size: 0.85em;
+  opacity: 0.8;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.slide.chapter-cover .chapter-name {
+  font-size: 1.8em;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.slide.chapter-cover .chapter-desc {
+  font-size: 0.95em;
+  opacity: 0.85;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.slide.chapter-cover.accent-cover {
+  background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+}
+.slide.chapter-cover.teal-cover {
+  background: linear-gradient(135deg, #0d7377 0%, #14919b 100%);
+}
+.slide.chapter-cover.green-cover {
+  background: linear-gradient(135deg, #1e8449 0%, #27ae60 100%);
+}
+.slide.chapter-cover.orange-cover {
+  background: linear-gradient(135deg, #d35400 0%, #e67e22 100%);
+}
+.slide.chapter-cover.purple-cover {
+  background: linear-gradient(135deg, #5b48c2 0%, #6c5ce7 100%);
+}
+
+/* ===== 事故案例卡 ===== */
+.case-card {
+  background: #fef9f0;
+  border: 1px solid #f0dfc0;
+  border-left: 5px solid var(--t-accent);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+.case-card.danger {
+  background: #fdf0ef;
+  border-color: #f0c0c0;
+  border-left-color: var(--t-red);
+}
+.case-card .case-tag {
+  font-size: 0.72em;
+  font-weight: 700;
+  color: white;
+  background: var(--t-accent);
+  padding: 2px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+.case-card.danger .case-tag { background: var(--t-red); }
+.case-card .case-title {
+  font-size: 0.95em;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 6px;
+}
+.case-card .case-detail {
+  font-size: 0.85em;
+  color: #555;
+  line-height: 1.6;
+}
+.case-card .case-result {
+  margin-top: 8px;
+  font-size: 0.82em;
+  font-weight: 600;
+  color: var(--t-red);
+}
+
+/* ===== 統計數據卡 ===== */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 12px 0;
+}
+.stat-card {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 16px 12px;
+  text-align: center;
+  border-top: 4px solid var(--t-primary);
+}
+.stat-card.danger { border-top-color: var(--t-red); }
+.stat-card.accent { border-top-color: var(--t-accent); }
+.stat-card.green { border-top-color: var(--t-green); }
+.stat-card.teal { border-top-color: var(--t-teal); }
+.stat-card .stat-num {
+  font-size: 2em;
+  font-weight: 800;
+  color: var(--t-primary);
+  line-height: 1.1;
+}
+.stat-card.danger .stat-num { color: var(--t-red); }
+.stat-card.accent .stat-num { color: var(--t-accent); }
+.stat-card.green .stat-num { color: var(--t-green); }
+.stat-card.teal .stat-num { color: var(--t-teal); }
+.stat-card .stat-label {
+  font-size: 0.78em;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+/* ===== 重點提示框 ===== */
+.tip-box {
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 12px 0;
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+.tip-box.info {
+  background: #ebf5fb;
+  border-left: 4px solid #3498db;
+}
+.tip-box.warning {
+  background: #fef9e7;
+  border-left: 4px solid #f39c12;
+}
+.tip-box.danger {
+  background: #fdedec;
+  border-left: 4px solid #e74c3c;
+}
+.tip-box.success {
+  background: #eafaf1;
+  border-left: 4px solid #27ae60;
+}
+.tip-box .tip-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+/* ===== SOP 步驟 ===== */
+.sop-steps {
+  counter-reset: sop;
+  margin: 12px 0;
+}
+.sop-step {
+  display: flex;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.sop-step:last-child { border-bottom: none; }
+.sop-step::before {
+  counter-increment: sop;
+  content: counter(sop);
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: var(--t-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85em;
+}
+.sop-step .step-content {
+  flex: 1;
+}
+.sop-step .step-title {
+  font-weight: 700;
+  font-size: 0.92em;
+  margin-bottom: 2px;
+}
+.sop-step .step-desc {
+  font-size: 0.85em;
+  color: #555;
+}
+
+/* ===== 對比卡（Do / Don't） ===== */
+.do-dont {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 12px 0;
+}
+.do-card, .dont-card {
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.do-card {
+  background: #eafaf1;
+  border: 2px solid #27ae60;
+}
+.dont-card {
+  background: #fdedec;
+  border: 2px solid #e74c3c;
+}
+.do-card .do-title, .dont-card .do-title {
+  font-weight: 700;
+  font-size: 0.9em;
+  margin-bottom: 6px;
+}
+.do-card .do-title { color: #27ae60; }
+.dont-card .do-title { color: #e74c3c; }
+.do-card ul, .dont-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.85em;
+}
+.do-card li, .dont-card li {
+  padding: 3px 0;
+  padding-left: 18px;
+  position: relative;
+}
+.do-card li::before {
+  content: '\2713';
+  position: absolute;
+  left: 0;
+  color: #27ae60;
+  font-weight: 700;
+}
+.dont-card li::before {
+  content: '\2717';
+  position: absolute;
+  left: 0;
+  color: #e74c3c;
+  font-weight: 700;
+}
+
+/* ===== 測驗區塊 ===== */
+.quiz-section {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin: 16px 0;
+  border: 2px solid #e2e8f0;
+}
+.quiz-title {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: var(--t-primary);
+  margin-bottom: 12px;
+}
+.quiz-question {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.quiz-question:last-child { border-bottom: none; }
+.quiz-q-text {
+  font-size: 0.92em;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.quiz-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid #e0e0e0;
+  background: white;
+  transition: all 0.2s;
+  font-size: 0.88em;
+}
+.quiz-option:hover { border-color: var(--t-primary); background: #f0f4ff; }
+.quiz-option.selected { border-color: var(--t-primary); background: #e8f0fe; }
+.quiz-option.correct {
+  border-color: #27ae60;
+  background: #eafaf1;
+}
+.quiz-option.wrong {
+  border-color: #e74c3c;
+  background: #fdedec;
+}
+.quiz-option .opt-marker {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75em;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.quiz-option.selected .opt-marker {
+  background: var(--t-primary);
+  border-color: var(--t-primary);
+  color: white;
+}
+.quiz-option.correct .opt-marker {
+  background: #27ae60;
+  border-color: #27ae60;
+  color: white;
+}
+.quiz-option.wrong .opt-marker {
+  background: #e74c3c;
+  border-color: #e74c3c;
+  color: white;
+}
+.quiz-feedback {
+  display: none;
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.85em;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct-fb { background: #eafaf1; color: #1e8449; border: 1px solid #a9dfbf; }
+.quiz-feedback.wrong-fb { background: #fdedec; color: #c0392b; border: 1px solid #f5b7b1; }
+
+.quiz-submit-btn {
+  display: inline-block;
+  padding: 10px 28px;
+  background: var(--t-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: all 0.2s;
+}
+.quiz-submit-btn:hover { background: var(--t-primary-light); }
+.quiz-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.quiz-result {
+  display: none;
+  text-align: center;
+  padding: 16px;
+  border-radius: 10px;
+  margin-top: 12px;
+  font-weight: 700;
+}
+.quiz-result.show { display: block; }
+.quiz-result.pass {
+  background: #eafaf1;
+  color: #27ae60;
+  border: 2px solid #a9dfbf;
+}
+.quiz-result.fail {
+  background: #fdedec;
+  color: #e74c3c;
+  border: 2px solid #f5b7b1;
+}
+
+/* ===== 法規引用 ===== */
+.law-ref {
+  background: #f0f4ff;
+  border-left: 4px solid var(--t-primary);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px;
+  margin: 10px 0;
+  font-size: 0.88em;
+}
+.law-ref .law-title {
+  font-weight: 700;
+  color: var(--t-primary);
+  margin-bottom: 4px;
+}
+.law-ref .law-text {
+  color: #555;
+  line-height: 1.6;
+}
+
+/* ===== 教材封面 ===== */
+.training-cover {
+  background: linear-gradient(135deg, #1a365d 0%, #2c5282 40%, #e67e22 100%);
+  color: white;
+  text-align: center;
+  padding: 60px 30px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  scroll-margin-top: 100px;
+}
+.training-cover::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+  animation: pulse 4s ease-in-out infinite;
+}
+.training-cover .cover-icon { font-size: 3.5em; position: relative; margin-bottom: 12px; }
+.training-cover h1 {
+  font-size: 2em;
+  font-weight: 800;
+  position: relative;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  margin-bottom: 6px;
+}
+.training-cover .cover-sub {
+  font-size: 1.1em;
+  opacity: 0.9;
+  position: relative;
+}
+.training-cover .cover-info {
+  margin-top: 16px;
+  font-size: 0.85em;
+  opacity: 0.7;
+  position: relative;
+}
+
+/* ===== 長條圖（教材版） ===== */
+.t-bar-chart { margin: 12px 0; }
+.t-bar-row { display: flex; align-items: center; margin-bottom: 6px; gap: 8px; }
+.t-bar-label { width: 100px; text-align: right; font-size: 0.82em; flex-shrink: 0; font-weight: 600; }
+.t-bar-track { flex: 1; background: #edf2f7; border-radius: 6px; height: 22px; overflow: hidden; }
+.t-bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+  font-size: 0.75em;
+  color: white;
+  font-weight: 600;
+  transition: width 0.6s ease;
+}
+.t-bar-value { font-size: 0.82em; font-weight: 700; width: 45px; flex-shrink: 0; }
+
+/* ===== 底部導航 ===== */
+.training-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-top: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 2500;
+}
+.footer-btn {
+  padding: 8px 20px;
+  border: 2px solid var(--t-primary);
+  border-radius: 8px;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+  color: var(--t-primary);
+}
+.footer-btn:hover {
+  background: var(--t-primary);
+  color: white;
+}
+.footer-btn.primary {
+  background: var(--t-primary);
+  color: white;
+}
+.footer-btn.primary:hover { background: var(--t-primary-light); }
+.footer-center {
+  font-size: 0.8em;
+  color: var(--text-light);
+}
+
+/* ===== 清單樣式 ===== */
+.t-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+}
+.t-list li {
+  padding: 6px 0 6px 22px;
+  position: relative;
+  font-size: 0.9em;
+  line-height: 1.5;
+  border-bottom: 1px solid #f5f5f5;
+}
+.t-list li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--t-primary);
+}
+.t-list li.red::before { background: var(--t-red); }
+.t-list li.orange::before { background: var(--t-accent); }
+.t-list li.green::before { background: var(--t-green); }
+
+/* ===== 表格 ===== */
+.t-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88em;
+  margin: 10px 0;
+}
+.t-table th {
+  background: var(--t-primary);
+  color: white;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+}
+.t-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+.t-table tr:nth-child(even) { background: #f8fafc; }
+.t-table tr:hover { background: #edf2f7; }
+
+/* ===== 回首頁按鈕 ===== */
+.back-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: white;
+  color: var(--t-primary);
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.85em;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.2s;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 3001;
+}
+.back-home:hover { background: var(--t-primary); color: white; }
+
+/* ===== 響應式 ===== */
+@media (max-width: 768px) {
+  .training-content { padding-top: 82px; padding-left: 10px; padding-right: 10px; }
+  .training-nav { padding: 6px 10px; }
+  .training-nav .nav-title { font-size: 0.8em; }
+  .chapter-nav { top: 42px; padding: 4px 8px; }
+  .chapter-nav-btn { font-size: 0.72em; padding: 3px 8px; }
+  .slide-header { padding: 14px 16px 10px; }
+  .slide-body { padding: 14px 16px 18px; }
+  .slide-title { font-size: 1.1em; }
+  .slide.chapter-cover { padding: 30px 16px; }
+  .slide.chapter-cover .chapter-name { font-size: 1.3em; }
+  .training-cover { padding: 40px 16px; }
+  .training-cover h1 { font-size: 1.5em; }
+  .do-dont { grid-template-columns: 1fr; }
+  .stat-row { grid-template-columns: repeat(2, 1fr); }
+  .training-footer { padding: 6px 10px; }
+  .footer-btn { padding: 6px 14px; font-size: 0.8em; }
+  .case-card { padding: 12px 14px; }
+  .back-home { padding: 6px 10px; font-size: 0.78em; }
+}
+
+/* ===== 列印 ===== */
+@media print {
+  .progress-bar-wrap, .training-nav, .chapter-nav, .training-footer, .back-home { display: none !important; }
+  .training-content { padding-top: 0; }
+  .slide { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+}
