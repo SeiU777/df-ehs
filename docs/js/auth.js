@@ -19,9 +19,9 @@
     return true;
   }
 
-  /* 檢查是否已登入 */
+  /* 檢查是否已登入（暫時停用密碼保護） */
   function isAuthenticated() {
-    return sessionStorage.getItem('df-ehs-auth') === 'ok';
+    return true; /* 原始邏輯：sessionStorage.getItem('df-ehs-auth') === 'ok' */
   }
 
   /* 設定已登入 */
