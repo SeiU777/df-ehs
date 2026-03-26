@@ -336,6 +336,71 @@
       transition: box-shadow 0.2s;
     }
     .photo-item img:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+    .photo-item { position: relative; }
+    .photo-zoom-btn {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.52);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity .2s;
+      z-index: 2;
+      line-height: 1;
+    }
+    .photo-item:hover .photo-zoom-btn { opacity: 1; }
+    /* Lightbox */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+    }
+    #lightbox.active { display: flex; }
+    #lightbox img {
+      max-width: 90vw;
+      max-height: 82vh;
+      border-radius: 8px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+      object-fit: contain;
+    }
+    #lightbox-caption {
+      color: rgba(255,255,255,0.85);
+      font-size: 0.92em;
+      text-align: center;
+      max-width: 80vw;
+    }
+    #lightbox-close {
+      position: fixed;
+      top: 18px;
+      right: 22px;
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: #fff;
+      font-size: 22px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #lightbox-close:hover { background: rgba(255,255,255,0.28); }
     .photo-caption {
       font-size: 0.78em;
       color: var(--text-light);
@@ -1438,21 +1503,22 @@
       <!-- 影片區塊 -->
       <div style="margin-top:16px;">
         <p style="font-size:0.88em;font-weight:700;color:var(--primary);margin-bottom:10px;">&#127909; 堆高機危險行為影片</p>
-        <div class="photo-grid">
-          <div class="photo-item" style="max-width:100%;">
-            <video controls style="width:100%;border-radius:8px;border:1px solid var(--border);background:#000;"
-                   src="images/2026-Q1/forklift-danger.mov"
-                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-            </video>
-            <div class="photo-placeholder" style="display:none;">
-              <div class="ph-icon">&#127909;</div>
-              <div>堆高機危險行為影片</div>
-              <div class="ph-filename">images/2026-Q1/forklift-danger.mov</div>
-              <div class="ph-hint">原始檔：ZweeiJU5pd4Ud0sgbQfERWoGEpC4tw1KjDXmWQ3XdOQ.mov｜請上傳至 GitHub 後重新整理</div>
-            </div>
-            <div class="photo-caption">廠內卡車司機定期考核影片 — 可見堆高機轉彎時牙叉上升之危險操作（114年3月）</div>
+        <div id="video-block-forklift">
+          <!-- 影片播放器（檔案存在時顯示） -->
+          <video id="forklift-video" controls
+            style="width:100%;border-radius:8px;border:1px solid var(--border);background:#000;display:none;"
+            src="images/2026-Q1/forklift-danger.mov">
+          </video>
+          <!-- 佔位符（檔案不存在時顯示） -->
+          <div id="forklift-placeholder" class="photo-placeholder" style="display:flex;">
+            <div class="ph-icon">&#127909;</div>
+            <div>堆高機危險行為影片</div>
+            <div class="ph-filename">images/2026-Q1/forklift-danger.mov</div>
+            <button onclick="uploadVideoFile()" style="margin-top:12px;padding:8px 22px;background:var(--primary);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:0.9em;">&#127909; 上傳影片</button>
+            <div id="forklift-upload-status" style="font-size:0.82em;color:var(--text-light);margin-top:6px;"></div>
           </div>
         </div>
+        <div class="photo-caption">廠內卡車司機定期考核影片 — 可見堆高機轉彎時牙叉上升之危險操作（114年3月）</div>
       </div>
     </div>
   </div>
@@ -1889,6 +1955,7 @@
           /* 優先用 data-repo-path（JS 新增的照片會設定此屬性） */
           var rp = img.dataset.repoPath || srcToRepoPath(img.getAttribute('src'));
           if (rp) addDeleteBtn(photoItem, rp);
+          addZoomBtn(photoItem, img);
         }
       }
       if (img.complete) tryAdd();
@@ -1942,6 +2009,7 @@
         img.style.cssText = 'width:100%;border-radius:8px;object-fit:cover;max-height:260px;display:block;';
         item.appendChild(img);
         addDeleteBtn(item, repoPath);
+        addZoomBtn(item, img);
         /* 如果 grid 內有佔位符，在佔位符之前插入；否則直接 append */
         var ph = grid.querySelector('.photo-placeholder, .chart-placeholder');
         if (ph) {
@@ -1964,6 +2032,90 @@
     btn.disabled = false;
   }
 
+  /* 放大按鈕 */
+  function addZoomBtn(photoItem, img) {
+    if (photoItem.querySelector('.photo-zoom-btn')) return;
+    var btn = document.createElement('button');
+    btn.className = 'photo-zoom-btn';
+    btn.title = '放大查看';
+    btn.innerHTML = '&#128269;';
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var caption = '';
+      var cap = photoItem.querySelector('.photo-caption');
+      if (cap) caption = cap.textContent.trim();
+      openLightbox(img.src, caption);
+    });
+    photoItem.appendChild(btn);
+  }
+
+  function openLightbox(src, caption) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox-caption').textContent = caption || '';
+    document.getElementById('lightbox').classList.add('active');
+    document.addEventListener('keydown', onLightboxKey);
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.getElementById('lightbox-img').src = '';
+    document.removeEventListener('keydown', onLightboxKey);
+  }
+
+  function onLightboxKey(e) {
+    if (e.key === 'Escape') closeLightbox();
+  }
+
+  /* 影片區塊：偵測影片是否可播放 */
+  (function(){
+    var vid = document.getElementById('forklift-video');
+    var ph  = document.getElementById('forklift-placeholder');
+    if (!vid || !ph) return;
+    vid.addEventListener('canplay', function(){
+      vid.style.display = 'block';
+      ph.style.display  = 'none';
+    });
+    vid.addEventListener('error', function(){
+      vid.style.display = 'none';
+      ph.style.display  = 'flex';
+    });
+    // 主動嘗試載入
+    vid.load();
+  })();
+
+  async function uploadVideoFile() {
+    var token = localStorage.getItem('df-ehs-upload-token');
+    if (!token) {
+      token = prompt('請輸入 GitHub Personal Access Token\n（需要 Contents: Read & Write 權限，之後會記住）');
+      if (!token) return;
+      localStorage.setItem('df-ehs-upload-token', token.trim());
+      token = token.trim();
+    }
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'video/*,.mov,.mp4,.avi,.webm';
+    input.click();
+    input.onchange = async function() {
+      var file = input.files[0];
+      if (!file) return;
+      var statusEl = document.getElementById('forklift-upload-status');
+      statusEl.textContent = '上傳中，請稍候…';
+      var repoPath = 'docs/committee/images/2026-Q1/forklift-danger.mov';
+      var result = await uploadOneFile(file, repoPath, token);
+      if (result.ok) {
+        statusEl.textContent = '✅ 上傳成功！';
+        var vid = document.getElementById('forklift-video');
+        var ph  = document.getElementById('forklift-placeholder');
+        vid.src = URL.createObjectURL(file);
+        vid.style.display = 'block';
+        ph.style.display  = 'none';
+      } else {
+        statusEl.textContent = '❌ 上傳失敗：' + (result.error || '未知錯誤');
+        statusEl.style.color = 'var(--danger)';
+      }
+    };
+  }
+
   /* 依 grid 內圖片數量自動調整並排樣式 */
   function refreshGridLayout(grid) {
     var items = grid.querySelectorAll('.photo-item');
@@ -1983,5 +2135,11 @@
   }
 </script>
 
+<!-- Lightbox -->
+<div id="lightbox" onclick="closeLightbox()">
+  <button id="lightbox-close" onclick="closeLightbox()">&#10005;</button>
+  <img id="lightbox-img" src="" alt="">
+  <div id="lightbox-caption"></div>
+</div>
 </body>
 </html>
