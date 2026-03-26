@@ -606,6 +606,123 @@ html[data-theme="dark"] .footer-center {
   color: var(--t-text-light);
 }
 
+/* =============================================
+   委員會季報頁面（committee）深色模式
+   ============================================= */
+
+/* 快速導覽列 */
+html[data-theme="dark"] .quick-nav {
+  background: var(--card-bg) !important;
+}
+html[data-theme="dark"] .quick-nav-btn {
+  background: #24243a !important;
+  color: #90b8e0 !important;
+  border-color: #3a3a55 !important;
+}
+html[data-theme="dark"] .quick-nav-btn:hover {
+  background: var(--primary) !important;
+  color: white !important;
+  border-color: var(--primary) !important;
+}
+html[data-theme="dark"] .quick-nav-btn.active {
+  background: var(--primary) !important;
+  color: white !important;
+  border-color: var(--primary) !important;
+}
+html[data-theme="dark"] .quick-nav-btn.no-content {
+  background: #1e1e2a !important;
+  color: #555570 !important;
+  border-color: #2e2e3e !important;
+}
+
+/* 法源引用框 */
+html[data-theme="dark"] .law-ref {
+  background: #1a2535 !important;
+  color: var(--text-light) !important;
+}
+
+/* 政策條目 */
+html[data-theme="dark"] .policy-item:hover {
+  background: #24243a !important;
+}
+html[data-theme="dark"] .policy-desc {
+  color: var(--text) !important;
+}
+
+/* 計畫欄位 */
+html[data-theme="dark"] .plan-col-body {
+  background: #1e1e2a !important;
+  border-color: #2e2e3e !important;
+}
+html[data-theme="dark"] .plan-item {
+  border-bottom-color: #2e2e3e !important;
+}
+
+/* 狀態徽章 */
+html[data-theme="dark"] .status-done {
+  background: #1b3a25 !important;
+  color: #81c784 !important;
+  border-color: #2a5a35 !important;
+}
+html[data-theme="dark"] .status-pending {
+  background: #3a2a10 !important;
+  color: #ffb74d !important;
+  border-color: #5a4020 !important;
+}
+html[data-theme="dark"] .status-na {
+  background: #24243a !important;
+  color: #666680 !important;
+  border-color: #2e2e3e !important;
+}
+
+/* 提案卡片 */
+html[data-theme="dark"] .proposal-body {
+  background: #1e1e2a !important;
+  border-color: #2e2e3e !important;
+}
+html[data-theme="dark"] .proposal-risk {
+  background: #3a1a1a !important;
+  color: #ef9a9a !important;
+  border-color: #5a2020 !important;
+}
+html[data-theme="dark"] .proposal-goal {
+  background: #152a3a !important;
+  color: #90b8e0 !important;
+  border-left-color: var(--primary) !important;
+}
+html[data-theme="dark"] .proposal-steps li {
+  border-bottom-color: #2e2e3e !important;
+}
+
+/* 稽核標籤 */
+html[data-theme="dark"] .audit-col-label.done {
+  background: #1b3a25 !important;
+  color: #81c784 !important;
+}
+html[data-theme="dark"] .audit-col-label.todo {
+  background: #3a1a1a !important;
+  color: #ef9a9a !important;
+}
+
+/* info-card（通知框）*/
+html[data-theme="dark"] .info-card {
+  background: #1a2535 !important;
+  color: var(--text) !important;
+}
+
+/* 事故統計數字框 */
+html[data-theme="dark"] .incident-stat {
+  background: #1e1e2a !important;
+  border-color: #2e2e3e !important;
+}
+
+/* 照片佔位符 */
+html[data-theme="dark"] .photo-placeholder {
+  background: #1e1e2a !important;
+  border-color: #3a3a55 !important;
+  color: var(--text-light) !important;
+}
+
 /* --- 教材頁面：按鈕上移避免被底部導航（z-index:2500）遮住 --- */
 .training-footer ~ .theme-toggle,
 .training-content ~ .theme-toggle,
