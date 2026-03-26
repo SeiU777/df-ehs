@@ -610,6 +610,36 @@ html[data-theme="dark"] .footer-center {
    委員會季報頁面（committee）深色模式
    ============================================= */
 
+/* 說明欄 info-box */
+html[data-theme="dark"] .info-box {
+  background: var(--card-bg) !important;
+}
+html[data-theme="dark"] .info-box-header {
+  background: #1a2535 !important;
+  border-bottom-color: #2e2e3e !important;
+}
+html[data-theme="dark"] .info-item {
+  color: var(--text-light) !important;
+}
+
+/* 上傳工具連結 */
+html[data-theme="dark"] .upload-banner {
+  background: #152a3a !important;
+  border-color: #2e3e52 !important;
+}
+html[data-theme="dark"] .upload-banner-text span {
+  color: var(--text-light) !important;
+}
+
+/* 季報卡片 meta 分隔線 */
+html[data-theme="dark"] .qcard-meta-row {
+  border-bottom-color: #2e2e3e !important;
+}
+html[data-theme="dark"] .qcard-btn.coming {
+  background: #24243a !important;
+  color: #555570 !important;
+}
+
 /* 快速導覽列 */
 html[data-theme="dark"] .quick-nav {
   background: var(--card-bg) !important;
@@ -721,6 +751,88 @@ html[data-theme="dark"] .photo-placeholder {
   background: #1e1e2a !important;
   border-color: #3a3a55 !important;
   color: var(--text-light) !important;
+}
+
+/* 圖片 contain 模式的留白背景 */
+html[data-theme="dark"] img[style*="background:#f5f5f5"] {
+  background: #1e1e2a !important;
+}
+
+/* 照片 / 圖表佔位符 */
+html[data-theme="dark"] .photo-placeholder,
+html[data-theme="dark"] .chart-placeholder {
+  background: #1a1a2a !important;
+  border-color: #3a3a55 !important;
+  color: var(--text-light) !important;
+}
+html[data-theme="dark"] .photo-placeholder:hover,
+html[data-theme="dark"] .chart-placeholder:hover {
+  background: #1e1e30 !important;
+  border-color: var(--primary) !important;
+}
+html[data-theme="dark"] .ph-filename,
+html[data-theme="dark"] .ph-hint {
+  color: #555570 !important;
+}
+html[data-theme="dark"] .ph-add-btn {
+  background: #24243a !important;
+  border-color: #3a3a55 !important;
+}
+html[data-theme="dark"] .ph-add-bar {
+  border-top-color: #2e2e3e !important;
+}
+
+/* 事故描述卡 */
+html[data-theme="dark"] .incident-desc {
+  background: #1e1e2a !important;
+  border-color: #2e2e3e !important;
+  color: var(--text) !important;
+}
+
+/* 事故詳情表格標籤欄（inline background:#f5f7fa） */
+html[data-theme="dark"] td[style*="background:#f5f7fa"] {
+  background: #24243a !important;
+  color: var(--text-light) !important;
+}
+
+/* 統計數字框 */
+html[data-theme="dark"] .stat-box {
+  background: #1e1e2a !important;
+  border-color: #2e2e3e !important;
+}
+html[data-theme="dark"] .stat-box.red {
+  background: linear-gradient(135deg, #2a1515, #1e1e2a) !important;
+  border-color: #5a2020 !important;
+}
+html[data-theme="dark"] .stat-box.green {
+  background: linear-gradient(135deg, #152515, #1e1e2a) !important;
+  border-color: #2a5a30 !important;
+}
+html[data-theme="dark"] .stat-box.green .stat-num { color: #81c784 !important; }
+
+/* 本期無異動 */
+html[data-theme="dark"] .no-action {
+  background: #1e1e2a !important;
+  border-color: #3a3a55 !important;
+}
+
+/* 頁尾導覽按鈕 */
+html[data-theme="dark"] .nav-footer a {
+  background: #1e1e2a !important;
+  color: var(--primary) !important;
+}
+html[data-theme="dark"] .nav-footer a:hover {
+  background: var(--primary) !important;
+  color: white !important;
+}
+
+/* 本季進度框（inline style background:#fff3e0） */
+html[data-theme="dark"] div[style*="background:#fff3e0"] {
+  background: #2e2010 !important;
+  color: var(--text) !important;
+}
+html[data-theme="dark"] div[style*="background:#fff3e0"] span {
+  color: #ffb74d !important;
 }
 
 /* --- 教材頁面：按鈕上移避免被底部導航（z-index:2500）遮住 --- */

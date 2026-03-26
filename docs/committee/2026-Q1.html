@@ -350,11 +350,12 @@
       justify-content: center;
       font-size: 14px;
       opacity: 0;
-      transition: opacity .2s;
+      transition: opacity .2s, background .2s, transform .15s;
       z-index: 2;
       line-height: 1;
     }
     .photo-item:hover .photo-zoom-btn { opacity: 1; }
+    .photo-zoom-btn:hover { background: var(--primary); transform: scale(1.15); }
     /* Lightbox */
     #lightbox {
       display: none;
@@ -488,10 +489,12 @@
       cursor: pointer;
       display: flex;
       align-items: center; justify-content: center;
-      transition: background 0.2s, transform 0.15s;
+      transition: background 0.2s, transform 0.15s, opacity 0.2s;
       z-index: 10;
       font-family: inherit;
+      opacity: 0;
     }
+    .photo-item:hover .photo-del-btn { opacity: 1; }
     .photo-del-btn:hover { background: rgba(198,40,40,0.92); transform: scale(1.15); }
 
     /* ===== 圓餅圖佔位 ===== */
