@@ -636,7 +636,11 @@
   font-weight: 600;
   transition: width 0.6s ease;
 }
-.t-bar-value { font-size: 0.82em; font-weight: 700; width: 45px; flex-shrink: 0; }
+.t-bar-fill { background: var(--t-primary, #1a365d); }
+.t-bar-fill.danger { background: #e74c3c; }
+.t-bar-fill.accent { background: #e67e22; }
+.t-bar-fill.teal { background: #319795; }
+.t-bar-value { font-size: 0.82em; font-weight: 700; flex-shrink: 0; }
 
 /* ===== 底部導航 ===== */
 .training-footer {
