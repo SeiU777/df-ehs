@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>職安衛委員會季報｜大豐環保</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/dark.css">
+  <script src="../js/theme.js"></script>
+  <style>
+    /* ===== Hero ===== */
+    .hero {
+      background: linear-gradient(135deg, #0d2137 0%, #1B3A6B 55%, #1e5799 100%);
+      color: white;
+      text-align: center;
+      padding: 56px 24px 44px;
+      border-radius: var(--radius);
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -30%;
+      width: 160%; height: 160%;
+      background: radial-gradient(ellipse, rgba(255,255,255,0.06) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; right: -60px;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.28);
+      padding: 4px 16px;
+      border-radius: 20px;
+      font-size: 0.78em;
+      margin-bottom: 14px;
+      position: relative;
+      letter-spacing: 0.5px;
+    }
+    .hero h1 {
+      font-size: 2.1em;
+      margin-bottom: 10px;
+      position: relative;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      font-weight: 800;
+    }
+    .hero .sub {
+      opacity: 0.88;
+      font-size: 1em;
+      position: relative;
+    }
+    .hero .law {
+      opacity: 0.6;
+      font-size: 0.8em;
+      margin-top: 14px;
+      position: relative;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 24px;
+      position: relative;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat .hs-num {
+      font-size: 1.7em;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+    .hero-stat .hs-label {
+      font-size: 0.72em;
+      opacity: 0.7;
+      margin-top: 3px;
+    }
+    .hero-divider {
+      width: 1px;
+      background: rgba(255,255,255,0.2);
+      align-self: stretch;
+    }
+
+    /* ===== 年份分組 ===== */
+    .year-section { margin-bottom: 44px; }
+    .year-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.1em;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+    .year-label::before {
+      content: '';
+      display: block;
+      width: 5px; height: 24px;
+      background: linear-gradient(180deg, #1B3A6B, #2a5298);
+      border-radius: 3px;
+    }
+    .year-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--border), transparent);
+    }
+    .quarter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    /* ===== 季報卡片 ===== */
+    .quarter-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 3px 14px rgba(0,0,0,0.08);
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+      display: flex;
+      flex-direction: column;
+    }
+    .quarter-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.14);
+    }
+    .quarter-card.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .qcard-top {
+      padding: 24px 22px 18px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .qcard-top::before {
+      content: '';
+      position: absolute;
+      top: -40%; right: -25%;
+      width: 140px; height: 140px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .qcard-top::after {
+      content: '';
+      position: absolute;
+      bottom: -20px; left: -20px;
+      width: 80px; height: 80px;
+      background: rgba(0,0,0,0.06);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .qcard-top .q-label {
+      font-size: 0.75em;
+      opacity: 0.75;
+      margin-bottom: 5px;
+      position: relative;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .qcard-top h2 {
+      font-size: 1.45em;
+      font-weight: 800;
+      position: relative;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .qcard-top .q-date {
+      font-size: 0.78em;
+      opacity: 0.72;
+      margin-top: 5px;
+      position: relative;
+    }
+    .q1-card .qcard-top { background: linear-gradient(135deg, #0f2444, #1B3A6B 60%, #2a5298); }
+    .q2-card .qcard-top { background: linear-gradient(135deg, #0d3b6e, #1565c0 60%, #0288d1); }
+    .q3-card .qcard-top { background: linear-gradient(135deg, #1a4a1e, #2e7d32 60%, #43a047); }
+    .q4-card .qcard-top { background: linear-gradient(135deg, #2d1a17, #4e342e 60%, #6d4c41); }
+
+    .qcard-body {
+      padding: 18px 20px 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .qcard-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 18px;
+      flex: 1;
+    }
+    .qcard-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85em;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f2f5;
+    }
+    .qcard-meta-row:last-child { border-bottom: none; }
+    .qcard-meta-row .meta-label { color: var(--text-light); }
+    .qcard-meta-row .meta-value { font-weight: 700; }
+    .meta-value.done { color: #2e7d32; }
+    .meta-value.todo { color: var(--danger); }
+    .meta-value.future { color: #bbb; font-weight: 400; }
+
+    .qcard-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 11px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.88em;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .qcard-btn.available {
+      background: linear-gradient(135deg, #1B3A6B, #2a5298);
+      color: white;
+      box-shadow: 0 3px 10px rgba(27,58,107,0.3);
+    }
+    .qcard-btn.available:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 16px rgba(27,58,107,0.4);
+    }
+    .qcard-btn.coming {
+      background: #f5f5f5;
+      color: #ccc;
+      cursor: not-allowed;
+      font-weight: 400;
+    }
+
+    /* ===== 說明欄 ===== */
+    .info-box {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 0;
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+    .info-box-header {
+      background: linear-gradient(135deg, #f0f4f9, #e8eef6);
+      padding: 14px 24px;
+      border-bottom: 1px solid #dde8f5;
+      font-size: 0.9em;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .info-box-body {
+      padding: 18px 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 20px;
+    }
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.88em;
+      color: #555;
+      padding: 5px 0;
+    }
+    .info-item::before {
+      content: '▸';
+      color: #1B3A6B;
+      flex-shrink: 0;
+      font-size: 0.85em;
+      margin-top: 2px;
+    }
+
+    /* ===== 上傳工具連結 ===== */
+    .upload-banner {
+      background: linear-gradient(135deg, #e8f0fb, #ddeaff);
+      border: 1.5px solid #c5d5ea;
+      border-radius: var(--radius);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .upload-banner-icon { font-size: 2em; flex-shrink: 0; }
+    .upload-banner-text { font-size: 0.9em; flex: 1; }
+    .upload-banner-text strong { color: var(--primary); display: block; margin-bottom: 3px; }
+    .upload-banner-text span { color: #666; font-size: 0.9em; }
+    .upload-banner a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      background: linear-gradient(135deg, #1B3A6B, #2a5298);
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88em;
+      transition: all 0.2s;
+      white-space: nowrap;
+      box-shadow: 0 3px 10px rgba(27,58,107,0.25);
+    }
+    .upload-banner a:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 16px rgba(27,58,107,0.35);
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.55em; }
+      .hero-stats { gap: 20px; }
+      .hero-stat .hs-num { font-size: 1.3em; }
+      .quarter-grid { grid-template-columns: 1fr; }
+      .info-box-body { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="top-nav">
+    <a class="back-link" href="../index.html">&#8592; 回首頁</a>
+  </div>
+
+  <!-- 頁首 -->
+  <div class="hero">
+    <div class="hero-badge">大豐環保科技股份有限公司</div>
+    <h1>&#9741; 職安衛委員會季報</h1>
+    <div class="sub">人資部法務環安課｜依法定12項辦理事項編製</div>
+    <div class="law">《職業安全衛生管理辦法》第12條 — 委員會應每三個月至少開會一次</div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hs-num">4</div>
+        <div class="hs-label">季報 / 年</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <div class="hs-num">12</div>
+        <div class="hs-label">法定項目</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <div class="hs-num">2026</div>
+        <div class="hs-label">當前年度</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 說明欄 -->
+  <div class="info-box">
+    <div class="info-box-header">&#128204; 關於本專欄</div>
+    <div class="info-box-body">
+      <div class="info-item">每季更新一次，供向總經理報告使用</div>
+      <div class="info-item">內容依照法定12項辦理事項依序呈現</div>
+      <div class="info-item">含勞檢缺失改善記錄、職災調查、KPI 達成狀況</div>
+      <div class="info-item">報告期間結束後由法務環安課負責更新</div>
+    </div>
+  </div>
+
+  <!-- 圖片上傳工具 -->
+  <div class="upload-banner">
+    <div class="upload-banner-icon">&#128247;</div>
+    <div class="upload-banner-text">
+      <strong>新增報告照片</strong>
+      <span>直接從網頁上傳照片到 GitHub，本機 git pull 即可同步。</span>
+    </div>
+    <a href="upload.html">&#128640; 前往上傳工具</a>
+  </div>
+
+  <!-- ===== 2026年度 ===== -->
+  <div class="year-section">
+    <div class="year-label">2026年度</div>
+    <div class="quarter-grid">
+
+      <!-- Q1 -->
+      <div class="quarter-card q1-card">
+        <div class="qcard-top">
+          <div class="q-label">2026年</div>
+          <h2>第一季（Q1）</h2>
+          <div class="q-date">2026年1月 ～ 3月</div>
+        </div>
+        <div class="qcard-body">
+          <div class="qcard-meta">
+            <div class="qcard-meta-row">
+              <span class="meta-label">勞檢事項</span>
+              <span class="meta-value todo">4項（2項改善中）</span>
+            </div>
+            <div class="qcard-meta-row">
+              <span class="meta-label">職災事故</span>
+              <span class="meta-value todo">1件</span>
+            </div>
+            <div class="qcard-meta-row">
+              <span class="meta-label">安全衛生提案</span>
+              <span class="meta-value done">4項</span>
+            </div>
+            <div class="qcard-meta-row">
+              <span class="meta-label">報告日期</span>
+              <span class="meta-value">2026年3月</span>
+            </div>
+          </div>
+          <a href="2026-Q1.html" class="qcard-btn available">&#128196; 查看完整報告</a>
+        </div>
+      </div>
+
+      <!-- Q2 佔位 -->
+      <div class="quarter-card q2-card disabled">
+        <div class="qcard-top">
+          <div class="q-label">2026年</div>
+          <h2>第二季（Q2）</h2>
+          <div class="q-date">2026年4月 ～ 6月</div>
+        </div>
+        <div class="qcard-body">
+          <div class="qcard-meta">
+            <div class="qcard-meta-row">
+              <span class="meta-label">狀態</span>
+              <span class="meta-value future">尚未開始</span>
+            </div>
+            <div class="qcard-meta-row">
+              <span class="meta-label">預計更新</span>
+              <span class="meta-value future">2026年6月</span>
+            </div>
+          </div>
+          <span class="qcard-btn coming">尚未發布</span>
+        </div>
+      </div>
+
+      <!-- Q3 佔位 -->
+      <div class="quarter-card q3-card disabled">
+        <div class="qcard-top">
+          <div class="q-label">2026年</div>
+          <h2>第三季（Q3）</h2>
+          <div class="q-date">2026年7月 ～ 9月</div>
+        </div>
+        <div class="qcard-body">
+          <div class="qcard-meta">
+            <div class="qcard-meta-row">
+              <span class="meta-label">狀態</span>
+              <span class="meta-value future">尚未開始</span>
+            </div>
+            <div class="qcard-meta-row">
+              <span class="meta-label">預計更新</span>
+              <span class="meta-value future">2026年9月</span>
+            </div>
+          </div>
+          <span class="qcard-btn coming">尚未發布</span>
+        </div>
+      </div>
+
+      <!-- Q4 佔位 -->
+      <div class="quarter-card q4-card disabled">
+        <div class="qcard-top">
+          <div class="q-label">2026年</div>
+          <h2>第四季（Q4）</h2>
+          <div class="q-date">2026年10月 ～ 12月</div>
+        </div>
+        <div class="qcard-body">
+          <div class="qcard-meta">
+            <div class="qcard-meta-row">
+              <span class="meta-label">狀態</span>
+              <span class="meta-value future">尚未開始</span>
+            </div>
+            <div class="qcard-meta-row">
+              <span class="meta-label">預計更新</span>
+              <span class="meta-value future">2026年12月</span>
+            </div>
+          </div>
+          <span class="qcard-btn coming">尚未發布</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    大豐環保科技股份有限公司｜人資部法務環安課｜職安衛委員會季報系統
+  </div>
+
+</div>
+
+</body>
+</html>

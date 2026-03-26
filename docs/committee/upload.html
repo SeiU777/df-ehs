@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>圖片上傳工具｜職安衛委員會季報</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/dark.css">
+  <script src="../js/theme.js"></script>
+  <style>
+    .upload-header {
+      background: linear-gradient(135deg, #0d2137 0%, #1B3A6B 55%, #1e5799 100%);
+      color: white;
+      padding: 40px 28px 30px;
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .upload-header::after {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      pointer-events: none;
+    }
+    .upload-header h1 { font-size: 1.7em; margin-bottom: 8px; position: relative; font-weight: 800; }
+    .upload-header .sub { opacity: 0.8; font-size: 0.88em; position: relative; }
+
+    /* ===== Token 設定區 ===== */
+    .token-section {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px 24px;
+      margin-bottom: 20px;
+    }
+    .token-section h2 {
+      font-size: 1em;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+    .token-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .token-row input {
+      flex: 1;
+      min-width: 200px;
+      padding: 9px 14px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .token-row input:focus { border-color: var(--primary); }
+    .token-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85em;
+      padding: 6px 12px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+    .token-status.set { background: #e8f5e9; color: #2e7d32; }
+    .token-status.unset { background: #fff3e0; color: #e65100; }
+    .token-hint {
+      font-size: 0.8em;
+      color: var(--text-light);
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+    .token-hint a { color: var(--primary); }
+
+    /* ===== 上傳表單 ===== */
+    .upload-form {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px 24px;
+      margin-bottom: 20px;
+    }
+    .upload-form h2 {
+      font-size: 1em;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+    .form-row {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+      min-width: 160px;
+    }
+    .form-group label {
+      font-size: 0.82em;
+      font-weight: 700;
+      color: var(--text-light);
+      letter-spacing: 0.3px;
+    }
+    .form-group select,
+    .form-group input[type="text"] {
+      padding: 9px 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.9em;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group select:focus,
+    .form-group input:focus { border-color: var(--primary); }
+
+    /* 檔案拖放區 */
+    .drop-zone {
+      border: 2px dashed #c5d5ea;
+      border-radius: 12px;
+      padding: 36px 20px;
+      text-align: center;
+      color: #aaa;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #fafbfc;
+    }
+    .drop-zone:hover, .drop-zone.drag-over {
+      border-color: #1B3A6B;
+      background: #f0f5fb;
+      color: #1B3A6B;
+    }
+    .drop-zone .dz-icon { font-size: 3em; margin-bottom: 10px; opacity: 0.6; }
+    .drop-zone .dz-text { font-size: 0.95em; font-weight: 600; }
+    .drop-zone .dz-hint { font-size: 0.78em; color: #ccc; margin-top: 6px; }
+    #fileInput { display: none; }
+
+    /* 已選檔案列表 */
+    .file-list {
+      margin: 14px 0;
+    }
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: #f5f7fa;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      font-size: 0.88em;
+    }
+    .file-item .fi-preview {
+      width: 44px;
+      height: 44px;
+      border-radius: 4px;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 1px solid #ddd;
+    }
+    .file-item .fi-info { flex: 1; }
+    .file-item .fi-name { font-weight: 600; }
+    .file-item .fi-target {
+      font-family: 'Courier New', monospace;
+      font-size: 0.82em;
+      color: var(--text-light);
+    }
+    .fi-rename input {
+      padding: 4px 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-family: 'Courier New', monospace;
+      width: 200px;
+    }
+    .file-item .fi-remove {
+      background: none;
+      border: none;
+      color: #aaa;
+      cursor: pointer;
+      font-size: 1.2em;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .file-item .fi-remove:hover { color: var(--danger); background: #ffebee; }
+
+    /* 上傳按鈕 */
+    .upload-btn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #1B3A6B, #2a5298);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1em;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      box-shadow: 0 3px 12px rgba(27,58,107,0.3);
+      letter-spacing: 0.3px;
+    }
+    .upload-btn:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(27,58,107,0.4); }
+    .upload-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* ===== 上傳結果 ===== */
+    .result-section {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px 24px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .result-section h2 {
+      font-size: 1em;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 14px;
+    }
+    .result-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 0.88em;
+    }
+    .result-item.uploading { background: #e3f2fd; }
+    .result-item.success { background: #e8f5e9; }
+    .result-item.error { background: #ffebee; }
+    .result-item .ri-icon { font-size: 1.2em; }
+    .result-item .ri-name { font-weight: 600; flex: 1; }
+    .result-item .ri-path {
+      font-family: 'Courier New', monospace;
+      font-size: 0.82em;
+      color: var(--text-light);
+    }
+
+    .sync-reminder {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 0.88em;
+      margin-top: 12px;
+    }
+    .sync-reminder code {
+      background: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ===== 操作說明 ===== */
+    .how-to {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 0;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .how-to-header {
+      background: linear-gradient(135deg, #f0f4f9, #e8eef6);
+      padding: 12px 22px;
+      border-bottom: 1px solid #dde8f5;
+      font-size: 0.88em;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .how-to ol {
+      padding: 16px 22px 16px 42px;
+      font-size: 0.88em;
+      color: #555;
+      line-height: 2;
+      margin: 0;
+    }
+    .how-to code {
+      background: #f0f4f9;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.92em;
+      color: #1B3A6B;
+    }
+
+    @media (max-width: 480px) {
+      .form-group { min-width: 100%; }
+      .fi-rename input { width: 140px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="top-nav">
+    <a class="back-link" href="index.html">&#8592; 返回季報列表</a>
+  </div>
+
+  <!-- 頁首 -->
+  <div class="upload-header">
+    <h1>&#128247; 圖片上傳工具</h1>
+    <div class="sub">直接從網頁上傳照片到 GitHub，本機執行 git pull 即可同步</div>
+  </div>
+
+  <!-- 操作說明 -->
+  <div class="how-to">
+    <div class="how-to-header">&#128196; 使用說明</div>
+    <ol>
+      <li><strong>首次使用</strong>：在下方輸入 GitHub Personal Access Token（需 <code>Contents: Write</code> 權限），儲存後長期有效。</li>
+      <li><strong>選擇季別</strong>：選擇要上傳到哪一季的資料夾（如 2026-Q1）。</li>
+      <li><strong>拖入照片</strong>：拖曳或點選檔案，可同時上傳多張。</li>
+      <li><strong>確認檔名</strong>：檢查或修改存檔名稱（英文命名，如 <code>nurse-service.jpg</code>）。</li>
+      <li><strong>上傳</strong>：點擊「開始上傳」，照片會直接 commit 到 GitHub repo。</li>
+      <li><strong>本機同步</strong>：在 VS Code 終端機執行 <code>git pull</code>，即可下載到本機資料夾。</li>
+    </ol>
+  </div>
+
+  <!-- Token 設定區 -->
+  <div class="token-section">
+    <h2>&#128273; GitHub Token 設定</h2>
+    <div class="token-row">
+      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+      <button onclick="saveToken()" style="padding:9px 18px;background:var(--primary);color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;">儲存</button>
+      <button onclick="clearToken()" style="padding:9px 14px;background:#f5f5f5;color:#666;border:1px solid #ddd;border-radius:8px;cursor:pointer;font-family:inherit;">清除</button>
+      <div class="token-status unset" id="tokenStatus">&#9744; 尚未設定</div>
+    </div>
+    <div class="token-hint">
+      Token 僅儲存於本機瀏覽器 localStorage，不會上傳到任何地方。<br>
+      申請方式：GitHub &#8594; Settings &#8594; Developer settings &#8594; Personal access tokens &#8594; Fine-grained tokens &#8594; 選擇 Repository: df-ehs &#8594; Contents: Read and Write
+    </div>
+  </div>
+
+  <!-- 上傳表單 -->
+  <div class="upload-form">
+    <h2>&#128228; 選擇檔案上傳</h2>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>季別（目標資料夾）</label>
+        <select id="quarterSelect">
+          <option value="2026-Q1">2026年Q1</option>
+          <option value="2026-Q2">2026年Q2</option>
+          <option value="2026-Q3">2026年Q3</option>
+          <option value="2026-Q4">2026年Q4</option>
+          <option value="2027-Q1">2027年Q1</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Commit 備註（選填）</label>
+        <input type="text" id="commitMsg" placeholder="例：新增3月職護臨場照片">
+      </div>
+    </div>
+
+    <!-- 拖放區 -->
+    <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+      <div class="dz-icon">&#128444;</div>
+      <div class="dz-text">點擊選擇 或 拖曳圖片到此區域</div>
+      <div class="dz-hint">支援 JPG、PNG、GIF（可同時選取多張）</div>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" multiple onchange="handleFiles(this.files)">
+
+    <!-- 已選檔案列表 -->
+    <div class="file-list" id="fileList"></div>
+
+    <!-- 上傳按鈕 -->
+    <button class="upload-btn" id="uploadBtn" onclick="startUpload()" disabled>
+      &#128640; 開始上傳
+    </button>
+  </div>
+
+  <!-- 上傳結果 -->
+  <div class="result-section" id="resultSection">
+    <h2>&#128196; 上傳結果</h2>
+    <div id="resultList"></div>
+    <div class="sync-reminder" id="syncReminder" style="display:none;">
+      <strong>&#9989; 上傳完成！</strong>
+      請在 VS Code 終端機執行：<code>git pull</code>
+      <br>即可將新照片同步到本機 <code>df-ehs/docs/committee/images/</code> 資料夾。
+    </div>
+  </div>
+
+  <div class="footer">
+    大豐環保科技股份有限公司｜人資部法務環安課｜圖片上傳工具
+  </div>
+
+</div>
+
+<script>
+  // ===== 設定 =====
+  var REPO_OWNER = 'seiu777';
+  var REPO_NAME = 'df-ehs';
+  var REPO_BASE_PATH = 'docs/committee/images';
+
+  // ===== Token 管理 =====
+  var TOKEN_KEY = 'df-ehs-upload-token';
+
+  function loadToken() {
+    var t = localStorage.getItem(TOKEN_KEY);
+    var status = document.getElementById('tokenStatus');
+    var input = document.getElementById('tokenInput');
+    if (t) {
+      input.value = t;
+      status.className = 'token-status set';
+      status.textContent = '✓ 已設定';
+    } else {
+      status.className = 'token-status unset';
+      status.textContent = '□ 尚未設定';
+    }
+    updateUploadBtn();
+  }
+
+  function saveToken() {
+    var val = document.getElementById('tokenInput').value.trim();
+    if (!val) { alert('請輸入 Token'); return; }
+    localStorage.setItem(TOKEN_KEY, val);
+    loadToken();
+  }
+
+  function clearToken() {
+    localStorage.removeItem(TOKEN_KEY);
+    document.getElementById('tokenInput').value = '';
+    loadToken();
+  }
+
+  function getToken() {
+    return localStorage.getItem(TOKEN_KEY);
+  }
+
+  // ===== 檔案處理 =====
+  var selectedFiles = [];
+
+  function handleFiles(files) {
+    for (var i = 0; i < files.length; i++) {
+      var file = files[i];
+      if (!file.type.startsWith('image/')) continue;
+      // 避免重複
+      var exists = selectedFiles.some(function(f) { return f.file.name === file.name; });
+      if (!exists) {
+        selectedFiles.push({ file: file, targetName: sanitizeFilename(file.name) });
+      }
+    }
+    renderFileList();
+    updateUploadBtn();
+  }
+
+  function sanitizeFilename(name) {
+    // 保留英文、數字、-、_、.
+    return name.toLowerCase()
+      .replace(/[^\w\-_.]/g, '-')
+      .replace(/-+/g, '-');
+  }
+
+  function renderFileList() {
+    var list = document.getElementById('fileList');
+    if (selectedFiles.length === 0) { list.innerHTML = ''; return; }
+    var html = '';
+    selectedFiles.forEach(function(item, idx) {
+      var url = URL.createObjectURL(item.file);
+      var quarter = document.getElementById('quarterSelect').value;
+      html += '<div class="file-item">' +
+        '<img class="fi-preview" src="' + url + '">' +
+        '<div class="fi-info">' +
+          '<div class="fi-name">' + item.file.name + '</div>' +
+          '<div class="fi-target">目標：images/' + quarter + '/<strong>' + item.targetName + '</strong></div>' +
+          '<div class="fi-rename">' +
+            '<input type="text" value="' + item.targetName + '" ' +
+              'onchange="selectedFiles[' + idx + '].targetName = this.value" ' +
+              'placeholder="存檔名稱">' +
+          '</div>' +
+        '</div>' +
+        '<button class="fi-remove" onclick="removeFile(' + idx + ')">&#10005;</button>' +
+      '</div>';
+    });
+    list.innerHTML = html;
+  }
+
+  function removeFile(idx) {
+    selectedFiles.splice(idx, 1);
+    renderFileList();
+    updateUploadBtn();
+  }
+
+  function updateUploadBtn() {
+    var btn = document.getElementById('uploadBtn');
+    btn.disabled = !(getToken() && selectedFiles.length > 0);
+  }
+
+  // 季別切換時更新顯示
+  document.getElementById('quarterSelect').addEventListener('change', renderFileList);
+
+  // ===== 拖放 =====
+  var dz = document.getElementById('dropZone');
+  dz.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    dz.classList.add('drag-over');
+  });
+  dz.addEventListener('dragleave', function() {
+    dz.classList.remove('drag-over');
+  });
+  dz.addEventListener('drop', function(e) {
+    e.preventDefault();
+    dz.classList.remove('drag-over');
+    handleFiles(e.dataTransfer.files);
+  });
+
+  // ===== 上傳 =====
+  var uploadResults = [];
+
+  function startUpload() {
+    var token = getToken();
+    if (!token) { alert('請先設定 GitHub Token'); return; }
+    if (selectedFiles.length === 0) { alert('請先選擇圖片'); return; }
+
+    document.getElementById('uploadBtn').disabled = true;
+    document.getElementById('resultSection').style.display = 'block';
+    document.getElementById('syncReminder').style.display = 'none';
+    document.getElementById('resultList').innerHTML = '';
+    uploadResults = [];
+
+    var quarter = document.getElementById('quarterSelect').value;
+    var customMsg = document.getElementById('commitMsg').value.trim();
+
+    var queue = selectedFiles.slice();
+    uploadNext(queue, 0, token, quarter, customMsg);
+  }
+
+  function uploadNext(queue, idx, token, quarter, customMsg) {
+    if (idx >= queue.length) {
+      // 全部完成
+      var allOk = uploadResults.every(function(r) { return r.ok; });
+      if (allOk || uploadResults.some(function(r) { return r.ok; })) {
+        document.getElementById('syncReminder').style.display = 'block';
+      }
+      document.getElementById('uploadBtn').disabled = false;
+      return;
+    }
+
+    var item = queue[idx];
+    var path = REPO_BASE_PATH + '/' + quarter + '/' + item.targetName;
+    var commitMessage = customMsg || ('Upload: ' + item.targetName + ' (' + quarter + ')');
+
+    // 顯示上傳中
+    var resultId = 'result-' + idx;
+    var resultHtml = '<div class="result-item uploading" id="' + resultId + '">' +
+      '<span class="ri-icon">&#9203;</span>' +
+      '<span class="ri-name">' + item.targetName + '</span>' +
+      '<span>上傳中...</span>' +
+    '</div>';
+    document.getElementById('resultList').insertAdjacentHTML('beforeend', resultHtml);
+
+    // 讀取檔案
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var base64 = e.target.result.split(',')[1];
+
+      // 先取得現有 SHA（如果檔案已存在需要提供 sha 才能更新）
+      var apiUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + path;
+      fetch(apiUrl, {
+        headers: {
+          'Authorization': 'token ' + token,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      }).then(function(r) {
+        if (r.ok) return r.json();
+        return null;
+      }).then(function(existing) {
+        var body = {
+          message: commitMessage,
+          content: base64
+        };
+        if (existing && existing.sha) {
+          body.sha = existing.sha;
+        }
+
+        return fetch(apiUrl, {
+          method: 'PUT',
+          headers: {
+            'Authorization': 'token ' + token,
+            'Accept': 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+      }).then(function(res) {
+        var el = document.getElementById(resultId);
+        if (res.ok) {
+          el.className = 'result-item success';
+          el.innerHTML = '<span class="ri-icon">&#9989;</span>' +
+            '<div class="ri-info" style="flex:1;">' +
+              '<div class="ri-name">' + item.targetName + '</div>' +
+              '<div class="ri-path">images/' + quarter + '/' + item.targetName + '</div>' +
+            '</div>' +
+            '<span style="font-size:0.82em;color:#2e7d32;">已上傳</span>';
+          uploadResults.push({ ok: true });
+        } else {
+          return res.json().then(function(err) {
+            el.className = 'result-item error';
+            el.innerHTML = '<span class="ri-icon">&#10060;</span>' +
+              '<span class="ri-name">' + item.targetName + '</span>' +
+              '<span style="font-size:0.82em;color:var(--danger);">失敗：' + (err.message || res.status) + '</span>';
+            uploadResults.push({ ok: false });
+          });
+        }
+      }).catch(function(err) {
+        var el = document.getElementById(resultId);
+        el.className = 'result-item error';
+        el.innerHTML = '<span class="ri-icon">&#10060;</span>' +
+          '<span class="ri-name">' + item.targetName + '</span>' +
+          '<span style="font-size:0.82em;color:var(--danger);">網路錯誤：' + err.message + '</span>';
+        uploadResults.push({ ok: false });
+      }).finally(function() {
+        uploadNext(queue, idx + 1, token, quarter, customMsg);
+      });
+    };
+    reader.readAsDataURL(item.file);
+  }
+
+  // ===== 初始化 =====
+  loadToken();
+</script>
+
+</body>
+</html>
