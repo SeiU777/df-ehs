@@ -1775,28 +1775,51 @@
   /* 單張上傳至 GitHub，回傳 { ok, message } */
   async function uploadOneFile(file, repoPath, token) {
     var base64 = await fileToBase64(file);
+    var apiUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + repoPath;
+    var hdrs = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' };
+
+    /* 取得現有檔案的 SHA（如果存在） */
     var sha = null;
     try {
-      var chk = await fetch(
-        'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + repoPath,
-        { headers: { 'Authorization': 'Bearer ' + token } }
-      );
-      if (chk.ok) sha = (await chk.json()).sha;
+      var chk = await fetch(apiUrl, { headers: hdrs, cache: 'no-store' });
+      if (chk.ok) {
+        var data = await chk.json();
+        sha = data.sha || null;
+      }
     } catch(e) {}
 
+    /* 上傳（PUT） */
     var body = { message: '上傳照片：' + repoPath.split('/').pop(), content: base64, branch: 'main' };
     if (sha) body.sha = sha;
 
-    var resp = await fetch(
-      'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + repoPath,
-      {
-        method: 'PUT',
-        headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      }
-    );
+    var resp = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: Object.assign({ 'Content-Type': 'application/json' }, hdrs),
+      body: JSON.stringify(body)
+    });
+
     if (resp.ok) return { ok: true };
+
+    /* 若因缺少 sha 失敗，重試一次 */
     var err = await resp.json();
+    if (err.message && err.message.indexOf('sha') !== -1 && !sha) {
+      try {
+        var retry = await fetch(apiUrl, { headers: hdrs, cache: 'no-store' });
+        if (retry.ok) {
+          var d = await retry.json();
+          body.sha = d.sha;
+          var resp2 = await fetch(apiUrl, {
+            method: 'PUT',
+            headers: Object.assign({ 'Content-Type': 'application/json' }, hdrs),
+            body: JSON.stringify(body)
+          });
+          if (resp2.ok) return { ok: true };
+          var err2 = await resp2.json();
+          return { ok: false, message: err2.message || resp2.status };
+        }
+      } catch(e2) {}
+    }
+
     return { ok: false, message: err.message || resp.status };
   }
 
