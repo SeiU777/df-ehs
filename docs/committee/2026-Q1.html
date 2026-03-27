@@ -1775,7 +1775,9 @@
   /* 單張上傳至 GitHub，回傳 { ok, message } */
   async function uploadOneFile(file, repoPath, token) {
     var base64 = await fileToBase64(file);
-    var apiUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + repoPath;
+    /* URL 編碼路徑中的特殊字元 */
+    var encodedPath = repoPath.split('/').map(function(s) { return encodeURIComponent(s); }).join('/');
+    var apiUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + encodedPath;
     var hdrs = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' };
 
     /* 取得現有檔案的 SHA（如果存在） */
@@ -1788,6 +1790,22 @@
       }
     } catch(e) {}
 
+    /* 若單檔 GET 未取得 SHA，改用目錄列表查找 */
+    if (!sha) {
+      try {
+        var dirPath = repoPath.substring(0, repoPath.lastIndexOf('/'));
+        var encodedDir = dirPath.split('/').map(function(s) { return encodeURIComponent(s); }).join('/');
+        var dirUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + encodedDir + '?ref=main';
+        var dirResp = await fetch(dirUrl, { headers: hdrs, cache: 'no-store' });
+        if (dirResp.ok) {
+          var listing = await dirResp.json();
+          var fileName = repoPath.split('/').pop();
+          var match = Array.isArray(listing) && listing.find(function(f) { return f.name === fileName; });
+          if (match) sha = match.sha;
+        }
+      } catch(e) {}
+    }
+
     /* 上傳（PUT） */
     var body = { message: '上傳照片：' + repoPath.split('/').pop(), content: base64, branch: 'main' };
     if (sha) body.sha = sha;
@@ -1799,28 +1817,8 @@
     });
 
     if (resp.ok) return { ok: true };
-
-    /* 若因缺少 sha 失敗，重試一次 */
     var err = await resp.json();
-    if (err.message && err.message.indexOf('sha') !== -1 && !sha) {
-      try {
-        var retry = await fetch(apiUrl, { headers: hdrs, cache: 'no-store' });
-        if (retry.ok) {
-          var d = await retry.json();
-          body.sha = d.sha;
-          var resp2 = await fetch(apiUrl, {
-            method: 'PUT',
-            headers: Object.assign({ 'Content-Type': 'application/json' }, hdrs),
-            body: JSON.stringify(body)
-          });
-          if (resp2.ok) return { ok: true };
-          var err2 = await resp2.json();
-          return { ok: false, message: err2.message || resp2.status };
-        }
-      } catch(e2) {}
-    }
-
-    return { ok: false, message: err.message || resp.status };
+    return { ok: false, message: '[' + resp.status + '] ' + (err.message || '未知錯誤') };
   }
 
   /* 點擊上傳按鈕 */
