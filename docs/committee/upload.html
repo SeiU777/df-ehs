@@ -572,7 +572,7 @@
       var apiUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + path;
       fetch(apiUrl, {
         headers: {
-          'Authorization': 'token ' + token,
+          'Authorization': 'Bearer ' + token,
           'Accept': 'application/vnd.github.v3+json'
         }
       }).then(function(r) {
@@ -590,7 +590,7 @@
         return fetch(apiUrl, {
           method: 'PUT',
           headers: {
-            'Authorization': 'token ' + token,
+            'Authorization': 'Bearer ' + token,
             'Accept': 'application/vnd.github.v3+json',
             'Content-Type': 'application/json'
           },
