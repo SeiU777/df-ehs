@@ -1970,23 +1970,35 @@
     btn.textContent = '…';
 
     try {
+      var encodedPath = repoPath.split('/').map(function(s) { return encodeURIComponent(s); }).join('/');
+      var apiUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + encodedPath;
+      var hdrs = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' };
+
       /* 取得 SHA */
-      var chk = await fetch(
-        'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + repoPath,
-        { headers: { 'Authorization': 'Bearer ' + token } }
-      );
-      if (!chk.ok) throw new Error('找不到此檔案（可能尚未 git push）');
-      var sha = (await chk.json()).sha;
+      var sha = null;
+      var chk = await fetch(apiUrl, { headers: hdrs, cache: 'no-store' });
+      if (chk.ok) {
+        sha = (await chk.json()).sha;
+      } else {
+        /* fallback：從目錄列表查找 */
+        var dirPath = repoPath.substring(0, repoPath.lastIndexOf('/'));
+        var encodedDir = dirPath.split('/').map(function(s) { return encodeURIComponent(s); }).join('/');
+        var dirUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + encodedDir + '?ref=main';
+        var dirResp = await fetch(dirUrl, { headers: hdrs, cache: 'no-store' });
+        if (dirResp.ok) {
+          var listing = await dirResp.json();
+          var match = Array.isArray(listing) && listing.find(function(f) { return f.name === filename; });
+          if (match) sha = match.sha;
+        }
+      }
+      if (!sha) throw new Error('找不到此檔案（可能尚未部署或路徑不正確）');
 
       /* DELETE */
-      var resp = await fetch(
-        'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + repoPath,
-        {
-          method: 'DELETE',
-          headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: '刪除照片：' + filename, sha: sha, branch: 'main' })
-        }
-      );
+      var resp = await fetch(apiUrl, {
+        method: 'DELETE',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, hdrs),
+        body: JSON.stringify({ message: '刪除照片：' + filename, sha: sha, branch: 'main' })
+      });
 
       if (resp.ok) {
         var grid = photoItem.closest('.photo-grid, .chart-placeholder-row');
