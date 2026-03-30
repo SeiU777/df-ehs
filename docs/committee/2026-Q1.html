@@ -711,6 +711,14 @@
       .cover-badge { font-size: 0.78em; padding: 5px 12px; }
     }
   </style>
+  <!-- 本機 / 線上圖片路徑自動切換 -->
+  <script>
+    var IS_LOCAL = location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    /* 顯示用路徑前綴：本機→GitHub Pages 絕對路徑，線上→相對路徑 */
+    var IMG_DISPLAY_BASE = IS_LOCAL
+      ? 'https://seiu777.github.io/df-ehs/committee/images/2026-Q1/'
+      : 'images/2026-Q1/';
+  </script>
 </head>
 <body>
 
@@ -1929,14 +1937,18 @@
     photoItem.appendChild(btn);
   }
 
-  /* 從 img.src 推算 repo 路徑（src 為相對路徑時） */
+  /* 從 img.src 推算 repo 路徑 */
   function srcToRepoPath(src) {
-    /* src 範例：images/2026-Q1/nurse-service.jpg
-       頁面位置：docs/committee/2026-Q1.html
-       → repo 路徑：docs/committee/images/2026-Q1/nurse-service.jpg */
+    if (!src) return null;
+    if (src.indexOf('blob:') === 0 || src.indexOf('data:') === 0) return null;
+    /* 處理 GitHub Pages 絕對 URL */
+    var ghPrefix = 'https://seiu777.github.io/df-ehs/committee/';
+    if (src.indexOf(ghPrefix) === 0) {
+      return 'docs/committee/' + src.substring(ghPrefix.length).replace(/\?.*$/, '');
+    }
+    /* 處理相對路徑 */
     var clean = src.replace(/^\.\//, '').replace(/\?.*$/, '');
-    if (clean.startsWith('blob:') || clean.startsWith('data:')) return null;
-    if (clean.startsWith('http')) return null; /* 外部連結不處理 */
+    if (clean.indexOf('http') === 0) return null;
     return 'docs/committee/' + clean;
   }
 
@@ -2049,8 +2061,28 @@
     return wrap;
   }
 
-  /* 頁面載入後初始化所有按鈕 */
+  /* 從任意 img src 推算檔名 */
+  function getFilenameFromSrc(src) {
+    if (!src) return null;
+    /* 移除 query string */
+    var clean = src.replace(/\?.*$/, '');
+    /* 取最後一段路徑 */
+    return clean.split('/').pop();
+  }
+
+  /* 頁面載入後初始化 */
   document.addEventListener('DOMContentLoaded', function() {
+
+    /* 0. 本機瀏覽時：將所有靜態圖片/影片 src 改為 GitHub Pages 絕對路徑 */
+    if (IS_LOCAL) {
+      document.querySelectorAll('img, video source').forEach(function(el) {
+        var s = el.getAttribute('src');
+        if (s && s.indexOf('images/2026-Q1/') === 0) {
+          var filename = s.replace('images/2026-Q1/', '');
+          el.src = IMG_DISPLAY_BASE + filename;
+        }
+      });
+    }
 
     /* 1. 佔位符內的上傳按鈕 */
     document.querySelectorAll('.photo-placeholder, .chart-placeholder').forEach(function(el) {
@@ -2079,14 +2111,12 @@
       grid.parentNode.insertBefore(bar, grid.nextSibling);
     });
 
-    /* 3. 為已成功載入的照片加入刪除按鈕
-          ── blob URL 的照片從 data-repo-path 屬性取路徑 */
+    /* 3. 為已成功載入的照片加入刪除與放大按鈕 */
     document.querySelectorAll('.photo-grid .photo-item img').forEach(function(img) {
       var photoItem = img.closest('.photo-item');
       if (!photoItem) return;
       function tryAdd() {
         if (img.naturalWidth > 0) {
-          /* 優先用 data-repo-path（JS 新增的照片會設定此屬性） */
           var rp = img.dataset.repoPath || srcToRepoPath(img.getAttribute('src'));
           if (rp) addDeleteBtn(photoItem, rp);
           addZoomBtn(photoItem, img);
@@ -2308,6 +2338,16 @@
     var vid = document.getElementById('forklift-video');
     var ph  = document.getElementById('forklift-placeholder');
     if (!vid || !ph) return;
+    /* 本機時修正影片 source src */
+    if (IS_LOCAL) {
+      var source = vid.querySelector('source');
+      if (source) {
+        var s = source.getAttribute('src');
+        if (s && s.indexOf('images/2026-Q1/') === 0) {
+          source.src = IMG_DISPLAY_BASE + s.replace('images/2026-Q1/', '');
+        }
+      }
+    }
     vid.addEventListener('canplay', function(){
       vid.style.display = 'block';
       ph.style.display  = 'none';
@@ -2316,7 +2356,6 @@
       vid.style.display = 'none';
       ph.style.display  = 'flex';
     });
-    // 主動嘗試載入
     vid.load();
   })();
 
