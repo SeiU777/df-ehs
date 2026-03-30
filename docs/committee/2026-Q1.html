@@ -1011,6 +1011,7 @@
           </div>
           <div class="photo-caption">職護臨場衛教服務（2026年3月）</div>
         </div>
+        <!-- END:pg-nurse -->
       </div>
     </div>
   </div>
@@ -1144,6 +1145,7 @@
           </div>
           <div class="photo-caption">勞動部職安署勞動檢查資訊管理系統 — 違規通知（2026.3.17）</div>
         </div>
+        <!-- END:pg-inspection -->
       </div>
     </div>
   </div>
@@ -1231,6 +1233,7 @@
             </div>
             <div class="photo-caption">柴油之安全資料表 — 改善後</div>
           </div>
+          <!-- END:pg-improvement -->
         </div>
       </div>
     </div>
@@ -1300,6 +1303,7 @@
           </div>
           <div class="photo-caption">危害性化學品之容器標示 — 需張貼至儲槽容器外明顯處</div>
         </div>
+        <!-- END:pg-equipment -->
       </div>
     </div>
   </div>
@@ -2071,84 +2075,61 @@
     };
   }
 
-  /* ===== extras.json 管理（永久保存動態新增的照片） ===== */
-  var EXTRAS_REPO_PATH = 'docs/committee/images/2026-Q1/extras.json';
+  /* ===== 修改 GitHub 上的 HTML 原始檔（永久寫入照片） ===== */
+  var HTML_REPO_PATH = 'docs/committee/2026-Q1.html';
 
-  /* 從 GitHub 讀取 extras.json */
-  async function loadExtrasFromGitHub(token) {
+  /* 取得 GitHub 上 HTML 檔的內容與 sha */
+  async function getHtmlFromGitHub(token) {
     var hdrs = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' };
-    var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + EXTRAS_REPO_PATH + '?ref=main';
-    try {
-      var resp = await fetch(url, { headers: hdrs, cache: 'no-store' });
-      if (!resp.ok) return { data: [], sha: null };
-      var json = await resp.json();
-      var content = JSON.parse(atob(json.content));
-      return { data: content, sha: json.sha };
-    } catch(e) { return { data: [], sha: null }; }
+    var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + HTML_REPO_PATH + '?ref=main';
+    var resp = await fetch(url, { headers: hdrs, cache: 'no-store' });
+    if (!resp.ok) return null;
+    var json = await resp.json();
+    /* GitHub 回傳 base64 編碼的內容（可能含換行，需移除） */
+    var raw = atob(json.content.replace(/\n/g, ''));
+    /* 處理 UTF-8 */
+    var bytes = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+    var html = new TextDecoder('utf-8').decode(bytes);
+    return { content: html, sha: json.sha };
   }
 
-  /* 將 extras.json 寫回 GitHub */
-  async function saveExtrasToGitHub(token, data, sha) {
+  /* 將修改後的 HTML 寫回 GitHub */
+  async function saveHtmlToGitHub(token, html, sha) {
     var hdrs = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
-    var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + EXTRAS_REPO_PATH;
-    var body = {
-      message: '更新照片清單 extras.json',
-      content: btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2)))),
-      branch: 'main'
-    };
-    if (sha) body.sha = sha;
+    var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + HTML_REPO_PATH;
+    /* 將 UTF-8 字串轉為 base64 */
+    var encoded = new TextEncoder().encode(html);
+    var binaryStr = '';
+    for (var i = 0; i < encoded.length; i++) binaryStr += String.fromCharCode(encoded[i]);
+    var b64 = btoa(binaryStr);
+    var body = { message: '新增照片到報告頁面', content: b64, sha: sha, branch: 'main' };
     var resp = await fetch(url, { method: 'PUT', headers: hdrs, body: JSON.stringify(body) });
     return resp.ok;
   }
 
-  /* 將照片元素加入指定 grid */
-  function addPhotoItemToGrid(grid, filename, caption) {
-    var item = document.createElement('div');
-    item.className = 'photo-item';
-    var img = document.createElement('img');
-    img.src = 'images/2026-Q1/' + filename;
-    img.alt = caption || filename;
-    img.style.cssText = 'width:100%;border-radius:8px;object-fit:cover;max-height:260px;display:block;';
-    img.onerror = function() { item.style.display = 'none'; };
-    item.appendChild(img);
-    var cap = document.createElement('div');
-    cap.className = 'photo-caption';
-    cap.textContent = caption || filename;
-    item.appendChild(cap);
-    grid.appendChild(item);
-    /* 載入後加入功能按鈕 */
-    var rp = IMG_BASE + filename;
-    img.dataset.repoPath = rp;
-    img.addEventListener('load', function() {
-      addDeleteBtn(item, rp);
-      addZoomBtn(item, img);
+  /* 在 HTML 字串中的指定 grid 標記處插入新照片 HTML */
+  function insertPhotoHtml(html, gridId, photoEntries) {
+    var marker = '<!-- END:' + gridId + ' -->';
+    var idx = html.indexOf(marker);
+    if (idx === -1) return html;
+    var snippet = '';
+    photoEntries.forEach(function(entry) {
+      snippet += '\n          <div class="photo-item">\n' +
+        '            <img src="images/2026-Q1/' + entry.filename + '" alt="' + entry.caption + '"\n' +
+        '                 onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">\n' +
+        '            <div class="photo-placeholder" style="display:none;">\n' +
+        '              <div class="ph-icon">&#128247;</div>\n' +
+        '              <div>' + entry.caption + '</div>\n' +
+        '              <div class="ph-filename">' + entry.filename + '</div>\n' +
+        '            </div>\n' +
+        '            <div class="photo-caption">' + entry.caption + '</div>\n' +
+        '          </div>';
     });
-    return item;
+    return html.slice(0, idx) + snippet + '\n          ' + html.slice(idx);
   }
 
-  /* 頁面載入時還原動態照片（不需要 token，直接從 GitHub Pages 讀取） */
-  function restoreExtrasOnLoad() {
-    fetch('images/2026-Q1/extras.json?t=' + Date.now())
-      .then(function(r) { return r.ok ? r.json() : []; })
-      .then(function(list) {
-        list.forEach(function(entry) {
-          var grid = document.getElementById(entry.grid);
-          if (!grid) return;
-          addPhotoItemToGrid(grid, entry.filename, entry.caption);
-        });
-        /* 重新調整各 grid 的排版 */
-        document.querySelectorAll('.photo-grid').forEach(function(g) { refreshGridLayout(g); });
-      })
-      .catch(function() {});
-  }
-  /* 立即執行還原 */
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', restoreExtrasOnLoad);
-  } else {
-    restoreExtrasOnLoad();
-  }
-
-  /* 上傳並將新照片加入現有 grid（永久保存） */
+  /* 上傳並將新照片加入現有 grid（永久寫入 HTML） */
   async function appendPhotosToGrid(btn, grid, files, token) {
     var bar = btn.parentNode;
     var statusEl = bar.querySelector('.ph-add-status');
@@ -2183,21 +2164,29 @@
         addZoomBtn(item, img);
         grid.appendChild(item);
         refreshGridLayout(grid);
-        /* 記錄到清單 */
-        newEntries.push({ grid: gridId, filename: files[i].name, caption: caption });
+        newEntries.push({ filename: files[i].name, caption: caption });
       } else {
         lastError = result.message || '未知錯誤';
       }
     }
 
-    /* 將新照片寫入 extras.json（永久保存） */
+    /* 將新照片永久寫入 HTML 原始檔 */
     if (newEntries.length > 0 && gridId) {
-      statusEl.textContent = '正在儲存照片清單…';
-      var extras = await loadExtrasFromGitHub(token);
-      var list = extras.data.concat(newEntries);
-      var saved = await saveExtrasToGitHub(token, list, extras.sha);
-      if (!saved) {
-        statusEl.textContent = '⚠️ 照片已上傳但清單儲存失敗，刷新後可能不顯示';
+      statusEl.textContent = '正在更新頁面原始檔…';
+      try {
+        var htmlData = await getHtmlFromGitHub(token);
+        if (htmlData) {
+          var newHtml = insertPhotoHtml(htmlData.content, gridId, newEntries);
+          var saved = await saveHtmlToGitHub(token, newHtml, htmlData.sha);
+          if (!saved) {
+            statusEl.textContent = '⚠️ 照片已上傳但 HTML 更新失敗，請手動 git pull 確認';
+            statusEl.style.color = '#e65100';
+            btn.disabled = false;
+            return;
+          }
+        }
+      } catch(e) {
+        statusEl.textContent = '⚠️ 照片已上傳但 HTML 更新失敗：' + e.message;
         statusEl.style.color = '#e65100';
         btn.disabled = false;
         return;
@@ -2205,7 +2194,7 @@
     }
 
     if (success === files.length) {
-      statusEl.textContent = '✅ ' + success + '張上傳成功！';
+      statusEl.textContent = '✅ ' + success + '張上傳成功！請執行 git pull 同步本機。';
       statusEl.style.color = '#2e7d32';
     } else {
       statusEl.textContent = '⚠️ ' + success + '/' + files.length + '張成功。錯誤：' + lastError;
