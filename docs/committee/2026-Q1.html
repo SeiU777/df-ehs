@@ -2127,7 +2127,9 @@
     var b64 = btoa(binaryStr);
     var body = { message: '新增照片到報告頁面', content: b64, sha: sha, branch: 'main' };
     var resp = await fetch(url, { method: 'PUT', headers: hdrs, body: JSON.stringify(body) });
-    return resp.ok;
+    if (resp.ok) return { ok: true };
+    var err = await resp.json().catch(function() { return {}; });
+    return { ok: false, message: '[' + resp.status + '] ' + (err.message || '未知錯誤') };
   }
 
   /* 在 HTML 字串中的指定 grid 標記處插入新照片 HTML */
@@ -2194,18 +2196,29 @@
 
     /* 將新照片永久寫入 HTML 原始檔 */
     if (newEntries.length > 0 && gridId) {
-      statusEl.textContent = '正在更新頁面原始檔…';
+      statusEl.textContent = '正在更新頁面原始檔…（步驟 1/2：讀取 HTML）';
       try {
         var htmlData = await getHtmlFromGitHub(token);
-        if (htmlData) {
-          var newHtml = insertPhotoHtml(htmlData.content, gridId, newEntries);
-          var saved = await saveHtmlToGitHub(token, newHtml, htmlData.sha);
-          if (!saved) {
-            statusEl.textContent = '⚠️ 照片已上傳但 HTML 更新失敗，請手動 git pull 確認';
-            statusEl.style.color = '#e65100';
-            btn.disabled = false;
-            return;
-          }
+        if (!htmlData) {
+          statusEl.textContent = '⚠️ 照片已上傳但無法讀取 HTML 原始檔，刷新後照片不會顯示';
+          statusEl.style.color = '#e65100';
+          btn.disabled = false;
+          return;
+        }
+        statusEl.textContent = '正在更新頁面原始檔…（步驟 2/2：寫入照片標籤）';
+        var newHtml = insertPhotoHtml(htmlData.content, gridId, newEntries);
+        if (newHtml === htmlData.content) {
+          statusEl.textContent = '⚠️ 照片已上傳但找不到插入標記 END:' + gridId + '，無法寫入 HTML';
+          statusEl.style.color = '#e65100';
+          btn.disabled = false;
+          return;
+        }
+        var saved = await saveHtmlToGitHub(token, newHtml, htmlData.sha);
+        if (!saved.ok) {
+          statusEl.textContent = '⚠️ 照片已上傳但 HTML 更新失敗：' + saved.message;
+          statusEl.style.color = '#e65100';
+          btn.disabled = false;
+          return;
         }
       } catch(e) {
         statusEl.textContent = '⚠️ 照片已上傳但 HTML 更新失敗：' + e.message;
@@ -2213,10 +2226,15 @@
         btn.disabled = false;
         return;
       }
+    } else if (newEntries.length > 0 && !gridId) {
+      statusEl.textContent = '⚠️ 照片已上傳但此區塊沒有 ID，無法永久寫入';
+      statusEl.style.color = '#e65100';
+      btn.disabled = false;
+      return;
     }
 
     if (success === files.length) {
-      statusEl.textContent = '✅ ' + success + '張上傳成功！請執行 git pull 同步本機。';
+      statusEl.textContent = '✅ ' + success + '張永久上傳成功！刷新頁面即可看到（GitHub Pages 約需 1-2 分鐘部署）。';
       statusEl.style.color = '#2e7d32';
     } else {
       statusEl.textContent = '⚠️ ' + success + '/' + files.length + '張成功。錯誤：' + lastError;
