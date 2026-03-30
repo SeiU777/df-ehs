@@ -1951,7 +1951,33 @@
     return 'docs/committee/' + clean;
   }
 
-  /* 刪除照片（GitHub API DELETE + 移除 DOM） */
+  /* 從 HTML 字串中移除包含指定檔名的 photo-item 區塊 */
+  function removePhotoItemFromHtml(html, filename) {
+    var searchStr = 'images/2026-Q1/' + filename;
+    var imgIdx = html.indexOf(searchStr);
+    if (imgIdx === -1) return html;
+    /* 往回找 <div class="photo-item" */
+    var startMarker = '<div class="photo-item"';
+    var startIdx = html.lastIndexOf(startMarker, imgIdx);
+    if (startIdx === -1) return html;
+    /* 往前數 div 巢狀層級，找到配對的 </div> */
+    var depth = 0;
+    var endIdx = -1;
+    for (var i = startIdx; i < html.length; i++) {
+      if (html.substr(i, 4) === '<div') depth++;
+      else if (html.substr(i, 6) === '</div>') {
+        depth--;
+        if (depth === 0) { endIdx = i + 6; break; }
+      }
+    }
+    if (endIdx === -1) return html;
+    /* 移除區塊（含前後空白） */
+    var before = html.substring(0, startIdx).replace(/\n\s*$/, '\n');
+    var after = html.substring(endIdx).replace(/^\s*\n?/, '');
+    return before + after;
+  }
+
+  /* 刪除照片（GitHub API DELETE + 移除 DOM + 更新 HTML 原始檔） */
   async function deletePhoto(btn, repoPath, photoItem) {
     var filename = repoPath.split('/').pop();
     if (!confirm('確定要刪除「' + filename + '」嗎？\n此動作會從 GitHub 移除此照片。')) return;
@@ -1972,11 +1998,11 @@
       var apiUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + encodedPath;
       var hdrs = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' };
 
-      /* 透過 Git Data API 取得 SHA */
+      /* 透過 Git Data API 取得檔案 SHA */
       var sha = await getFileSha(repoPath, token);
       if (!sha) throw new Error('找不到此檔案（可能尚未部署或路徑不正確）');
 
-      /* DELETE */
+      /* DELETE 圖片檔案 */
       var resp = await fetch(apiUrl, {
         method: 'DELETE',
         headers: Object.assign({ 'Content-Type': 'application/json' }, hdrs),
@@ -1984,9 +2010,21 @@
       });
 
       if (resp.ok) {
+        /* 從 DOM 移除 */
         var grid = photoItem.closest('.photo-grid, .chart-placeholder-row');
         photoItem.remove();
         if (grid) refreshGridLayout(grid);
+
+        /* 同時從 HTML 原始檔移除 photo-item 區塊 */
+        try {
+          var htmlData = await getHtmlFromGitHub(token);
+          if (htmlData) {
+            var newHtml = removePhotoItemFromHtml(htmlData.content, filename);
+            if (newHtml !== htmlData.content) {
+              await saveHtmlToGitHub(token, newHtml, htmlData.sha);
+            }
+          }
+        } catch(e2) { /* HTML 更新失敗不影響刪除結果 */ }
       } else {
         var err = await resp.json();
         alert('刪除失敗：' + (err.message || resp.status));
