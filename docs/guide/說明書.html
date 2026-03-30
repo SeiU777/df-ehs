@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大豐環保 職安分析報告系統 — 完整說明書</title>
+  <style>
+    :root {
+      --primary: #1e4a6e;
+      --primary-light: #2a6496;
+      --primary-dark: #153750;
+      --accent: #4caf50;
+      --accent-light: #81c784;
+      --bg: #f4f6f8;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --text-light: #666666;
+      --border: #e0e0e0;
+      --code-bg: #f0f4f8;
+      --warning: #ff9800;
+      --danger: #e53935;
+      --sidebar-width: 280px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ===== 側邊目錄 ===== */
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: var(--primary-dark);
+      color: #fff;
+      overflow-y: auto;
+      z-index: 100;
+      padding: 20px 0;
+      transition: transform 0.3s;
+    }
+
+    .sidebar-title {
+      padding: 10px 20px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      margin-bottom: 10px;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 8px 20px;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .sidebar a:hover, .sidebar a.active {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+
+    .sidebar a.sub {
+      padding-left: 36px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .sidebar a.sub:hover { color: rgba(255,255,255,0.9); }
+
+    .sidebar-toggle {
+      display: none;
+      position: fixed;
+      left: 10px; top: 10px;
+      z-index: 200;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    /* ===== 主內容 ===== */
+    .main {
+      margin-left: var(--sidebar-width);
+      padding: 0;
+    }
+
+    /* ===== 封面 ===== */
+    .cover {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+      color: #fff;
+      padding: 80px 40px;
+      text-align: center;
+    }
+
+    .cover h1 {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+
+    .cover .subtitle {
+      font-size: 22px;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+
+    .cover .meta {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    .cover .badge {
+      display: inline-block;
+      background: var(--accent);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin-top: 20px;
+    }
+
+    /* ===== 章節 ===== */
+    .chapter {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 30px;
+    }
+
+    .chapter h2 {
+      color: var(--primary);
+      font-size: 26px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid var(--accent);
+    }
+
+    .chapter h3 {
+      color: var(--primary);
+      font-size: 20px;
+      margin: 30px 0 12px;
+    }
+
+    .chapter h4 {
+      color: var(--primary-light);
+      font-size: 17px;
+      margin: 20px 0 8px;
+    }
+
+    .chapter p {
+      margin-bottom: 12px;
+    }
+
+    /* ===== 卡片 ===== */
+    .card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 24px;
+      margin: 20px 0;
+    }
+
+    .card.warning {
+      border-left: 4px solid var(--warning);
+    }
+
+    .card.danger {
+      border-left: 4px solid var(--danger);
+    }
+
+    .card.success {
+      border-left: 4px solid var(--accent);
+    }
+
+    .card.info {
+      border-left: 4px solid var(--primary);
+    }
+
+    .card-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .card.warning .card-title { color: var(--warning); }
+    .card.danger .card-title { color: var(--danger); }
+    .card.success .card-title { color: var(--accent); }
+    .card.info .card-title { color: var(--primary); }
+
+    /* ===== 步驟 ===== */
+    .step {
+      background: var(--card-bg);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 20px 24px;
+      margin: 16px 0;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      background: var(--primary);
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .step-content { flex: 1; }
+    .step-content h4 { margin: 0 0 6px; color: var(--primary); }
+
+    /* ===== 程式碼 ===== */
+    code {
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: "Cascadia Code", "Consolas", monospace;
+      font-size: 14px;
+      color: var(--primary);
+    }
+
+    pre {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 16px 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 12px 0;
+      font-family: "Cascadia Code", "Consolas", monospace;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ===== 表格 ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+
+    th {
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 14px;
+      text-align: left;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:nth-child(even) { background: #f8fafc; }
+
+    /* ===== 架構圖 ===== */
+    .arch-diagram {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 24px;
+      border-radius: 10px;
+      font-family: "Cascadia Code", "Consolas", monospace;
+      font-size: 14px;
+      line-height: 1.8;
+      white-space: pre;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    /* ===== 勾選表 ===== */
+    .checklist { list-style: none; padding: 0; }
+    .checklist li {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .checklist li::before {
+      content: "☐";
+      font-size: 18px;
+      color: var(--primary);
+    }
+
+    /* ===== FAQ ===== */
+    details {
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    summary {
+      padding: 14px 20px;
+      cursor: pointer;
+      font-weight: bold;
+      color: var(--primary);
+      user-select: none;
+    }
+
+    summary:hover { background: #f8fafc; }
+
+    details > div {
+      padding: 0 20px 16px;
+      color: var(--text-light);
+    }
+
+    /* ===== 回到頂部 ===== */
+    .back-top {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      display: none;
+      z-index: 50;
+    }
+
+    /* ===== 列印 ===== */
+    @media print {
+      .sidebar, .sidebar-toggle, .back-top { display: none !important; }
+      .main { margin-left: 0; }
+      .cover { padding: 40px 20px; }
+      .chapter { padding: 20px; }
+      pre { white-space: pre-wrap; }
+    }
+
+    /* ===== 手機 ===== */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-toggle { display: block; }
+      .main { margin-left: 0; }
+      .cover { padding: 60px 20px; }
+      .cover h1 { font-size: 26px; }
+      .chapter { padding: 20px 16px; }
+      .step { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 手機選單按鈕 -->
+<button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+<!-- 側邊目錄 -->
+<nav class="sidebar">
+  <div class="sidebar-title">職安系統說明書</div>
+  <a href="#cover">封面</a>
+  <a href="#ch1">第一章：專案簡介</a>
+  <a href="#ch1-flow" class="sub">系統運作流程</a>
+  <a href="#ch1-components" class="sub">四大組件</a>
+  <a href="#ch2">第二章：打包內容</a>
+  <a href="#ch3">第三章：環境安裝</a>
+  <a href="#ch3-quick" class="sub">快速安裝</a>
+  <a href="#ch3-full" class="sub">從零安裝</a>
+  <a href="#ch4">第四章：參考資料</a>
+  <a href="#ch5">第五章：Claude Code</a>
+  <a href="#ch5-skills" class="sub">Skills 設定</a>
+  <a href="#ch6">第六章：日常操作</a>
+  <a href="#ch6-monthly" class="sub">月度報告更新</a>
+  <a href="#ch6-case" class="sub">個案職災分析</a>
+  <a href="#ch7">第七章：常見問題</a>
+  <a href="#appendix-a">附錄 A：打包清單</a>
+  <a href="#appendix-b">附錄 B：路徑速查</a>
+</nav>
+
+<!-- 主內容 -->
+<div class="main">
+
+  <!-- 封面 -->
+  <section class="cover" id="cover">
+    <h1>職安分析報告系統</h1>
+    <div class="subtitle">完整說明書</div>
+    <div class="meta">大豐環保科技股份有限公司 ｜ 法務及環安課</div>
+    <div class="meta" style="margin-top:8px;">版本 1.0 ｜ 2026-03-30</div>
+    <div class="badge">適用對象：新進同事、接手人員</div>
+  </section>
+
+  <!-- 第一章 -->
+  <section class="chapter" id="ch1">
+    <h2>第一章：專案簡介與系統架構</h2>
+
+    <h3>1.1 這個系統是什麼？</h3>
+    <p>大豐環保法務及環安課的<strong>職業災害分析報告系統</strong>，功能包括：</p>
+    <ul>
+      <li>職災統計報告網站（GitHub Pages 自動部署）</li>
+      <li>個案職災分析報告產生器（AI 輔助，產出 .docx）</li>
+      <li>安委會季度簡報生成工具</li>
+      <li>教育訓練教材網站</li>
+    </ul>
+
+    <h3 id="ch1-flow">1.2 系統運作流程</h3>
+    <div class="arch-diagram">┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
+│  Excel 職災資料  │────→│   Claude Code    │────→│  HTML 報告檔案   │
+│ （每月更新）      │     │ （AI 讀取分析）    │     │ （df-ehs/docs/） │
+└─────────────────┘     └──────────────────┘     └────────┬────────┘
+                                                          │ git push
+                                                          ▼
+                                                 ┌─────────────────┐
+                                                 │  GitHub Pages   │
+                                                 │ （自動部署網站）  │
+                                                 └─────────────────┘
+                                                          │
+                                                          ▼
+                                          https://seiu777.github.io/df-ehs/</div>
+
+    <h3 id="ch1-components">1.3 四大組件</h3>
+    <table>
+      <tr><th>組件</th><th>技術</th><th>用途</th></tr>
+      <tr><td><strong>A. 靜態網站</strong></td><td>HTML + CSS + JS</td><td>職災報告網站，部署在 GitHub Pages</td></tr>
+      <tr><td><strong>B. Python 腳本</strong></td><td>Python 3.12+</td><td>讀取 Excel、處理 PDF、資料分析</td></tr>
+      <tr><td><strong>C. 簡報工具</strong></td><td>Node.js</td><td>生成安委會 PowerPoint / Word</td></tr>
+      <tr><td><strong>D. Claude Code</strong></td><td>AI 助手</td><td>自動更新報告、分析職災案件</td></tr>
+    </table>
+  </section>
+
+  <!-- 第二章 -->
+  <section class="chapter" id="ch2">
+    <h2>第二章：打包內容清單</h2>
+    <p>你拿到的資料夾結構如下：</p>
+    <pre>職安_完整專案包/
+├── 說明書.html              ← 你正在看的這份
+├── 說明書.md                ← 純文字版
+├── setup.bat                ← 一鍵安裝腳本
+├── 職安.code-workspace      ← VS Code 工作區
+├── df-ehs/                  ← Git 版本控制的程式碼
+│   ├── docs/                ← 網站檔案
+│   ├── skills-backup/       ← Claude Code Skills 備份
+│   ├── claude-config/       ← Claude Code 設定備份
+│   ├── scripts/             ← Python 工具腳本
+│   ├── requirements.txt     ← Python 依賴清單
+│   └── *.md                 ← 各種說明文件
+└── 參考資料/                 ← 公司內部資料（1.1GB）
+    ├── 公司職災資料/          ← 職災 Excel + 分析報告
+    ├── 安委會/                ← 安委會素材 + 簡報工具
+    ├── 職災分析方法/          ← 事故調查手冊 + HSG48
+    ├── 教育訓練/              ← 安全教育訓練資料
+    └── 原google分析內容與簡報/ ← 舊版分析報告</pre>
+  </section>
+
+  <!-- 第三章 -->
+  <section class="chapter" id="ch3">
+    <h2>第三章：環境安裝</h2>
+
+    <h3 id="ch3-quick">3.1 快速安裝（已有 Git / Python / Node.js）</h3>
+
+    <div class="card success">
+      <div class="card-title">最快的方式</div>
+      <ol>
+        <li>複製整個資料夾到 <code>C:\Users\{你的名稱}\Documents\claude\職安\</code></li>
+        <li>雙擊執行 <code>setup.bat</code></li>
+        <li>完成！</li>
+      </ol>
+    </div>
+
+    <h3 id="ch3-full">3.2 從零開始安裝</h3>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>安裝 Git</h4>
+        <p>前往 <code>https://git-scm.com/download/win</code> 下載，安裝時保持預設。</p>
+        <p>驗證：<code>git --version</code></p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>安裝 Python</h4>
+        <p>前往 <code>https://www.python.org/downloads/</code> 下載 3.12 以上版本。</p>
+        <div class="card danger" style="margin:8px 0">
+          <div class="card-title">重要</div>
+          安裝時務必勾選底部的 <strong>"Add Python to PATH"</strong>，否則命令列找不到 Python。
+        </div>
+        <p>驗證：<code>python --version</code></p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>安裝 Node.js</h4>
+        <p>前往 <code>https://nodejs.org/</code> 下載 LTS 版本，安裝時保持預設。</p>
+        <p>驗證：<code>node --version</code></p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>安裝 VS Code（建議）</h4>
+        <p>前往 <code>https://code.visualstudio.com/</code> 下載。</p>
+        <p>建議安裝擴充功能：<strong>Claude Code</strong>（Anthropic 官方）</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h4>放置專案</h4>
+        <p>將整個資料夾複製到：</p>
+        <pre>C:\Users\{你的使用者名稱}\Documents\claude\職安\</pre>
+        <p>建議使用相同路徑，可減少設定修改。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <h4>執行安裝腳本</h4>
+        <p>雙擊 <code>setup.bat</code>，自動安裝所有依賴和 Claude Code 設定。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">7</div>
+      <div class="step-content">
+        <h4>測試網站</h4>
+        <pre>cd df-ehs\docs
+python -m http.server 3300</pre>
+        <p>瀏覽器開啟 <code>http://localhost:3300</code>，看到首頁即成功。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 第四章 -->
+  <section class="chapter" id="ch4">
+    <h2>第四章：參考資料設定</h2>
+
+    <h3>4.1 核心檔案（必須有的）</h3>
+    <table>
+      <tr><th>檔案</th><th>用途</th></tr>
+      <tr><td><code>參考資料/公司職災資料/職災統計__2023.1-2025.12.xlsx</code></td><td>所有報告的數據來源</td></tr>
+      <tr><td><code>參考資料/公司職災資料/公司表單之事故選單內容.docx</code></td><td>事故下拉選單定義</td></tr>
+      <tr><td><code>參考資料/安委會/pptx-workspace/package.json</code></td><td>簡報工具依賴</td></tr>
+      <tr><td><code>參考資料/職災分析方法/職災分析方法手冊/</code></td><td>事故調查指南手冊</td></tr>
+      <tr><td><code>參考資料/職災分析方法/人為失效模式/HSG48_中文版.html</code></td><td>人因分析框架</td></tr>
+    </table>
+
+    <div class="card danger">
+      <div class="card-title">資訊安全提醒</div>
+      <ul>
+        <li>職災 Excel 包含<strong>員工個人資料</strong>（姓名、身分證字號等）</li>
+        <li><strong>嚴禁</strong>上傳到 GitHub 或公開平台</li>
+        <li><strong>嚴禁</strong>透過未加密管道傳送</li>
+        <li>離開電腦時請鎖定螢幕</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 第五章 -->
+  <section class="chapter" id="ch5">
+    <h2>第五章：Claude Code 設定</h2>
+
+    <h3>5.1 什麼是 Claude Code？</h3>
+    <p>Anthropic 出品的 AI 編程助手，能直接操作電腦上的檔案。在本專案負責：</p>
+    <ul>
+      <li>讀取 Excel → 自動更新 HTML 報告</li>
+      <li>分析事故截圖 → 產出 .docx 分析報告</li>
+      <li>輔助安委會簡報製作</li>
+    </ul>
+
+    <div class="card info">
+      <div class="card-title">非必要工具</div>
+      沒有 Claude Code 也可以手動編輯 HTML 報告。但有了它，每月更新報告只需要一句話。
+    </div>
+
+    <h3>5.2 修改 Shell 路徑（重要！）</h3>
+    <p>開啟 <code>~/.claude/settings.json</code>，將 SHELL 路徑改成你電腦的 Git Bash：</p>
+    <pre>{
+  "env": {
+    "SHELL": "C:\\Users\\{你的使用者名稱}\\AppData\\Local\\Programs\\Git\\bin\\bash.exe"
+  }
+}</pre>
+
+    <h3 id="ch5-skills">5.3 Skills 說明</h3>
+    <p><code>setup.bat</code> 已自動複製 3 個職安專用 Skills：</p>
+    <table>
+      <tr><th>Skill</th><th>觸發方式</th><th>輸出</th></tr>
+      <tr><td><strong>7-accident-analysis</strong></td><td>「這是公司新的職災案件，請你幫我做分析報告」</td><td>.docx</td></tr>
+      <tr><td><strong>7-occupational-safety-analyzer</strong></td><td>「幫我分析公司職災資料」</td><td>.html</td></tr>
+      <tr><td><strong>dafong-html-report</strong></td><td>需要大豐風格報告時自動套用</td><td>.html</td></tr>
+    </table>
+
+    <div class="card warning">
+      <div class="card-title">修改硬編碼路徑</div>
+      <p>Skills 中有寫死的路徑，如果你的專案路徑與 <code>Documents/claude/職安/</code> 不同：</p>
+      <ul>
+        <li><code>~/.claude/skills/7-accident-analysis/SKILL.md</code> — 修改參考資料路徑</li>
+        <li><code>~/.claude/skills/7-accident-analysis/report-template.js</code> — 第 9 行 modulePath</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 第六章 -->
+  <section class="chapter" id="ch6">
+    <h2>第六章：日常操作流程</h2>
+
+    <h3 id="ch6-monthly">6.1 月度報告更新</h3>
+    <p>最常用的流程：每月更新職災數據後重新生成報告。</p>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>取得最新 Excel</h4>
+        <p>放到 <code>參考資料/公司職災資料/</code> 目錄</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>開啟 Claude Code</h4>
+        <p>輸入：「資料更新了，幫我更新報告」</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>部署到 GitHub Pages</h4>
+        <pre>cd df-ehs
+git add -A
+git commit -m "更新 YYYY-MM 月報"
+git push</pre>
+        <p>等 1-2 分鐘，前往 <code>https://seiu777.github.io/df-ehs/</code> 確認。</p>
+      </div>
+    </div>
+
+    <h3 id="ch6-case">6.2 個案職災分析</h3>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>準備事故截圖</h4>
+        <p>發生單位表單截圖 + 工安單位表單截圖（如有）</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>請 Claude 分析</h4>
+        <p>輸入：「這是公司新的職災案件，請你幫我做分析報告」，然後提供截圖。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>取得報告</h4>
+        <p>Claude 會產出 .docx 報告，存放在 <code>參考資料/公司職災資料/分析報告/{年份}/</code></p>
+      </div>
+    </div>
+
+    <h3>6.3 本地預覽網站</h3>
+    <pre>cd df-ehs\docs
+python -m http.server 3300</pre>
+    <p>瀏覽器開啟 <code>http://localhost:3300</code>，按 <code>Ctrl+C</code> 結束。</p>
+  </section>
+
+  <!-- 第七章 -->
+  <section class="chapter" id="ch7">
+    <h2>第七章：常見問題排解</h2>
+
+    <details>
+      <summary>Q: python 指令找不到？</summary>
+      <div>
+        <p>Windows 上有時需要用 <code>py</code> 代替 <code>python</code>：</p>
+        <pre>py --version
+py -m http.server 3300</pre>
+        <p>或重新安裝 Python 並勾選 "Add Python to PATH"。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Q: git push 被拒絕？</summary>
+      <div>
+        <p>你需要 <code>seiu777/df-ehs</code> repo 的存取權限。</p>
+        <p>請聯繫 repo 管理員，將你的 GitHub 帳號加為 collaborator。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Q: 網站更新後看不到變化？</summary>
+      <div>
+        <p>1. GitHub Pages 有 1-2 分鐘部署延遲</p>
+        <p>2. 清除瀏覽器快取：按 <code>Ctrl+Shift+R</code>（強制重新載入）</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Q: 中文資料夾名稱有問題？</summary>
+      <div>
+        <pre>git config --global core.quotepath false</pre>
+      </div>
+    </details>
+
+    <details>
+      <summary>Q: npm install 失敗？</summary>
+      <div>
+        <p>如果公司有代理伺服器：</p>
+        <pre>npm config set proxy http://proxy.company.com:8080
+npm config set https-proxy http://proxy.company.com:8080</pre>
+      </div>
+    </details>
+
+    <details>
+      <summary>Q: Claude Code 找不到檔案？</summary>
+      <div>
+        <p>確認 <code>參考資料/</code> 資料夾已正確放置，且路徑與 Skills 中的設定一致。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Q: Skills 沒有出現？</summary>
+      <div>
+        <p>確認 SKILL.md 放在 <code>~/.claude/skills/{skill-name}/SKILL.md</code>。</p>
+        <p>資料夾名稱必須與 Skill 名稱完全一致。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Q: setup.bat 閃退？</summary>
+      <div>
+        <p>右鍵 setup.bat → 「以系統管理員身分執行」。</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- 附錄 A -->
+  <section class="chapter" id="appendix-a">
+    <h2>附錄 A：打包清單</h2>
+    <p>打包給新人前，確認以下項目都有包含：</p>
+
+    <h4>必要檔案</h4>
+    <ul class="checklist">
+      <li><code>df-ehs/</code> 目錄（含 .git，確認 git status 乾淨）</li>
+      <li><code>df-ehs/docs/</code> 所有網站檔案</li>
+      <li><code>df-ehs/skills-backup/</code> 三個 Skills 備份</li>
+      <li><code>df-ehs/claude-config/</code> Claude Code 設定</li>
+      <li><code>df-ehs/scripts/</code> 13 個 Python 腳本</li>
+      <li><code>df-ehs/requirements.txt</code></li>
+      <li><code>df-ehs/setup.bat</code></li>
+    </ul>
+
+    <h4>參考資料</h4>
+    <ul class="checklist">
+      <li><code>參考資料/公司職災資料/職災統計__2023.1-2025.12.xlsx</code></li>
+      <li><code>參考資料/公司職災資料/公司表單之事故選單內容.docx</code></li>
+      <li><code>參考資料/安委會/pptx-workspace/</code>（含 package.json）</li>
+      <li><code>參考資料/職災分析方法/</code>（手冊 + HSG48）</li>
+    </ul>
+
+    <h4>根目錄檔案</h4>
+    <ul class="checklist">
+      <li><code>說明書.html</code></li>
+      <li><code>說明書.md</code></li>
+      <li><code>setup.bat</code>（根目錄複本）</li>
+      <li><code>職安.code-workspace</code></li>
+    </ul>
+  </section>
+
+  <!-- 附錄 B -->
+  <section class="chapter" id="appendix-b">
+    <h2>附錄 B：路徑速查表</h2>
+    <table>
+      <tr><th>用途</th><th>路徑</th></tr>
+      <tr><td>專案根目錄</td><td><code>C:\Users\{使用者}\Documents\claude\職安\</code></td></tr>
+      <tr><td>Git repo</td><td><code>職安\df-ehs\</code></td></tr>
+      <tr><td>網站檔案</td><td><code>職安\df-ehs\docs\</code></td></tr>
+      <tr><td>職災 Excel</td><td><code>職安\參考資料\公司職災資料\職災統計__2023.1-2025.12.xlsx</code></td></tr>
+      <tr><td>事故選單定義</td><td><code>職安\參考資料\公司職災資料\公司表單之事故選單內容.docx</code></td></tr>
+      <tr><td>分析報告輸出</td><td><code>職安\參考資料\公司職災資料\分析報告\{年份}\</code></td></tr>
+      <tr><td>簡報工具</td><td><code>職安\參考資料\安委會\pptx-workspace\</code></td></tr>
+      <tr><td>安委會季報</td><td><code>職安\df-ehs\docs\reports\committee\</code></td></tr>
+      <tr><td>Claude Code 設定</td><td><code>C:\Users\{使用者}\.claude\</code></td></tr>
+      <tr><td>Skills</td><td><code>C:\Users\{使用者}\.claude\skills\</code></td></tr>
+      <tr><td>GitHub Pages</td><td><code>https://seiu777.github.io/df-ehs/</code></td></tr>
+      <tr><td>GitHub Repo</td><td><code>https://github.com/SeiU777/df-ehs</code></td></tr>
+    </table>
+  </section>
+
+</div>
+
+<!-- 回到頂部 -->
+<button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  // 回到頂部按鈕顯示/隱藏
+  window.addEventListener('scroll', () => {
+    document.querySelector('.back-top').style.display = window.scrollY > 400 ? 'block' : 'none';
+  });
+
+  // 手機版：點擊連結後關閉側邊欄
+  document.querySelectorAll('.sidebar a').forEach(a => {
+    a.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        document.querySelector('.sidebar').classList.remove('open');
+      }
+    });
+  });
+
+  // 側邊欄高亮目前章節
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        document.querySelectorAll('.sidebar a').forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  document.querySelectorAll('[id^="ch"], [id^="appendix"], [id="cover"]').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

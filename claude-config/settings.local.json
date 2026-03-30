@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m markitdown \"C:\\\\Users\\\\chloe.chang\\\\Desktop\\\\20262026年Q1.pptx\")"
+    ]
+  }
+}
