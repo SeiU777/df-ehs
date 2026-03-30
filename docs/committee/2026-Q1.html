@@ -1798,39 +1798,37 @@
     });
   }
 
+  /* 透過 Git Data API 取得檔案 SHA（繞過 Contents API 的讀取限制） */
+  async function getFileSha(repoPath, token) {
+    var hdrs = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' };
+    var base = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME;
+    try {
+      /* 1. 取得 main branch 最新 commit SHA */
+      var refResp = await fetch(base + '/git/ref/heads/main', { headers: hdrs, cache: 'no-store' });
+      if (!refResp.ok) return null;
+      var commitSha = (await refResp.json()).object.sha;
+      /* 2. 取得 commit 的 tree SHA */
+      var commitResp = await fetch(base + '/git/commits/' + commitSha, { headers: hdrs, cache: 'no-store' });
+      if (!commitResp.ok) return null;
+      var treeSha = (await commitResp.json()).tree.sha;
+      /* 3. 遞迴取得所有檔案的 SHA */
+      var treeResp = await fetch(base + '/git/trees/' + treeSha + '?recursive=1', { headers: hdrs, cache: 'no-store' });
+      if (!treeResp.ok) return null;
+      var tree = (await treeResp.json()).tree;
+      var match = tree.find(function(f) { return f.path === repoPath; });
+      return match ? match.sha : null;
+    } catch(e) { return null; }
+  }
+
   /* 單張上傳至 GitHub，回傳 { ok, message } */
   async function uploadOneFile(file, repoPath, token) {
     var base64 = await fileToBase64(file);
-    /* URL 編碼路徑中的特殊字元 */
     var encodedPath = repoPath.split('/').map(function(s) { return encodeURIComponent(s); }).join('/');
     var apiUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + encodedPath;
     var hdrs = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' };
 
     /* 取得現有檔案的 SHA（如果存在） */
-    var sha = null;
-    try {
-      var chk = await fetch(apiUrl, { headers: hdrs, cache: 'no-store' });
-      if (chk.ok) {
-        var data = await chk.json();
-        sha = data.sha || null;
-      }
-    } catch(e) {}
-
-    /* 若單檔 GET 未取得 SHA，改用目錄列表查找 */
-    if (!sha) {
-      try {
-        var dirPath = repoPath.substring(0, repoPath.lastIndexOf('/'));
-        var encodedDir = dirPath.split('/').map(function(s) { return encodeURIComponent(s); }).join('/');
-        var dirUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + encodedDir + '?ref=main';
-        var dirResp = await fetch(dirUrl, { headers: hdrs, cache: 'no-store' });
-        if (dirResp.ok) {
-          var listing = await dirResp.json();
-          var fileName = repoPath.split('/').pop();
-          var match = Array.isArray(listing) && listing.find(function(f) { return f.name === fileName; });
-          if (match) sha = match.sha;
-        }
-      } catch(e) {}
-    }
+    var sha = await getFileSha(repoPath, token);
 
     /* 上傳（PUT） */
     var body = { message: '上傳照片：' + repoPath.split('/').pop(), content: base64, branch: 'main' };
@@ -1974,23 +1972,8 @@
       var apiUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + encodedPath;
       var hdrs = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' };
 
-      /* 取得 SHA */
-      var sha = null;
-      var chk = await fetch(apiUrl, { headers: hdrs, cache: 'no-store' });
-      if (chk.ok) {
-        sha = (await chk.json()).sha;
-      } else {
-        /* fallback：從目錄列表查找 */
-        var dirPath = repoPath.substring(0, repoPath.lastIndexOf('/'));
-        var encodedDir = dirPath.split('/').map(function(s) { return encodeURIComponent(s); }).join('/');
-        var dirUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + encodedDir + '?ref=main';
-        var dirResp = await fetch(dirUrl, { headers: hdrs, cache: 'no-store' });
-        if (dirResp.ok) {
-          var listing = await dirResp.json();
-          var match = Array.isArray(listing) && listing.find(function(f) { return f.name === filename; });
-          if (match) sha = match.sha;
-        }
-      }
+      /* 透過 Git Data API 取得 SHA */
+      var sha = await getFileSha(repoPath, token);
       if (!sha) throw new Error('找不到此檔案（可能尚未部署或路徑不正確）');
 
       /* DELETE */
