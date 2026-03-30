@@ -1,0 +1,17 @@
+# 職安專案 Python 依賴
+# 安裝方式：pip install -r requirements.txt
+
+# Excel 讀取（analyze_accidents.py, read_excel*.py）
+openpyxl>=3.1.0
+
+# PDF 文字擷取（extract_ocr.py）
+pdfplumber>=0.10.0
+
+# PDF 圖片擷取（extract_with_ocr.py）
+pymupdf>=1.23.0
+
+# 資料分析（search_wu.py）
+pandas>=2.0.0
+
+# Word 文件處理（安委會相關腳本）
+python-docx>=1.1.0

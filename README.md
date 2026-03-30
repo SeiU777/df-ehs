@@ -37,3 +37,14 @@ python -m http.server 3300
 1. 更新 Excel 原始數據
 2. 請 Claude Code 更新報告內容
 3. Commit + Push → GitHub Pages 自動部署
+
+---
+
+## 環境設定（新手請按順序閱讀）
+
+如果你是第一次接手這個專案，請依序閱讀以下文件：
+
+1. [ARCHITECTURE.md](ARCHITECTURE.md) — 系統全貌與工作流程（10 分鐘）
+2. [SETUP.md](SETUP.md) — 安裝基礎工具 Git/Python/Node.js（30 分鐘）
+3. [SETUP-REFERENCE-DATA.md](SETUP-REFERENCE-DATA.md) — 取得參考資料（15 分鐘）
+4. [SETUP-CLAUDE.md](SETUP-CLAUDE.md) — 設定 Claude Code AI 助手（20 分鐘）

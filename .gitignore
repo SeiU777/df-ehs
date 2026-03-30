@@ -9,5 +9,18 @@ desktop.ini
 *~
 .vscode/
 
-# Node（若未來加入建置工具）
+# Node
 node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 環境與機密
+.env
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
