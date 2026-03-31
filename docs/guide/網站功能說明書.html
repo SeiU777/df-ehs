@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大豐環保 職安分析報告網站 — 功能說明書</title>
+  <style>
+    :root {
+      --primary: #1e4a6e;
+      --primary-light: #2a6496;
+      --primary-dark: #153750;
+      --accent: #4caf50;
+      --accent-light: #81c784;
+      --bg: #f4f6f8;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --text-light: #666666;
+      --border: #e0e0e0;
+      --code-bg: #f0f4f8;
+      --warning: #ff9800;
+      --danger: #e53935;
+      --info: #2196f3;
+      --sidebar-width: 280px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ===== 側邊目錄 ===== */
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: var(--primary-dark);
+      color: #fff;
+      overflow-y: auto;
+      z-index: 100;
+      padding: 20px 0;
+      transition: transform 0.3s;
+    }
+
+    .sidebar-title {
+      padding: 10px 20px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      margin-bottom: 10px;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 8px 20px;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .sidebar a:hover, .sidebar a.active {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+
+    .sidebar a.sub {
+      padding-left: 36px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .sidebar a.sub:hover, .sidebar a.sub.active {
+      color: rgba(255,255,255,0.9);
+    }
+
+    .sidebar-toggle {
+      display: none;
+      position: fixed;
+      left: 10px; top: 10px;
+      z-index: 200;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    /* ===== 主內容 ===== */
+    .main {
+      margin-left: var(--sidebar-width);
+      padding: 0;
+    }
+
+    /* ===== 封面 ===== */
+    .cover {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+      color: #fff;
+      padding: 80px 40px;
+      text-align: center;
+    }
+
+    .cover h1 {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+
+    .cover .subtitle {
+      font-size: 22px;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+
+    .cover .meta {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    .cover .badge {
+      display: inline-block;
+      background: var(--accent);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin-top: 20px;
+    }
+
+    /* ===== 章節 ===== */
+    .chapter {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 30px;
+    }
+
+    .chapter h2 {
+      color: var(--primary);
+      font-size: 26px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid var(--accent);
+    }
+
+    .chapter h3 {
+      color: var(--primary);
+      font-size: 20px;
+      margin: 30px 0 12px;
+    }
+
+    .chapter h4 {
+      color: var(--primary-light);
+      font-size: 17px;
+      margin: 20px 0 8px;
+    }
+
+    .chapter p {
+      margin-bottom: 12px;
+    }
+
+    .chapter ul, .chapter ol {
+      margin: 8px 0 16px 24px;
+    }
+
+    .chapter li {
+      margin-bottom: 4px;
+    }
+
+    /* ===== 卡片 ===== */
+    .card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 24px;
+      margin: 20px 0;
+    }
+
+    .card.warning {
+      border-left: 4px solid var(--warning);
+    }
+
+    .card.danger {
+      border-left: 4px solid var(--danger);
+    }
+
+    .card.success {
+      border-left: 4px solid var(--accent);
+    }
+
+    .card.info {
+      border-left: 4px solid var(--primary);
+    }
+
+    .card-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .card.warning .card-title { color: var(--warning); }
+    .card.danger .card-title { color: var(--danger); }
+    .card.success .card-title { color: var(--accent); }
+    .card.info .card-title { color: var(--primary); }
+
+    /* ===== 步驟 ===== */
+    .step {
+      background: var(--card-bg);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 20px 24px;
+      margin: 16px 0;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      background: var(--primary);
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .step-content { flex: 1; }
+    .step-content h4 { margin: 0 0 6px; color: var(--primary); }
+
+    /* ===== 程式碼 ===== */
+    code {
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: "Cascadia Code", "Consolas", monospace;
+      font-size: 14px;
+      color: var(--primary);
+    }
+
+    pre {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 16px 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 12px 0;
+      font-family: "Cascadia Code", "Consolas", monospace;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      font-size: inherit;
+    }
+
+    /* ===== 表格 ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+
+    th {
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 14px;
+      text-align: left;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:nth-child(even) { background: #f8fafc; }
+
+    /* ===== 密碼醒目樣式 ===== */
+    .password-highlight {
+      display: inline-block;
+      background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+      border: 2px solid var(--warning);
+      border-radius: 6px;
+      padding: 6px 16px;
+      font-family: "Cascadia Code", "Consolas", monospace;
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--danger);
+      letter-spacing: 1px;
+    }
+
+    /* ===== 色塊 ===== */
+    .color-swatch {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      vertical-align: middle;
+      margin-right: 4px;
+      border: 1px solid rgba(0,0,0,0.15);
+    }
+
+    /* ===== FAQ ===== */
+    details {
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    summary {
+      padding: 14px 20px;
+      cursor: pointer;
+      font-weight: bold;
+      color: var(--primary);
+      user-select: none;
+    }
+
+    summary:hover { background: #f8fafc; }
+
+    details > div {
+      padding: 0 20px 16px;
+      color: var(--text-light);
+    }
+
+    /* ===== 回到頂部 ===== */
+    .back-top {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      display: none;
+      z-index: 50;
+    }
+
+    /* ===== 列印 ===== */
+    @media print {
+      .sidebar, .sidebar-toggle, .back-top { display: none !important; }
+      .main { margin-left: 0; }
+      .cover { padding: 40px 20px; }
+      .chapter { padding: 20px; }
+      pre { white-space: pre-wrap; }
+    }
+
+    /* ===== 手機 ===== */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-toggle { display: block; }
+      .main { margin-left: 0; }
+      .cover { padding: 60px 20px; }
+      .cover h1 { font-size: 26px; }
+      .chapter { padding: 20px 16px; }
+      .step { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 手機選單按鈕 -->
+<button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
+
+<!-- 側邊目錄 -->
+<nav class="sidebar">
+  <div class="sidebar-title">網站功能說明書</div>
+  <a href="#cover">封面</a>
+  <a href="#ch1">第一章：網站總覽</a>
+  <a href="#ch1-1" class="sub">1.1 網站是什麼？</a>
+  <a href="#ch1-2" class="sub">1.2 網站包含的內容</a>
+  <a href="#ch1-3" class="sub">1.3 技術特色</a>
+  <a href="#ch2">第二章：密碼保護系統</a>
+  <a href="#ch2-1" class="sub">2.1 密碼</a>
+  <a href="#ch2-2" class="sub">2.2 登入方式</a>
+  <a href="#ch2-3" class="sub">2.3 登入狀態</a>
+  <a href="#ch2-4" class="sub">2.4 哪些頁面有密碼保護？</a>
+  <a href="#ch2-5" class="sub">2.5 技術細節</a>
+  <a href="#ch2-6" class="sub">2.6 如何修改密碼</a>
+  <a href="#ch3">第三章：首頁功能</a>
+  <a href="#ch3-1" class="sub">3.1 頂部橫幅</a>
+  <a href="#ch3-2" class="sub">3.2 KPI 摘要列</a>
+  <a href="#ch3-3" class="sub">3.3 報告入口卡片</a>
+  <a href="#ch3-4" class="sub">3.4 頁尾</a>
+  <a href="#ch4">第四章：年度職災報告</a>
+  <a href="#ch4-1" class="sub">4.1 三個年度</a>
+  <a href="#ch4-2" class="sub">4.2 報告結構</a>
+  <a href="#ch4-3" class="sub">4.3 視覺元件</a>
+  <a href="#ch4-4" class="sub">4.4 側邊目錄功能</a>
+  <a href="#ch5">第五章：三年總覽報告</a>
+  <a href="#ch6">第六章：環境與外部因素分析</a>
+  <a href="#ch7">第七章：安委會季報系統</a>
+  <a href="#ch7-1" class="sub">7.1 首頁</a>
+  <a href="#ch7-2" class="sub">7.2 季報內容</a>
+  <a href="#ch7-3" class="sub">7.3 圖片上傳工具</a>
+  <a href="#ch7-4" class="sub">7.4 季報圖片</a>
+  <a href="#ch8">第八章：教育訓練教材</a>
+  <a href="#ch8-1" class="sub">8.1 兩個版本</a>
+  <a href="#ch8-2" class="sub">8.2 課程大綱</a>
+  <a href="#ch8-3" class="sub">8.3 互動功能</a>
+  <a href="#ch8-4" class="sub">8.4 兩版本差異</a>
+  <a href="#ch9">第九章：深色/淺色模式</a>
+  <a href="#ch10">第十章：完整版與摘要版</a>
+  <a href="#ch11">第十一章：檔案架構與路徑</a>
+  <a href="#ch12">第十二章：CSS 設計系統</a>
+  <a href="#ch12-1" class="sub">12.1 色彩系統</a>
+  <a href="#ch12-2" class="sub">12.2 年度主題色</a>
+  <a href="#ch12-3" class="sub">12.3 字型</a>
+  <a href="#ch12-4" class="sub">12.4 共用 CSS 元件</a>
+  <a href="#ch13">第十三章：JavaScript 模組</a>
+  <a href="#ch14">第十四章：如何修改與更新</a>
+  <a href="#appendix-a">附錄 A：所有頁面清單</a>
+  <a href="#appendix-b">附錄 B：密碼與帳號資訊</a>
+</nav>
+
+<!-- 主內容 -->
+<div class="main">
+
+  <!-- 封面 -->
+  <section class="cover" id="cover">
+    <h1>職安分析報告網站 &mdash; 功能說明書</h1>
+    <div class="subtitle">大豐環保 職業災害分析報告網站</div>
+    <div class="meta">大豐環保科技股份有限公司 ｜ 法務及環安課</div>
+    <div class="meta" style="margin-top:8px;">版本 1.0 ｜ 2026-03-31</div>
+    <div class="badge">網址：https://seiu777.github.io/df-ehs/</div>
+  </section>
+
+  <!-- 第一章：網站總覽 -->
+  <section class="chapter" id="ch1">
+    <h2>第一章：網站總覽</h2>
+
+    <h3 id="ch1-1">1.1 網站是什麼？</h3>
+    <p>大豐環保法務及環安課的<strong>職業災害分析報告網站</strong>，部署在 GitHub Pages 上，所有員工可透過網址瀏覽。</p>
+    <p><strong>網址</strong>：<code>https://seiu777.github.io/df-ehs/</code></p>
+
+    <h3 id="ch1-2">1.2 網站包含的內容</h3>
+    <table>
+      <tr><th>區塊</th><th>說明</th><th>頁面數</th></tr>
+      <tr><td><strong>首頁</strong></td><td>KPI 總覽 + 報告入口卡片</td><td>1 頁</td></tr>
+      <tr><td><strong>年度報告</strong></td><td>2023 / 2024 / 2025 各年度職災分析</td><td>6 頁（各年完整版+摘要版）</td></tr>
+      <tr><td><strong>三年總覽</strong></td><td>2023-2025 跨年趨勢對比</td><td>2 頁（完整版+摘要版）</td></tr>
+      <tr><td><strong>環境因素分析</strong></td><td>天氣、時間、地理等 6 大維度</td><td>2 頁（完整版+摘要版）</td></tr>
+      <tr><td><strong>安委會季報</strong></td><td>法定 12 項辦理事項季度報告</td><td>3 頁（首頁+上傳工具+Q1 報告）</td></tr>
+      <tr><td><strong>教育訓練</strong></td><td>安全衛生教育課程（含測驗）</td><td>2 頁（總公司版+全興廠版）</td></tr>
+    </table>
+
+    <h3 id="ch1-3">1.3 技術特色</h3>
+    <ul>
+      <li><strong>純靜態網站</strong>：HTML + CSS + JavaScript，無後端伺服器</li>
+      <li><strong>密碼保護</strong>：XOR 加密驗證，sessionStorage 保持登入</li>
+      <li><strong>深色模式</strong>：支援淺色/深色主題切換，跟隨系統設定</li>
+      <li><strong>響應式設計</strong>：手機、平板、電腦三種螢幕尺寸</li>
+      <li><strong>Chart.js 圖表</strong>：互動式統計圖表（折線圖、圓餅圖、長條圖）</li>
+      <li><strong>側邊目錄</strong>：可收合的章節導航（桌面常駐、行動裝置隱藏）</li>
+    </ul>
+  </section>
+
+  <!-- 第二章：密碼保護系統 -->
+  <section class="chapter" id="ch2">
+    <h2>第二章：密碼保護系統</h2>
+
+    <h3 id="ch2-1">2.1 密碼</h3>
+    <p style="text-align:center; margin: 20px 0;">
+      <span class="password-highlight">Da0302fon2026%</span>
+    </p>
+
+    <h3 id="ch2-2">2.2 登入方式</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <p>開啟網站首頁，畫面會顯示全螢幕的密碼輸入框</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <p>輸入密碼 <span class="password-highlight" style="font-size:14px; padding:2px 8px;">Da0302fon2026%</span></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <p>按下登入按鈕或 Enter 鍵</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <p>驗證成功後，密碼層消失，顯示網站內容</p>
+      </div>
+    </div>
+
+    <h3 id="ch2-3">2.3 登入狀態</h3>
+    <ul>
+      <li>登入後，瀏覽同一視窗中的所有頁面<strong>不需要再次輸入密碼</strong></li>
+      <li>狀態儲存在 <code>sessionStorage</code>（關鍵：<code>df-ehs-auth</code>）</li>
+      <li><strong>關閉瀏覽器</strong>或<strong>關閉分頁</strong>後會自動登出，下次需重新輸入</li>
+    </ul>
+
+    <h3 id="ch2-4">2.4 哪些頁面有密碼保護？</h3>
+    <table>
+      <tr><th>頁面</th><th style="text-align:center;">密碼保護</th></tr>
+      <tr><td>首頁 index.html</td><td style="text-align:center;">有</td></tr>
+      <tr><td>年度報告（2023/2024/2025）</td><td style="text-align:center;">有</td></tr>
+      <tr><td>年度報告摘要版</td><td style="text-align:center;">有</td></tr>
+      <tr><td>三年總覽</td><td style="text-align:center;">有</td></tr>
+      <tr><td>環境因素分析</td><td style="text-align:center;">有</td></tr>
+      <tr><td>安委會季報</td><td style="text-align:center;">有</td></tr>
+      <tr><td>教育訓練</td><td style="text-align:center;">有</td></tr>
+    </table>
+
+    <h3 id="ch2-5">2.5 技術細節</h3>
+    <p>密碼驗證邏輯在 <code>js/auth.js</code> 中：</p>
+    <ul>
+      <li>加密方式：XOR（金鑰 = 42）</li>
+      <li>編碼後資料：<code>[110,75,26,25,26,24,76,69,68,24,26,24,28,15]</code></li>
+      <li>驗證函式：逐字元比對 <code>input.charCodeAt(i) ^ 42 === data[i]</code></li>
+      <li><strong>非高安全加密</strong>，僅防止一般瀏覽，有技術背景的人可解碼</li>
+    </ul>
+
+    <h3 id="ch2-6">2.6 如何修改密碼</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content"><p>開啟 <code>js/auth.js</code></p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content"><p>決定新密碼（例如 <code>NewPass2026!</code>）</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <p>用以下 JavaScript 計算新的編碼資料：</p>
+        <pre><code>const password = 'NewPass2026!';
+const key = 42;
+const encoded = Array.from(password).map(c =&gt; c.charCodeAt(0) ^ key);
+console.log(encoded); // 貼入 auth.js 的 _d 陣列</code></pre>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content"><p>將結果替換 <code>_d</code> 陣列</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content"><p>提交並推送</p></div>
+    </div>
+  </section>
+
+  <!-- 第三章：首頁功能 -->
+  <section class="chapter" id="ch3">
+    <h2>第三章：首頁功能</h2>
+    <p><strong>檔案</strong>：<code>docs/index.html</code></p>
+
+    <h3 id="ch3-1">3.1 頂部橫幅（Hero）</h3>
+    <ul>
+      <li>背景：藍色漸層動畫（脈動光暈效果）</li>
+      <li>標題：「大豐環保 職業災害分析報告」</li>
+      <li>副標題：資料期間說明</li>
+      <li>機構名稱：「大豐環保科技股份有限公司｜法務及環安課」</li>
+    </ul>
+
+    <h3 id="ch3-2">3.2 KPI 摘要列</h3>
+    <p>首頁橫幅下方的 KPI 數字列，顯示三年累計指標：</p>
+    <table>
+      <tr><th>KPI</th><th>數值</th><th>顏色</th></tr>
+      <tr><td>三年事故總件數</td><td>142 件</td><td>紅色</td></tr>
+      <tr><td>月均事故件數</td><td>3.94 件</td><td>橙色</td></tr>
+      <tr><td>累計損失工日</td><td>~910 天</td><td>&mdash;</td></tr>
+      <tr><td>交通事故</td><td>72 件</td><td>藍色</td></tr>
+      <tr><td>工安事故</td><td>63 件</td><td>橙色</td></tr>
+      <tr><td>虛驚事故</td><td>7 件</td><td>綠色</td></tr>
+      <tr><td>永久失能</td><td>2 件</td><td>紅色</td></tr>
+    </table>
+
+    <h3 id="ch3-3">3.3 報告入口卡片</h3>
+    <p>首頁以卡片形式呈現所有可瀏覽的報告：</p>
+
+    <h4>卡片 1：三年總覽（藍色）</h4>
+    <ul>
+      <li>內容：跨年趨勢分析</li>
+      <li>關鍵警示：交通事故+133%、2025 創新高 53 件</li>
+      <li>改善亮點：工安逐年下降、2025 無永久失能</li>
+      <li>連結：
+        <ul>
+          <li>完整報告 &rarr; <code>reports/overview.html</code></li>
+          <li>重點概覽 &rarr; <code>reports/overview-summary.html</code></li>
+        </ul>
+      </li>
+    </ul>
+
+    <h4>卡片 2：2025 年度（紅色）</h4>
+    <ul>
+      <li>事故 53 件｜損失 ~359 天</li>
+      <li>分類：交通 35 / 工安 13 / 虛驚 5</li>
+      <li>連結：<code>reports/2025.html</code>、<code>reports/2025-summary.html</code></li>
+    </ul>
+
+    <h4>卡片 3：2024 年度（橙色）</h4>
+    <ul>
+      <li>事故 44 件｜損失 ~406 天｜含永久失能 1 例</li>
+      <li>分類：交通 22 / 工安 21 / 虛驚 1</li>
+      <li>連結：<code>reports/2024.html</code>、<code>reports/2024-summary.html</code></li>
+    </ul>
+
+    <h4>卡片 4：2023 年度（綠色）</h4>
+    <ul>
+      <li>事故 45 件｜損失 ~144 天｜含永久失能 1 例</li>
+      <li>分類：工安 29 / 交通 15 / 虛驚 1</li>
+      <li>連結：<code>reports/2023.html</code>、<code>reports/2023-summary.html</code></li>
+    </ul>
+
+    <h4>卡片 5：環境與外部因素分析（青綠色）</h4>
+    <ul>
+      <li>6 大維度、142 件樣本</li>
+      <li>涵蓋：天氣、作業型態、時間模式、地理熱點</li>
+      <li>連結：<code>reports/environmental-factors.html</code>、<code>reports/environmental-factors-summary.html</code></li>
+    </ul>
+
+    <h4>卡片 6：安委會季報（深藍色）</h4>
+    <ul>
+      <li>最新：2026 年 Q1</li>
+      <li>法定依據：職安衛管理辦法第 12 條</li>
+      <li>連結：<code>committee/index.html</code>、<code>committee/2026-Q1.html</code></li>
+    </ul>
+
+    <h4>卡片 7：教育訓練（兩版本）</h4>
+    <ul>
+      <li>總公司版：7 堂課、~124 件案例</li>
+      <li>全興廠版：7 堂課、~18 件案例</li>
+      <li>連結：<code>training/hq.html</code>、<code>training/quanxing.html</code></li>
+    </ul>
+
+    <h3 id="ch3-4">3.4 頁尾</h3>
+    <ul>
+      <li>版權資訊：大豐環保科技股份有限公司｜法務及環安課</li>
+      <li>資料期間說明</li>
+    </ul>
+  </section>
+
+  <!-- 第四章：年度職災報告 -->
+  <section class="chapter" id="ch4">
+    <h2>第四章：年度職災報告</h2>
+
+    <h3 id="ch4-1">4.1 共有三個年度</h3>
+    <table>
+      <tr><th>年度</th><th>檔案</th><th>主題色</th></tr>
+      <tr><td>2023</td><td><code>reports/2023.html</code></td><td>綠色漸層</td></tr>
+      <tr><td>2024</td><td><code>reports/2024.html</code></td><td>橙色漸層</td></tr>
+      <tr><td>2025</td><td><code>reports/2025.html</code></td><td>紅色漸層</td></tr>
+    </table>
+
+    <h3 id="ch4-2">4.2 報告結構（每年相同）</h3>
+    <p>每份年度報告包含以下章節：</p>
+    <ol>
+      <li><strong>封面</strong> &mdash; 年度標題、資料期間、公司名稱</li>
+      <li><strong>KPI 總覽</strong> &mdash; 4 個指標卡片（總案件數 / 損失工日 / 嚴重事故 / 月均件數）</li>
+      <li><strong>事故分類統計</strong> &mdash; 工安 / 交通 / 虛驚的件數與佔比（圓餅圖）</li>
+      <li><strong>事故類型深度分析</strong> &mdash; 各類型（被夾被捲、跌倒、墜落等）的件數與嚴重度</li>
+      <li><strong>月份趨勢</strong> &mdash; 每月事故件數折線圖 / 長條圖</li>
+      <li><strong>部門分析</strong> &mdash; 各部門事故頻率</li>
+      <li><strong>原因分析</strong> &mdash; 不安全行為 / 不安全狀況 / 基本原因統計</li>
+      <li><strong>嚴重事故案例</strong> &mdash; 重大案件詳細分析</li>
+      <li><strong>改善建議</strong> &mdash; 工程 / 管理 / 教育 / PPE 四層次</li>
+      <li><strong>結語</strong> &mdash; 年度總結與展望</li>
+    </ol>
+
+    <h3 id="ch4-3">4.3 使用的視覺元件</h3>
+    <table>
+      <tr><th>元件</th><th>CSS Class</th><th>用途</th></tr>
+      <tr><td>KPI 卡片</td><td><code>.kpi-grid</code> + <code>.kpi-card</code></td><td>指標數字展示</td></tr>
+      <tr><td>圓餅圖</td><td>CSS <code>conic-gradient</code></td><td>比例分佈圖（純 CSS，無外部套件）</td></tr>
+      <tr><td>長條圖</td><td>CSS <code>width</code> 百分比</td><td>頻率 / 嚴重度比較</td></tr>
+      <tr><td>Chart.js 圖表</td><td><code>&lt;canvas&gt;</code></td><td>互動式折線圖、長條圖</td></tr>
+      <tr><td>重點卡片</td><td><code>.highlight-card</code></td><td>綠色邊框，正面指標</td></tr>
+      <tr><td>警示卡片</td><td><code>.warning-card</code></td><td>橙色邊框，需注意項目</td></tr>
+      <tr><td>危險卡片</td><td><code>.danger-card</code></td><td>紅色邊框，嚴重警示</td></tr>
+      <tr><td>徽章</td><td><code>.badge-danger/warning/success</code></td><td>嚴重度標籤</td></tr>
+      <tr><td>側邊目錄</td><td><code>.sidebar</code> + <code>.toc-chapter</code></td><td>章節導航（可收合）</td></tr>
+    </table>
+
+    <h3 id="ch4-4">4.4 側邊目錄功能</h3>
+    <ul>
+      <li><strong>桌面（&gt;1024px）</strong>：左側常駐顯示，點擊章節跳轉</li>
+      <li><strong>平板/手機（&le;1024px）</strong>：預設隱藏，點擊選單按鈕開啟</li>
+      <li>點擊章節連結後自動關閉（行動裝置）</li>
+      <li>半透明遮罩層覆蓋背景</li>
+    </ul>
+  </section>
+
+  <!-- 第五章：三年總覽報告 -->
+  <section class="chapter" id="ch5">
+    <h2>第五章：三年總覽報告</h2>
+
+    <h3>5.1 檔案</h3>
+    <ul>
+      <li>完整版：<code>reports/overview.html</code></li>
+      <li>摘要版：<code>reports/overview-summary.html</code></li>
+    </ul>
+
+    <h3>5.2 內容特色</h3>
+    <ul>
+      <li>2023-2025 三年跨年趨勢對比</li>
+      <li>年度事故件數變化折線圖</li>
+      <li>事故分類（工安/交通/虛驚）年度變化</li>
+      <li>嚴重度指標對比（損失工日、永久失能）</li>
+      <li><strong>關鍵發現</strong>：交通事故三年成長 133%、工安事故逐年下降</li>
+    </ul>
+
+    <h3>5.3 主題色</h3>
+    <ul>
+      <li>藍色漸層（#1e4a6e &rarr; #2980b9）</li>
+    </ul>
+  </section>
+
+  <!-- 第六章：環境與外部因素分析 -->
+  <section class="chapter" id="ch6">
+    <h2>第六章：環境與外部因素分析</h2>
+
+    <h3>6.1 檔案</h3>
+    <ul>
+      <li>完整版：<code>reports/environmental-factors.html</code></li>
+      <li>摘要版：<code>reports/environmental-factors-summary.html</code></li>
+    </ul>
+
+    <h3>6.2 分析維度</h3>
+    <ol>
+      <li><strong>天氣因素</strong> &mdash; 雨天、高溫、濕度與事故的關聯</li>
+      <li><strong>作業型態</strong> &mdash; 不同工作類型的事故分佈</li>
+      <li><strong>時間模式</strong> &mdash; 時段、星期、月份的事故頻率</li>
+      <li><strong>地理熱點</strong> &mdash; 事故高發地點分析</li>
+      <li><strong>季節因素</strong> &mdash; 季節與事故類型的交叉分析</li>
+      <li><strong>其他外部因素</strong> &mdash; 特殊環境條件</li>
+    </ol>
+
+    <h3>6.3 主題色</h3>
+    <ul>
+      <li>青綠色系（#0d7377 &rarr; #45b7aa）</li>
+    </ul>
+  </section>
+
+  <!-- 第七章：安委會季報系統 -->
+  <section class="chapter" id="ch7">
+    <h2>第七章：安委會季報系統</h2>
+
+    <h3 id="ch7-1">7.1 首頁</h3>
+    <p><strong>檔案</strong>：<code>committee/index.html</code></p>
+    <p><strong>頁面結構</strong>：</p>
+    <ul>
+      <li>頂部導航：返回首頁連結</li>
+      <li>Hero 區塊：
+        <ul>
+          <li>徽章：大豐環保科技股份有限公司</li>
+          <li>標題：職安衛委員會季報</li>
+          <li>法規引用：職業安全衛生管理辦法第 12 條</li>
+          <li>統計：4 季報/年 &middot; 12 法定項目 &middot; 2026 當前年度</li>
+        </ul>
+      </li>
+      <li>說明欄：更新頻率、內容依據</li>
+      <li>圖片上傳工具入口橫幅</li>
+      <li>2026 年度季報卡片：
+        <ul>
+          <li><strong>Q1</strong>（深藍色）&mdash; 已發布，可點擊</li>
+          <li><strong>Q2</strong>（紫色）&mdash; 尚未開始，禁用</li>
+          <li><strong>Q3</strong>（綠色）&mdash; 尚未開始，禁用</li>
+          <li><strong>Q4</strong>（棕色）&mdash; 尚未開始，禁用</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3 id="ch7-2">7.2 季報內容（以 2026-Q1 為例）</h3>
+    <p><strong>檔案</strong>：<code>committee/2026-Q1.html</code></p>
+    <p>內容依法定 12 項辦理事項編排：</p>
+    <ol>
+      <li>職業安全衛生政策</li>
+      <li>安全衛生管理計畫</li>
+      <li>安全衛生教育訓練</li>
+      <li>作業環境監測</li>
+      <li>健康管理</li>
+      <li>機械設備管理</li>
+      <li>安全衛生守則</li>
+      <li>自動檢查</li>
+      <li>職災調查處理</li>
+      <li>安全衛生提案</li>
+      <li>其他安全衛生管理事項</li>
+      <li>勞動檢查追蹤</li>
+    </ol>
+
+    <h3 id="ch7-3">7.3 圖片上傳工具</h3>
+    <p><strong>檔案</strong>：<code>committee/upload.html</code></p>
+    <p>功能：直接從網頁上傳照片到 GitHub repo，省去手動 git 操作。</p>
+    <p>使用方式：</p>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content"><p>需要先設定 GitHub 個人存取令牌（Token）</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content"><p>在 Token 輸入框貼上令牌</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content"><p>選擇要上傳的圖片檔案</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content"><p>點擊上傳，圖片會直接推送到 GitHub repo</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content"><p>本機用 <code>git pull</code> 同步</p></div>
+    </div>
+
+    <h3 id="ch7-4">7.4 安委會季報圖片</h3>
+    <p><strong>位置</strong>：<code>committee/images/2026-Q1/</code></p>
+    <table>
+      <tr><th>圖片</th><th>內容</th></tr>
+      <tr><td><code>check-valve-ref.jpg</code></td><td>止回閥參考圖</td></tr>
+      <tr><td><code>container-label-ref.jpg</code></td><td>容器標示參考圖</td></tr>
+      <tr><td><code>diesel-sds-after.jpg</code></td><td>柴油 SDS 改善後</td></tr>
+      <tr><td><code>flashback-arrester-after.jpg</code></td><td>防止回火器安裝後</td></tr>
+      <tr><td><code>forklift-danger.mov</code></td><td>堆高機危險影片</td></tr>
+      <tr><td><code>labor-inspection-record.jpg</code></td><td>勞檢紀錄</td></tr>
+      <tr><td><code>nurse-service.jpg</code></td><td>護理服務</td></tr>
+      <tr><td><code>pressure-gauge-after.jpg</code></td><td>壓力錶改善後</td></tr>
+      <tr><td><code>氧乙炔及止回閥-安裝位置示意圖.png</code></td><td>氧乙炔安裝示意圖</td></tr>
+    </table>
+  </section>
+
+  <!-- 第八章：教育訓練教材 -->
+  <section class="chapter" id="ch8">
+    <h2>第八章：教育訓練教材</h2>
+
+    <h3 id="ch8-1">8.1 兩個版本</h3>
+    <table>
+      <tr><th>版本</th><th>檔案</th><th>適用對象</th></tr>
+      <tr><td>總公司版</td><td><code>training/hq.html</code></td><td>總辦公室人員</td></tr>
+      <tr><td>全興廠版</td><td><code>training/quanxing.html</code></td><td>全興廠人員</td></tr>
+    </table>
+
+    <h3 id="ch8-2">8.2 課程大綱（以總公司版為例）</h3>
+    <table>
+      <tr><th>單元</th><th>主題</th><th>時間</th></tr>
+      <tr><td>01</td><td>作業安全衛生有關法規概要</td><td>5 分鐘</td></tr>
+      <tr><td>02</td><td>公司職災數據回顧</td><td>10 分鐘</td></tr>
+      <tr><td>03</td><td>職業安全衛生概念及安全衛生工作守則</td><td>5 分鐘</td></tr>
+      <tr><td>04</td><td>危害辨識</td><td>10 分鐘</td></tr>
+      <tr><td>05</td><td>作業前、中、後之自動檢查</td><td>5 分鐘</td></tr>
+      <tr><td>06</td><td>標準作業程序（交通、跌倒、環管、機械）</td><td>25 分鐘</td></tr>
+      <tr><td>07</td><td>人因性危害與身心不法類危害</td><td>5 分鐘</td></tr>
+      <tr><td>08</td><td>緊急事故應變處理</td><td>5 分鐘</td></tr>
+      <tr><td>09</td><td>消防及急救常識暨演練</td><td>15 分鐘</td></tr>
+      <tr><td>10</td><td>其他安全衛生知識（6S、環安衛政策、安全目標）</td><td>10 分鐘</td></tr>
+    </table>
+
+    <h3 id="ch8-3">8.3 互動功能</h3>
+
+    <h4>進度條</h4>
+    <ul>
+      <li>頂部固定的閱讀進度條</li>
+      <li>隨捲動即時更新百分比（0%-100%）</li>
+      <li>顯示在導航列右側</li>
+    </ul>
+
+    <h4>章節導航</h4>
+    <ul>
+      <li>頂部章節按鈕列，高亮目前章節</li>
+      <li>點擊按鈕平滑捲動到對應章節</li>
+      <li>底部上/下一章按鈕</li>
+    </ul>
+
+    <h4>隨堂測驗</h4>
+    <ul>
+      <li>每個課程章節結束後有測驗題</li>
+      <li>功能：
+        <ul>
+          <li>點擊選項選擇答案（單選）</li>
+          <li>全部作答後點「提交」</li>
+          <li>自動批改，顯示正確/錯誤標記</li>
+          <li>計算得分百分比</li>
+          <li><strong>80 分以上</strong>顯示「通過」（綠色）</li>
+          <li><strong>未達 80 分</strong>顯示「請複習後重新作答」（紅色）</li>
+          <li>提交後不可更改</li>
+        </ul>
+      </li>
+      <li>CSS Class：<code>.quiz-section</code>、<code>.quiz-question</code>、<code>.quiz-option</code>、<code>.quiz-submit-btn</code>、<code>.quiz-result</code></li>
+    </ul>
+
+    <h4>法規引用</h4>
+    <ul>
+      <li>課程中引用的法規條文用特殊樣式標示</li>
+      <li>CSS Class：<code>.law-ref</code></li>
+    </ul>
+
+    <h3 id="ch8-4">8.4 兩版本差異</h3>
+    <table>
+      <tr><th>特性</th><th>總公司版（hq）</th><th>全興廠版（quanxing）</th></tr>
+      <tr><td>案例數</td><td>~124 件</td><td>~18 件</td></tr>
+      <tr><td>重點</td><td>交通安全、客戶作業、分選作業</td><td>機械安全、LOTO、高溫作業</td></tr>
+      <tr><td>適用場景</td><td>辦公室 + 外勤</td><td>工廠作業</td></tr>
+    </table>
+  </section>
+
+  <!-- 第九章：深色/淺色模式 -->
+  <section class="chapter" id="ch9">
+    <h2>第九章：深色/淺色模式</h2>
+
+    <h3>9.1 切換方式</h3>
+    <ul>
+      <li>頁面右下角有一個圓形按鈕</li>
+      <li>淺色模式顯示 &#x1f319;（點擊切換到深色）</li>
+      <li>深色模式顯示 &#x2600;&#xfe0f;（點擊切換到淺色）</li>
+    </ul>
+
+    <h3>9.2 運作邏輯</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>首次訪問</h4>
+        <p>跟隨系統設定（Windows 深色模式 &rarr; 網站深色模式）</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>手動切換</h4>
+        <p>偏好儲存在 <code>localStorage</code>（關鍵：<code>theme</code>）</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>持久記憶</h4>
+        <p>關閉瀏覽器後再開，仍保持上次選擇</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>系統跟隨</h4>
+        <p>如果使用者未手動切換，會自動跟隨系統主題變更</p>
+      </div>
+    </div>
+
+    <h3>9.3 技術實作</h3>
+    <ul>
+      <li><code>js/theme.js</code> &mdash; 切換邏輯</li>
+      <li><code>css/dark.css</code> &mdash; 深色模式的 CSS 變數覆蓋</li>
+      <li>HTML 屬性：<code>&lt;html data-theme="dark"&gt;</code> 或 <code>&lt;html data-theme="light"&gt;</code></li>
+    </ul>
+  </section>
+
+  <!-- 第十章：完整版與摘要版 -->
+  <section class="chapter" id="ch10">
+    <h2>第十章：完整版與摘要版</h2>
+
+    <h3>10.1 兩種版本的差異</h3>
+    <p>每份報告都有<strong>完整版</strong>和<strong>摘要版</strong>：</p>
+    <table>
+      <tr><th>特性</th><th>完整版</th><th>摘要版（summary）</th></tr>
+      <tr><td>側邊目錄</td><td>有</td><td>無</td></tr>
+      <tr><td>Chart.js 圖表</td><td>有</td><td>無</td></tr>
+      <tr><td>頁面長度</td><td>長（需捲動多頁）</td><td>短（一頁濃縮）</td></tr>
+      <tr><td>資料詳細度</td><td>完整數據與分析</td><td>關鍵指標與結論</td></tr>
+      <tr><td>適合場景</td><td>深入研究、報告呈現</td><td>快速瀏覽、會議摘要</td></tr>
+      <tr><td>最大寬度</td><td>不限</td><td>1000px</td></tr>
+      <tr><td>設計風格</td><td>豐富視覺效果</td><td>簡潔乾淨</td></tr>
+    </table>
+
+    <h3>10.2 檔案對照表</h3>
+    <table>
+      <tr><th>完整版</th><th>摘要版</th></tr>
+      <tr><td><code>overview.html</code></td><td><code>overview-summary.html</code></td></tr>
+      <tr><td><code>2025.html</code></td><td><code>2025-summary.html</code></td></tr>
+      <tr><td><code>2024.html</code></td><td><code>2024-summary.html</code></td></tr>
+      <tr><td><code>2023.html</code></td><td><code>2023-summary.html</code></td></tr>
+      <tr><td><code>environmental-factors.html</code></td><td><code>environmental-factors-summary.html</code></td></tr>
+    </table>
+  </section>
+
+  <!-- 第十一章：檔案架構與路徑 -->
+  <section class="chapter" id="ch11">
+    <h2>第十一章：檔案架構與路徑</h2>
+
+    <h3>11.1 完整目錄樹</h3>
+    <pre>df-ehs/
+├── docs/                                    &larr; GitHub Pages 發佈目錄
+│   ├── index.html                           &larr; 首頁（密碼保護入口）
+│   │
+│   ├── css/
+│   │   ├── common.css                       &larr; 共用樣式（14.8 KB）
+│   │   │   定義：CSS 變數、Reset、排版、容器、
+│   │   │   KPI 卡片、章節、圓餅圖、長條圖、頁尾、
+│   │   │   回到頂部、響應式斷點
+│   │   ├── dark.css                         &larr; 深色模式（25.5 KB）
+│   │   │   覆蓋所有色彩變數、主題切換按鈕樣式
+│   │   ├── sidebar.css                      &larr; 側邊目錄（3.7 KB）
+│   │   │   側邊欄佈局、TOC 連結、手機選單、遮罩
+│   │   └── training.css                     &larr; 教育訓練（18.4 KB）
+│   │       進度條、章節導航、測驗 UI、投影片樣式
+│   │
+│   ├── js/
+│   │   ├── auth.js                          &larr; 密碼驗證（1.2 KB）
+│   │   │   XOR 加密驗證、sessionStorage 管理
+│   │   ├── theme.js                         &larr; 主題切換（1.1 KB）
+│   │   │   深色/淺色切換、localStorage 記憶、
+│   │   │   系統主題跟隨
+│   │   ├── sidebar.js                       &larr; 側邊目錄（0.8 KB）
+│   │   │   開/關切換、遮罩控制、TOC 點擊關閉
+│   │   └── training.js                      &larr; 教育訓練（4.5 KB）
+│   │       進度條、章節高亮、測驗批改、上/下一章
+│   │
+│   ├── reports/
+│   │   ├── overview.html                    &larr; 三年總覽完整版（94.6 KB）
+│   │   ├── overview-summary.html            &larr; 三年總覽摘要版（12.7 KB）
+│   │   ├── 2023.html                        &larr; 2023 年度完整版（60.5 KB）
+│   │   ├── 2023-summary.html                &larr; 2023 年度摘要版（11.4 KB）
+│   │   ├── 2024.html                        &larr; 2024 年度完整版（64.2 KB）
+│   │   ├── 2024-summary.html                &larr; 2024 年度摘要版（11.2 KB）
+│   │   ├── 2025.html                        &larr; 2025 年度完整版（68.3 KB）
+│   │   ├── 2025-summary.html                &larr; 2025 年度摘要版（12.4 KB）
+│   │   ├── environmental-factors.html       &larr; 環境因素完整版（151.2 KB）
+│   │   └── environmental-factors-summary.html &larr; 環境因素摘要版（13.5 KB）
+│   │
+│   ├── committee/
+│   │   ├── index.html                       &larr; 安委會首頁（季報入口）
+│   │   ├── upload.html                      &larr; 圖片上傳工具
+│   │   ├── 2026-Q1.html                     &larr; 2026 年 Q1 季報
+│   │   ├── 2026-Q1-content.md               &larr; Q1 內容規格草稿
+│   │   └── images/2026-Q1/                  &larr; Q1 照片與影片
+│   │       ├── check-valve-ref.jpg
+│   │       ├── container-label-ref.jpg
+│   │       ├── diesel-sds-after.jpg
+│   │       ├── flashback-arrester-after.jpg
+│   │       ├── forklift-danger.mov
+│   │       ├── labor-inspection-record.jpg
+│   │       ├── nurse-service.jpg
+│   │       ├── pressure-gauge-after.jpg
+│   │       ├── extras.json
+│   │       └── 氧乙炔及止回閥-安裝位置示意圖.png
+│   │
+│   ├── training/
+│   │   ├── hq.html                          &larr; 總公司教育訓練
+│   │   └── quanxing.html                    &larr; 全興廠教育訓練
+│   │
+│   └── guide/
+│       ├── 說明書.html                       &larr; 環境設定說明書（HTML）
+│       ├── 說明書.md                         &larr; 環境設定說明書（MD）
+│       ├── 網站功能說明書.html                &larr; 本文件（HTML 版）
+│       └── 網站功能說明書.md                  &larr; 本文件（MD 版）
+│
+├── skills-backup/                           &larr; Claude Code Skills 備份
+├── claude-config/                           &larr; Claude Code 設定備份
+├── scripts/                                 &larr; Python 工具腳本
+├── requirements.txt                         &larr; Python 依賴
+├── setup.bat                                &larr; 一鍵安裝腳本
+├── ARCHITECTURE.md                          &larr; 系統架構說明
+├── SETUP.md                                 &larr; 基礎工具安裝
+├── SETUP-CLAUDE.md                          &larr; Claude Code 設定
+├── SETUP-REFERENCE-DATA.md                  &larr; 參考資料指南
+├── README.md                                &larr; 專案總說明
+└── .gitignore                               &larr; Git 忽略規則</pre>
+  </section>
+
+  <!-- 第十二章：CSS 設計系統 -->
+  <section class="chapter" id="ch12">
+    <h2>第十二章：CSS 設計系統</h2>
+
+    <h3 id="ch12-1">12.1 色彩系統（common.css :root）</h3>
+    <table>
+      <tr><th>變數</th><th>色碼</th><th>用途</th></tr>
+      <tr><td><code>--primary</code></td><td><span class="color-swatch" style="background-color:#1e4a6e;"></span><code>#1e4a6e</code></td><td>主色深藍（標題、連結、主要元素）</td></tr>
+      <tr><td><code>--primary-light</code></td><td><span class="color-swatch" style="background-color:#2a6496;"></span><code>#2a6496</code></td><td>主色淺藍（懸停、次要元素）</td></tr>
+      <tr><td><code>--primary-dark</code></td><td><span class="color-swatch" style="background-color:#153a57;"></span><code>#153a57</code></td><td>主色暗藍（側邊欄背景）</td></tr>
+      <tr><td><code>--accent</code></td><td><span class="color-swatch" style="background-color:#4caf50;"></span><code>#4caf50</code></td><td>強調綠（正面指標、成功狀態）</td></tr>
+      <tr><td><code>--accent-light</code></td><td><span class="color-swatch" style="background-color:#81c784;"></span><code>#81c784</code></td><td>強調淺綠</td></tr>
+      <tr><td><code>--warning</code></td><td><span class="color-swatch" style="background-color:#ff9800;"></span><code>#ff9800</code></td><td>警示橙（需注意項目）</td></tr>
+      <tr><td><code>--warning-light</code></td><td><span class="color-swatch" style="background-color:#ffb74d;"></span><code>#ffb74d</code></td><td>警示淺橙</td></tr>
+      <tr><td><code>--danger</code></td><td><span class="color-swatch" style="background-color:#e53935;"></span><code>#e53935</code></td><td>危險紅（嚴重警示、負面指標）</td></tr>
+      <tr><td><code>--danger-light</code></td><td><span class="color-swatch" style="background-color:#ef5350;"></span><code>#ef5350</code></td><td>危險淺紅</td></tr>
+      <tr><td><code>--info</code></td><td><span class="color-swatch" style="background-color:#2196f3;"></span><code>#2196f3</code></td><td>資訊藍（補充說明）</td></tr>
+      <tr><td><code>--bg</code></td><td><span class="color-swatch" style="background-color:#f5f7fa;"></span><code>#f5f7fa</code></td><td>頁面背景淺灰</td></tr>
+      <tr><td><code>--card-bg</code></td><td><span class="color-swatch" style="background-color:#ffffff;"></span><code>#ffffff</code></td><td>卡片背景白</td></tr>
+      <tr><td><code>--text</code></td><td><span class="color-swatch" style="background-color:#333333;"></span><code>#333333</code></td><td>主要文字深灰</td></tr>
+      <tr><td><code>--text-light</code></td><td><span class="color-swatch" style="background-color:#666666;"></span><code>#666666</code></td><td>次要文字淺灰</td></tr>
+      <tr><td><code>--border</code></td><td><span class="color-swatch" style="background-color:#e0e0e0;"></span><code>#e0e0e0</code></td><td>邊框灰</td></tr>
+      <tr><td><code>--radius</code></td><td>&mdash;</td><td><code>12px</code> 圓角弧度</td></tr>
+    </table>
+
+    <h3 id="ch12-2">12.2 各年度報告主題色</h3>
+    <table>
+      <tr><th>報告</th><th>封面漸層</th></tr>
+      <tr><td>三年總覽</td><td><span class="color-swatch" style="background-color:#1e4a6e;"></span><code>#1e4a6e</code> &rarr; <span class="color-swatch" style="background-color:#2980b9;"></span><code>#2980b9</code>（藍色）</td></tr>
+      <tr><td>2025</td><td><span class="color-swatch" style="background-color:#b71c1c;"></span><code>#b71c1c</code> &rarr; <span class="color-swatch" style="background-color:#ef5350;"></span><code>#ef5350</code>（紅色）</td></tr>
+      <tr><td>2024</td><td><span class="color-swatch" style="background-color:#ff9800;"></span><code>#ff9800</code> &rarr; <span class="color-swatch" style="background-color:#ffb74d;"></span><code>#ffb74d</code>（橙色）</td></tr>
+      <tr><td>2023</td><td><span class="color-swatch" style="background-color:#4caf50;"></span><code>#4caf50</code> &rarr; <span class="color-swatch" style="background-color:#81c784;"></span><code>#81c784</code>（綠色）</td></tr>
+      <tr><td>環境因素</td><td><span class="color-swatch" style="background-color:#0d7377;"></span><code>#0d7377</code> &rarr; <span class="color-swatch" style="background-color:#45b7aa;"></span><code>#45b7aa</code>（青綠色）</td></tr>
+      <tr><td>安委會季報</td><td><span class="color-swatch" style="background-color:#0d2137;"></span><code>#0d2137</code> &rarr; <span class="color-swatch" style="background-color:#1e5799;"></span><code>#1e5799</code>（深藍色）</td></tr>
+    </table>
+
+    <h3 id="ch12-3">12.3 字型</h3>
+    <pre><code>font-family: "Microsoft JhengHei", "PingFang TC", -apple-system, sans-serif;</code></pre>
+    <ul>
+      <li>Windows：微軟正黑體</li>
+      <li>macOS/iOS：蘋方</li>
+    </ul>
+
+    <h3 id="ch12-4">12.4 共用 CSS 元件</h3>
+    <table>
+      <tr><th>元件</th><th>Class</th><th>說明</th></tr>
+      <tr><td>容器</td><td><code>.container</code></td><td>內容最大寬度限制</td></tr>
+      <tr><td>KPI 網格</td><td><code>.kpi-grid</code></td><td>4 欄 KPI 卡片佈局</td></tr>
+      <tr><td>KPI 卡片</td><td><code>.kpi-card</code></td><td>指標數字展示卡片</td></tr>
+      <tr><td>章節</td><td><code>.chapter</code></td><td>報告章節容器</td></tr>
+      <tr><td>卡片</td><td><code>.card</code></td><td>通用白底卡片</td></tr>
+      <tr><td>重點卡片</td><td><code>.highlight-card</code></td><td>綠色邊框重點</td></tr>
+      <tr><td>警示卡片</td><td><code>.warning-card</code></td><td>橙色邊框警示</td></tr>
+      <tr><td>危險卡片</td><td><code>.danger-card</code></td><td>紅色邊框危險</td></tr>
+      <tr><td>圓餅圖</td><td><code>.pie-chart</code></td><td>CSS conic-gradient 圓餅圖</td></tr>
+      <tr><td>長條圖</td><td><code>.bar-*</code></td><td>CSS width 長條圖</td></tr>
+      <tr><td>頁尾</td><td><code>.footer</code></td><td>頁面底部資訊</td></tr>
+      <tr><td>回到頂部</td><td><code>.back-to-top</code></td><td>右下角捲動按鈕</td></tr>
+    </table>
+  </section>
+
+  <!-- 第十三章：JavaScript 模組 -->
+  <section class="chapter" id="ch13">
+    <h2>第十三章：JavaScript 模組</h2>
+
+    <h3>13.1 auth.js &mdash; 密碼驗證</h3>
+    <p><strong>公開 API</strong>（<code>window.dfAuth</code>）：</p>
+    <table>
+      <tr><th>方法</th><th>說明</th></tr>
+      <tr><td><code>dfAuth.verify(input)</code></td><td>驗證輸入的密碼是否正確，回傳 boolean</td></tr>
+      <tr><td><code>dfAuth.isAuthenticated()</code></td><td>檢查是否已登入（sessionStorage）</td></tr>
+      <tr><td><code>dfAuth.setAuthenticated()</code></td><td>設定已登入狀態</td></tr>
+      <tr><td><code>dfAuth.logout()</code></td><td>登出（清除 sessionStorage）</td></tr>
+    </table>
+
+    <h3>13.2 theme.js &mdash; 主題切換</h3>
+    <ul>
+      <li>頁面載入時讀取 <code>localStorage.theme</code> 或系統偏好</li>
+      <li>動態注入切換按鈕到 <code>&lt;body&gt;</code></li>
+      <li>監聽系統主題變更事件</li>
+    </ul>
+
+    <h3>13.3 sidebar.js &mdash; 側邊目錄</h3>
+    <table>
+      <tr><th>函式</th><th>說明</th></tr>
+      <tr><td><code>toggleSidebar()</code></td><td>切換側邊欄開/關</td></tr>
+      <tr><td><code>closeSidebar()</code></td><td>關閉側邊欄（含動畫）</td></tr>
+    </table>
+    <ul>
+      <li>回到頂部按鈕：捲動超過 400px 時顯示</li>
+      <li>TOC 連結點擊後自動關閉（&le;1024px）</li>
+    </ul>
+
+    <h3>13.4 training.js &mdash; 教育訓練</h3>
+    <table>
+      <tr><th>功能</th><th>說明</th></tr>
+      <tr><td>進度條</td><td>根據捲動位置即時更新百分比</td></tr>
+      <tr><td>章節高亮</td><td>根據捲動位置高亮目前章節按鈕</td></tr>
+      <tr><td>測驗系統</td><td>選項選擇 &rarr; 提交 &rarr; 批改 &rarr; 顯示結果</td></tr>
+      <tr><td>上/下一章</td><td>底部導航按鈕</td></tr>
+    </table>
+  </section>
+
+  <!-- 第十四章：如何修改與更新 -->
+  <section class="chapter" id="ch14">
+    <h2>第十四章：如何修改與更新</h2>
+
+    <h3>14.1 更新報告數據</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content"><p>取得最新職災 Excel</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content"><p>用 Claude Code 說「資料更新了，幫我更新報告」</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content"><p>Claude 讀取 Excel &rarr; 更新 HTML 中的數據、圖表、KPI</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content"><p><code>git add</code> &rarr; <code>git commit</code> &rarr; <code>git push</code></p></div>
+    </div>
+
+    <h3>14.2 新增年度報告</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content"><p>複製上一年的 HTML（如 <code>2025.html</code> &rarr; <code>2026.html</code>）</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content"><p>修改：標題、封面顏色（每年不同色系）、sidebar 目錄</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content"><p>替換所有數據和圖表</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content"><p>在 <code>index.html</code> 新增年度卡片</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content"><p>在 <code>overview.html</code> 加入新年度數據</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-content"><p>建立對應的摘要版 <code>2026-summary.html</code></p></div>
+    </div>
+
+    <h3>14.3 新增安委會季報</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content"><p>複製 <code>committee/2026-Q1.html</code> &rarr; <code>committee/2026-Q2.html</code></p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content"><p>修改內容（法定 12 項各項更新）</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content"><p>在 <code>committee/index.html</code> 啟用 Q2 卡片（移除 disabled）</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content"><p>將素材照片放到 <code>committee/images/2026-Q2/</code></p></div>
+    </div>
+
+    <h3>14.4 修改教育訓練</h3>
+    <ul>
+      <li>編輯 <code>training/hq.html</code> 或 <code>training/quanxing.html</code></li>
+      <li>測驗題的正確答案在 <code>.quiz-question</code> 的 <code>data-answer</code> 屬性中</li>
+    </ul>
+
+    <h3>14.5 修改密碼</h3>
+    <p>見 <a href="#ch2-6" style="color:var(--primary);">第二章 2.6 節</a></p>
+
+    <h3>14.6 修改樣式</h3>
+    <ul>
+      <li>改品牌色 / 字型 &rarr; 編輯 <code>css/common.css</code> 的 <code>:root</code> 變數</li>
+      <li>改深色模式 &rarr; 編輯 <code>css/dark.css</code></li>
+      <li>改側邊欄 &rarr; 編輯 <code>css/sidebar.css</code></li>
+      <li>改教育訓練外觀 &rarr; 編輯 <code>css/training.css</code></li>
+    </ul>
+  </section>
+
+  <!-- 附錄 A：所有頁面清單 -->
+  <section class="chapter" id="appendix-a">
+    <h2>附錄 A：所有頁面清單</h2>
+    <table>
+      <tr><th>#</th><th>頁面</th><th>檔案路徑</th><th>說明</th></tr>
+      <tr><td>1</td><td>首頁</td><td><code>index.html</code></td><td>KPI + 報告入口</td></tr>
+      <tr><td>2</td><td>三年總覽</td><td><code>reports/overview.html</code></td><td>2023-2025 跨年對比</td></tr>
+      <tr><td>3</td><td>三年總覽摘要</td><td><code>reports/overview-summary.html</code></td><td>濃縮版</td></tr>
+      <tr><td>4</td><td>2023 年度</td><td><code>reports/2023.html</code></td><td>完整版</td></tr>
+      <tr><td>5</td><td>2023 摘要</td><td><code>reports/2023-summary.html</code></td><td>濃縮版</td></tr>
+      <tr><td>6</td><td>2024 年度</td><td><code>reports/2024.html</code></td><td>完整版</td></tr>
+      <tr><td>7</td><td>2024 摘要</td><td><code>reports/2024-summary.html</code></td><td>濃縮版</td></tr>
+      <tr><td>8</td><td>2025 年度</td><td><code>reports/2025.html</code></td><td>完整版</td></tr>
+      <tr><td>9</td><td>2025 摘要</td><td><code>reports/2025-summary.html</code></td><td>濃縮版</td></tr>
+      <tr><td>10</td><td>環境因素</td><td><code>reports/environmental-factors.html</code></td><td>6 維度分析</td></tr>
+      <tr><td>11</td><td>環境因素摘要</td><td><code>reports/environmental-factors-summary.html</code></td><td>濃縮版</td></tr>
+      <tr><td>12</td><td>安委會首頁</td><td><code>committee/index.html</code></td><td>季報入口</td></tr>
+      <tr><td>13</td><td>圖片上傳</td><td><code>committee/upload.html</code></td><td>GitHub 上傳工具</td></tr>
+      <tr><td>14</td><td>2026 Q1 季報</td><td><code>committee/2026-Q1.html</code></td><td>法定 12 項</td></tr>
+      <tr><td>15</td><td>教育訓練（總公司）</td><td><code>training/hq.html</code></td><td>10 單元+測驗</td></tr>
+      <tr><td>16</td><td>教育訓練（全興）</td><td><code>training/quanxing.html</code></td><td>10 單元+測驗</td></tr>
+    </table>
+  </section>
+
+  <!-- 附錄 B：密碼與帳號資訊 -->
+  <section class="chapter" id="appendix-b">
+    <h2>附錄 B：密碼與帳號資訊</h2>
+    <table>
+      <tr><th>項目</th><th>值</th></tr>
+      <tr><td><strong>網站密碼</strong></td><td><span class="password-highlight" style="font-size:14px; padding:3px 10px;">Da0302fon2026%</span></td></tr>
+      <tr><td><strong>GitHub Repo</strong></td><td><code>https://github.com/SeiU777/df-ehs</code></td></tr>
+      <tr><td><strong>GitHub Pages</strong></td><td><code>https://seiu777.github.io/df-ehs/</code></td></tr>
+      <tr><td><strong>密碼儲存方式</strong></td><td>sessionStorage（關閉分頁即登出）</td></tr>
+      <tr><td><strong>主題偏好儲存</strong></td><td>localStorage（永久保留）</td></tr>
+    </table>
+  </section>
+
+</div><!-- end .main -->
+
+<!-- 回到頂部按鈕 -->
+<button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#9650;</button>
+
+<script>
+  // 回到頂部按鈕顯示/隱藏
+  const backTop = document.querySelector('.back-top');
+  window.addEventListener('scroll', () => {
+    backTop.style.display = window.scrollY > 400 ? 'block' : 'none';
+  });
+
+  // 側邊欄章節高亮（IntersectionObserver）
+  const sections = document.querySelectorAll('.chapter, .cover');
+  const sidebarLinks = document.querySelectorAll('.sidebar a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        sidebarLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + id) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }, {
+    rootMargin: '-20% 0px -60% 0px',
+    threshold: 0
+  });
+
+  sections.forEach(section => {
+    if (section.id) observer.observe(section);
+  });
+
+  // 手機點擊連結後關閉 sidebar
+  sidebarLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        document.querySelector('.sidebar').classList.remove('open');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
